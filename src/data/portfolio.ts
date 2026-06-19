@@ -26,10 +26,10 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "nova-ui-kit",
-    title: "Nova — Mobile UI Kit",
+    title: "Nova — Dashboard & SaaS UI Kit",
     description:
-      "A comprehensive mobile UI kit with 80+ screens across 12 categories. Built in Figma with a robust design system, auto-layout, and dark/light variants.",
-    tags: ["UI Kit", "Mobile", "Figma"],
+      "A production-ready SaaS UI kit with 200+ components, 80+ screens, light & dark themes. Token-based design system with full auto layout.",
+    tags: ["UI Kit", "Dashboard", "SaaS", "Figma"],
     thumbnail: "/projects/nova-thumb.jpg",
     year: "2026",
     featured: true,

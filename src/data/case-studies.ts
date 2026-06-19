@@ -11,46 +11,47 @@ export type CaseStudyContent = {
 export const caseStudies: Record<string, CaseStudyContent> = {
   "nova-ui-kit": {
     slug: "nova-ui-kit",
-    hero: "A comprehensive mobile UI kit designed from scratch — 80+ screens, 200+ components, dark/light modes, and a scalable design system.",
+    hero: "A production-ready Dashboard & SaaS UI Kit — 80+ screens, 200+ components with auto layout, light & dark themes, built on a token-based design system.",
     challenge:
-      "Mobile app teams often spend weeks building foundational UI from scratch — onboarding flows, dashboards, profile screens, settings, e-commerce modules. I wanted to create a production-ready UI kit that covers the most common app categories while maintaining a cohesive, modern aesthetic that designers can customize in minutes.",
+      "SaaS teams waste weeks rebuilding the same dashboard patterns from scratch — stat cards, data tables, analytics charts, user management, settings, and auth flows. Existing UI kits often lack proper auto layout, component variants, or dark mode. I set out to build a truly production-ready kit that designers can drop into any SaaS project and start customizing immediately.",
     process: [
       {
-        title: "Market Research & Audit",
+        title: "Market Research & Competitive Audit",
         description:
-          "Studied 30+ top-selling UI kits on UI8, Gumroad, and Creative Market. Mapped the most requested screen categories: onboarding, auth, dashboard, profile, settings, e-commerce, messaging, social feed, analytics, media player, finance, and empty states.",
+          "Analyzed 30+ top-selling UI kits on UI8, Creative Market, and Gumroad. Benchmarked against Untitled UI, shadcn/ui, and AlignUI to identify gaps: most kits lack comprehensive dark mode, consistent token usage, or real-world data in screens. Mapped the 6 most requested screen categories for SaaS: Dashboard, Analytics, Users, Settings, Auth, and empty states.",
       },
       {
         title: "Design System Foundation",
         description:
-          "Built a robust token-based design system in Figma: 8pt grid, type scale (Inter + SF Pro), color palette with semantic tokens, spacing scale, elevation/shadow system, and corner radius tokens. Everything uses auto-layout and component variants.",
+          "Built a token-based foundation in Figma: 70+ color styles organized by role (Primary, Neutral, Success, Warning, Error, Info, Surface, Border, Text), 22 text styles (Display → Code), 7 effect styles (Shadow XS→XL, Focus rings). 8pt grid, Inter typeface, semantic naming convention. Both light and dark color sets included.",
       },
       {
-        title: "Component Library",
+        title: "Component Library (200+ Variants)",
         description:
-          "Designed 200+ atomic components: buttons (5 variants × 3 sizes), inputs, cards, modals, bottom sheets, navigation bars, tab bars, toggles, sliders, avatars, badges, chips, and more. Each component has light/dark variants with interactive states (default, hover, pressed, disabled).",
+          "Designed 14 component sets with full variant coverage: Button (5 types × 4 sizes × 3 states), Input (3 sizes × 5 states with labels & helpers), Badge (6 colors × 3 sizes × dot toggle), Avatar, Toggle, Checkbox, Stat Card, Table Row, Nav Item, Select, Toast (4 types), Modal, Tab (2 styles), and Progress Bar (4 colors × 4 percentages). Every component uses auto layout.",
       },
       {
-        title: "Screen Design & Prototyping",
+        title: "Screen Design — Real-World Layouts",
         description:
-          "Composed 80+ screens across 12 categories using the component library. Each screen is a real-world layout — not just placeholder wireframes. Added interactive prototyping for key flows: onboarding → sign up → dashboard → settings.",
+          "Composed 6 core screens using components: Dashboard Overview (light + dark), Analytics with period filtering, Users table with search/filter/status badges, Settings profile form, and Login with Google SSO. Each screen features a consistent sidebar navigation, top bar, and content area — ready for production handoff.",
       },
       {
-        title: "Documentation & Packaging",
+        title: "Documentation & Packaging for UI8",
         description:
-          "Created a usage guide with naming conventions, how to swap themes, customize colors, and extend the system. Organized everything in a clean Figma file structure with cover pages, changelogs, and component documentation.",
+          "Created a polished cover page, organized all components and screens with clear naming conventions, and wrote a README with customization instructions. File structured for easy browsing: Cover & Tokens → Components → Screens. Prepared product listing description, preview images, and pricing strategy for UI8.net.",
       },
     ],
     solution:
-      "Nova ships as a single Figma file with 3 sections: Design System (tokens, components, styles), Screen Library (80+ screens organized by category), and Documentation (usage guide, changelog, customization instructions). Every element uses auto-layout for responsive resizing and component variants for easy theme switching.",
+      "Nova ships as a single Figma file with 3 sections: Design System (70+ color styles, 22 text styles, 7 shadow/focus effects), Component Library (200+ variants across 14 component sets, all with auto layout), and Screen Templates (6+ production-ready dashboard screens in light & dark). Every element follows consistent naming, uses auto layout for responsive resizing, and is organized for quick customization.",
     results: [
-      "80+ production-ready screens across 12 categories",
-      "200+ reusable components with light/dark variants",
-      "Token-based design system for easy customization",
-      "Interactive prototypes for 4 key user flows",
-      "Complete documentation and usage guide",
+      "200+ component variants across 14 categories",
+      "6 production-ready screens with light & dark themes",
+      "70+ color styles with semantic naming",
+      "Full auto layout — every component resizes correctly",
+      "Token-based system for 1-click theme customization",
+      "Listed on UI8.net as premium design resource",
     ],
-    tools: ["Figma", "Figma Auto-Layout", "Figma Variants", "Figma Prototyping"],
+    tools: ["Figma", "Figma Auto-Layout", "Figma Variants", "Figma Styles"],
   },
   "meditation-app": {
     slug: "meditation-app",
