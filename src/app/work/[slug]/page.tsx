@@ -37,7 +37,7 @@ export default async function CaseStudyPage({
   const next = projects[(idx + 1) % projects.length];
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-20">
+    <div className="mx-auto max-w-5xl px-6 md:px-10 py-20">
       <Link
         href="/work"
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"

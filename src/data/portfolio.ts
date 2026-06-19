@@ -1,9 +1,9 @@
 export const siteConfig = {
   name: "Dang Pham",
   title: "UI Designer",
-  tagline: "Crafting intuitive interfaces with a touch of 3D magic",
+  tagline: "Crafting intuitive, polished interfaces for modern products.",
   description:
-    "UI Designer based in Ho Chi Minh City, Vietnam. Specializing in mobile & web UI design with 3D illustration skills.",
+    "UI & Product Designer based in Ho Chi Minh City, Vietnam. Specializing in mobile, web, and SaaS interface design.",
   email: "phamnhathaidang@gmail.com",
   links: {
     dribbble: "https://dribbble.com/pnhd",

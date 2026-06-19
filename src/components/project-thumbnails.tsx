@@ -2,7 +2,7 @@
 
 export function NovaThumb() {
   return (
-    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" className="w-full h-full block">
       <defs>
         <linearGradient id="nova-bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
           <stop stopColor="#1a1a2e" />
@@ -40,15 +40,13 @@ export function NovaThumb() {
       <rect x="80" y="200" width="60" height="60" rx="12" fill="#f97316" opacity="0.15" transform="rotate(-12 110 230)" />
       <rect x="660" y="160" width="50" height="50" rx="10" fill="#06b6d4" opacity="0.15" transform="rotate(8 685 185)" />
       <circle cx="700" cy="400" r="30" fill="#f97316" opacity="0.1" />
-      {/* Label */}
-      <text x="400" y="540" textAnchor="middle" fill="#94a3b8" fontSize="14" fontFamily="system-ui">NOVA — Mobile UI Kit</text>
     </svg>
   );
 }
 
 export function SerenityThumb() {
   return (
-    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" className="w-full h-full block">
       <defs>
         <linearGradient id="serenity-bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
           <stop stopColor="#1e1b4b" />
@@ -82,14 +80,13 @@ export function SerenityThumb() {
       <circle cx="150" cy="300" r="1.5" fill="#c4b5fd" opacity="0.4" />
       <circle cx="680" cy="350" r="2" fill="#c4b5fd" opacity="0.3" />
       <circle cx="120" cy="450" r="1.5" fill="#c4b5fd" opacity="0.2" />
-      <text x="400" y="540" textAnchor="middle" fill="#94a3b8" fontSize="14" fontFamily="system-ui">SERENITY — Meditation App</text>
     </svg>
   );
 }
 
 export function PulseThumb() {
   return (
-    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" className="w-full h-full block">
       <defs>
         <linearGradient id="pulse-bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
           <stop stopColor="#0c1220" />
@@ -151,14 +148,13 @@ export function PulseThumb() {
         <circle r="50" fill="none" stroke="#06b6d4" strokeWidth="12" strokeDasharray="80 235" strokeDashoffset="-120" opacity="0.7" />
         <circle r="50" fill="none" stroke="#8b5cf6" strokeWidth="12" strokeDasharray="50 265" strokeDashoffset="-200" opacity="0.6" />
       </g>
-      <text x="400" y="540" textAnchor="middle" fill="#94a3b8" fontSize="14" fontFamily="system-ui">PULSE — Analytics Dashboard</text>
     </svg>
   );
 }
 
 export function ElevateThumb() {
   return (
-    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+    <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" className="w-full h-full block">
       <defs>
         <linearGradient id="elev-bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
           <stop stopColor="#0a0a0a" />
@@ -202,7 +198,6 @@ export function ElevateThumb() {
       <circle cx="700" cy="350" r="3" fill="#f97316" opacity="0.3" />
       <circle cx="100" cy="400" r="2" fill="#06b6d4" opacity="0.3" />
       <circle cx="680" cy="460" r="2" fill="#f97316" opacity="0.2" />
-      <text x="400" y="540" textAnchor="middle" fill="#94a3b8" fontSize="14" fontFamily="system-ui">ELEVATE — 3D Landing Page</text>
     </svg>
   );
 }

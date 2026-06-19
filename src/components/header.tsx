@@ -19,7 +19,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 glass">
-      <div className="mx-auto max-w-6xl flex items-center justify-between px-6 h-16">
+      <div className="mx-auto max-w-7xl flex items-center justify-between px-6 md:px-10 h-16">
         <Link href="/" className="text-lg font-semibold tracking-tight hover:text-accent transition-colors">
           {siteConfig.name}
         </Link>

@@ -1,58 +1,65 @@
 # Nova UI Kit — Figma Plugin Scripts
 
-## Cách chạy
+Premium Dashboard & SaaS UI Kit. Run these scripts inside Figma to generate the entire design system programmatically.
 
-### Cách 1: Figma Console (Nhanh nhất)
-1. Mở file Figma: https://www.figma.com/design/8xN5KzxsqJDFUEF7ZFvcXJ
-2. Bật Dev Mode (phím tắt: Shift+D)  
-3. Mở Console: Menu > Plugins > Development > Open console
-4. Paste từng file theo thứ tự, nhấn Run:
-   - `01-foundation.js` — Tạo color styles, text styles, effect styles, cover page
-   - `02-components.js` — Tạo component sets: Button, Input, Badge, Avatar, Toggle, Checkbox, Stat Card, Table Row, Nav Item, Select, Toast, Modal, Tab, Progress
-   - `03-screens.js` — Tạo 6 dashboard screens (Light + Dark)
+## How to Use
 
-### Cách 2: Tạo Plugin
-1. Figma > Menu > Plugins > Development > New Plugin
-2. Chọn "Empty" template  
-3. Thay code trong `code.ts` bằng nội dung từng file
-4. Run plugin
+### Method 1: Figma Console (Recommended)
+1. Open Figma Desktop
+2. Go to **Menu → Plugins → Development → Open Console** (or press `Ctrl+Alt+I`)
+3. Paste each script in order into the Console tab and press Enter
 
-## Nội dung tạo ra
+### Method 2: Figma Plugin
+1. Create a new plugin: **Plugins → Development → New Plugin → Figma Design → choose "Empty"**
+2. Replace `code.js` content with the script
+3. Run the plugin
 
-### Foundation (01)
-- 70+ Color styles (Primary, Neutral, Success, Warning, Error, Info, Surface, Border, Text + Dark variants)
-- 22 Text styles (Display, Heading, Body, Label, Code)
-- 7 Effect styles (Shadow XS→XL, Focus Primary/Error)
-- Cover page với branding
+## Script Order (IMPORTANT — run sequentially)
 
-### Components (02)  
-- **Button** — 5 types × 4 sizes × 3 states = 60 variants
-- **Input** — 3 sizes × 5 states = 15 variants  
-- **Badge** — 6 colors × 3 sizes × 2 dot options = 36 variants
-- **Avatar** — 6 sizes × 2 types = 12 variants
-- **Toggle** — 2 sizes × 4 states = 8 variants
-- **Checkbox** — 2 sizes × 4 states = 8 variants
-- **Stat Card** — 3 trend variants
-- **Table Row** — 3 types (Header, Body, Body Hover)
-- **Nav Item** — 3 states
-- **Select/Dropdown** — 3 states
-- **Toast** — 4 types (Success, Error, Warning, Info)
-- **Modal** — Delete confirmation dialog
-- **Tab** — 2 styles × 2 states = 4 variants
-- **Progress Bar** — 4 percentages × 4 colors = 16 variants
+| # | File | What it creates |
+|---|------|-----------------|
+| 0 | `00-variables.js` | **Figma Variables** — Color tokens (Light/Dark modes), Spacing, Radius |
+| 1 | `01-foundation.js` | **Styles** — Color paint styles, 20 Text styles, 8 Effect styles (shadows, blur, focus ring), Style Guide page |
+| 2 | `02-components.js` | **Core Components** — Button (5 types × 4 sizes × 3 states), Input, Badge, Avatar, Toggle, Checkbox, Stat Card, Table Row, Nav Item, Select, Toast, Modal, Tab, Progress |
+| 3 | `02b-components-extra.js` | **Extra Components** — Radio, Alert/Banner, Tooltip, Breadcrumb, Pagination, Skeleton Loader, Divider, Avatar Group, Blog Card, Profile Card, Empty State |
+| 4 | `03-screens.js` | **Dashboard Screens** — Overview, Analytics, Settings, User Management |
 
-**Total: 200+ component variants**
+## What's Included
 
-### Screens (03)
-1. **Dashboard Overview (Light)** — Stats, bar chart, traffic sources pie
-2. **Dashboard Overview (Dark)** — Same layout, dark theme
-3. **Analytics** — Visitor chart with period tabs
-4. **Users Table** — Search, filters, table with avatars & status badges
-5. **Settings Profile** — Form with avatar upload, text fields
-6. **Auth Login** — Split screen: branding + login form with Google SSO
+### Design Tokens (Variables)
+- **Color Tokens**: Primary (Indigo), Neutral, Success, Warning, Error, Info — full 50-900 scales
+- **Semantic Tokens**: Background, Surface, Border, Text levels, Link, Primary, Destructive
+- **Light/Dark Mode**: Switch between modes via Figma's Variable Modes
+- **Spacing**: 2xs (2px) → 10xl (128px), 8pt grid system
+- **Radius**: none → full (9999px)
 
-## Ghi chú
-- Font: Inter (có sẵn trong Figma)
-- Tất cả frames đều dùng Auto Layout
-- Color styles tổ chức theo nhóm: Primary/, Neutral/, Success/, etc.
-- Starter plan giới hạn 3 pages — tất cả nằm trên 1 page
+### Typography (20 Text Styles)
+- Display: XL (72px) → SM (36px)
+- Heading: H1 (30px) → H4 (18px)
+- Body: LG (18px) → XS (12px), Regular + Medium variants
+- Label: LG → SM, Caption, Overline
+
+### Effect Styles
+- Elevation: XS → 2XL (multi-layer shadows)
+- Inner Shadow, Focus Ring (Primary + Error), Background Blur, Layer Blur
+
+### Components (25+ component sets)
+All built with **Auto Layout**, **variant sets**, proper naming conventions.
+
+Core: Button, Input, Badge, Avatar, Toggle, Checkbox, Stat Card, Table Row, Nav Item, Select, Toast, Modal, Tab, Progress
+
+Extra: Radio, Alert, Tooltip, Breadcrumb, Pagination, Skeleton, Divider, Avatar Group, Blog Card, Profile Card, Empty State
+
+### Font
+- **Inter** — free Google Font
+
+## For UI8 Packaging
+
+After running all scripts:
+1. Organize pages: `📐 Style Guide` | `🧩 Components` | `📱 Screens` | `📖 README`
+2. Add a cover page with mockup screenshots
+3. Export as `.fig` file
+4. Package with thumbnail (1600×1200px) for UI8
+
+## License
+Created by Dang Pham (Wonton Design). For commercial sale on UI8.

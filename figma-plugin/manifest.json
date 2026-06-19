@@ -1,0 +1,7 @@
+{
+  "name": "Nova UI Kit Generator",
+  "id": "nova-ui-kit-generator-local",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"]
+}

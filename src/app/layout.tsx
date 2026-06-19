@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { siteConfig } from "@/data/portfolio";
@@ -37,6 +38,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col font-sans antialiased noise">
         <ThemeProvider>
+          <SmoothScroll />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
