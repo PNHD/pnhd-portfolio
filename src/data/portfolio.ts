@@ -20,6 +20,7 @@ export type Project = {
   thumbnail: string;
   year: string;
   featured: boolean;
+  externalLink?: { label: string; href: string };
 };
 
 export const projects: Project[] = [
@@ -32,6 +33,7 @@ export const projects: Project[] = [
     thumbnail: "/projects/nova-thumb.jpg",
     year: "2026",
     featured: true,
+    externalLink: { label: "Buy on UI8", href: "https://ui8.net" },
   },
   {
     slug: "meditation-app",

@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { projects } from "@/data/portfolio";
 import { caseStudies } from "@/data/case-studies";
 import { CaseStudyHero } from "./case-study-hero";
+import { NovaGallery } from "./nova-gallery";
 import type { Metadata } from "next";
 
 type Params = Promise<{ slug: string }>;
@@ -48,11 +49,22 @@ export default async function CaseStudyPage({
         {project.title}
       </h1>
 
-      <div className="flex gap-2 mb-4 flex-wrap">
+      <div className="flex flex-wrap items-center gap-2 mb-4">
         {project.tags.map((tag) => (
           <span key={tag} className="tag-chip">{tag}</span>
         ))}
         <span className="tag-chip">{project.year}</span>
+        {project.externalLink && (
+          <a
+            href={project.externalLink.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-xs font-medium hover:opacity-90 transition-opacity ml-1"
+          >
+            {project.externalLink.label}
+            <ExternalLink size={12} />
+          </a>
+        )}
       </div>
 
       <p className="text-muted-foreground text-lg mb-12 leading-relaxed max-w-2xl">
@@ -93,6 +105,17 @@ export default async function CaseStudyPage({
             </div>
           </section>
 
+          {/* Screen Gallery — only for Nova */}
+          {slug === "nova-ui-kit" && (
+            <section>
+              <h2 className="text-2xl font-bold mb-6">Screen Previews</h2>
+              <p className="text-muted-foreground text-sm mb-8 max-w-xl">
+                A selection of screens from the kit — onboarding, dashboard, profile, e-commerce, messaging, and the design system foundation.
+              </p>
+              <NovaGallery />
+            </section>
+          )}
+
           {/* Solution */}
           <section>
             <h2 className="text-2xl font-bold mb-5">Solution</h2>
@@ -131,6 +154,25 @@ export default async function CaseStudyPage({
               ))}
             </div>
           </section>
+
+          {/* Buy CTA for products */}
+          {project.externalLink && (
+            <section className="rounded-2xl bg-surface border border-border p-8 text-center">
+              <h2 className="text-xl font-bold mb-2">Get this product</h2>
+              <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto">
+                Ready to use in your next project. Includes Figma source file, design system, all screens, and documentation.
+              </p>
+              <a
+                href={project.externalLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-accent text-accent-foreground font-medium hover:opacity-90 transition-opacity"
+              >
+                {project.externalLink.label}
+                <ExternalLink size={14} />
+              </a>
+            </section>
+          )}
         </div>
       ) : (
         <div>
