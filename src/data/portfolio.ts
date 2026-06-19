@@ -126,5 +126,5 @@ export const skills = [
   { name: "Claude", category: "AI Tools" },
   { name: "ChatGPT", category: "AI Tools" },
   { name: "Gemini", category: "AI Tools" },
-  { name: "Midjourney", category: "AI Tools" },
+  { name: "ComfyUI", category: "AI Tools" },
 ];

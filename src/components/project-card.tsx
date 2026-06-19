@@ -4,8 +4,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/portfolio";
+import { thumbnails } from "./project-thumbnails";
 
 export function ProjectCard({ project }: { project: Project }) {
+  const Thumb = thumbnails[project.slug];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -16,8 +19,14 @@ export function ProjectCard({ project }: { project: Project }) {
       <Link href={`/work/${project.slug}`} className="group block h-full">
         <div className="h-full rounded-3xl bg-muted bento-glow p-1">
           <div className="h-full rounded-[20px] bg-surface overflow-hidden flex flex-col">
-            <div className="aspect-[4/3] bg-gradient-to-br from-accent/20 via-accent-2/10 to-transparent flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
-              <span className="text-sm text-muted-foreground">Preview</span>
+            <div className="aspect-[4/3] overflow-hidden group-hover:scale-[1.02] transition-transform duration-500">
+              {Thumb ? (
+                <Thumb />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-accent/20 via-accent-2/10 to-transparent flex items-center justify-center">
+                  <span className="text-sm text-muted-foreground">Preview</span>
+                </div>
+              )}
             </div>
             <div className="p-5">
               <div className="flex items-start justify-between gap-2">

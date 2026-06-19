@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { ProjectCard } from "@/components/project-card";
+import { thumbnails } from "@/components/project-thumbnails";
 import { siteConfig, projects, skills } from "@/data/portfolio";
 
 export default function Home() {
@@ -81,8 +82,8 @@ export default function Home() {
               <Link href={`/work/${featured[0].slug}`} className="group block h-full">
                 <div className="h-full rounded-3xl bg-muted bento-glow p-1">
                   <div className="h-full rounded-[20px] bg-surface overflow-hidden flex flex-col">
-                    <div className="flex-1 min-h-[300px] bg-gradient-to-br from-accent/20 via-accent-2/10 to-transparent flex items-center justify-center">
-                      <span className="text-muted-foreground text-sm">Preview</span>
+                    <div className="flex-1 min-h-[300px] overflow-hidden">
+                      {(() => { const Thumb = thumbnails[featured[0].slug]; return Thumb ? <Thumb /> : <div className="w-full h-full bg-gradient-to-br from-accent/20 via-accent-2/10 to-transparent" />; })()}
                     </div>
                     <div className="p-6">
                       <div className="flex items-start justify-between">

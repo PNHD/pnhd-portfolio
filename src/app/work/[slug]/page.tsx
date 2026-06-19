@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { projects } from "@/data/portfolio";
 import { caseStudies } from "@/data/case-studies";
+import { CaseStudyHero } from "./case-study-hero";
 import type { Metadata } from "next";
 
 type Params = Promise<{ slug: string }>;
@@ -62,10 +63,7 @@ export default async function CaseStudyPage({
         {cs?.hero ?? project.description}
       </p>
 
-      {/* Hero image placeholder */}
-      <div className="aspect-video rounded-2xl bg-gradient-to-br from-accent/20 via-accent-2/10 to-muted mb-16 flex items-center justify-center">
-        <span className="text-muted-foreground">Case study hero image</span>
-      </div>
+      <CaseStudyHero slug={slug} />
 
       {cs ? (
         <div className="space-y-16">
