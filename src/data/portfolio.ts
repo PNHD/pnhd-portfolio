@@ -24,6 +24,16 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "nova-ui-kit",
+    title: "Nova — Mobile UI Kit",
+    description:
+      "A comprehensive mobile UI kit with 80+ screens across 12 categories. Built in Figma with a robust design system, auto-layout, and dark/light variants.",
+    tags: ["UI Kit", "Mobile", "Figma"],
+    thumbnail: "/projects/nova-thumb.jpg",
+    year: "2026",
+    featured: true,
+  },
+  {
     slug: "meditation-app",
     title: "Serenity — Meditation App Redesign",
     description:
@@ -51,16 +61,6 @@ export const projects: Project[] = [
     tags: ["Web", "3D", "UI"],
     thumbnail: "/projects/3d-landing-thumb.jpg",
     year: "2026",
-    featured: true,
-  },
-  {
-    slug: "wwm-calc",
-    title: "WWM Calc — Game Tool",
-    description:
-      "A live gear graduation calculator for Where Winds Meet. Built with React + TypeScript, deployed on Cloudflare Pages.",
-    tags: ["Web", "Shipped", "React"],
-    thumbnail: "/projects/wwm-thumb.jpg",
-    year: "2025",
     featured: false,
   },
 ];
@@ -123,7 +123,8 @@ export const skills = [
   { name: "Illustrator", category: "Design" },
   { name: "Blender", category: "3D" },
   { name: "After Effects", category: "Motion" },
-  { name: "React", category: "Code" },
-  { name: "TypeScript", category: "Code" },
-  { name: "Tailwind CSS", category: "Code" },
+  { name: "Claude", category: "AI Tools" },
+  { name: "ChatGPT", category: "AI Tools" },
+  { name: "Gemini", category: "AI Tools" },
+  { name: "Midjourney", category: "AI Tools" },
 ];

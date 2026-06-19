@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { projects } from "@/data/portfolio";
+import { caseStudies } from "@/data/case-studies";
 import type { Metadata } from "next";
 
 type Params = Promise<{ slug: string }>;
@@ -30,6 +31,8 @@ export default async function CaseStudyPage({
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
+  const cs = caseStudies[slug];
+
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       <Link
@@ -40,11 +43,8 @@ export default async function CaseStudyPage({
       </Link>
 
       <h1 className="text-3xl md:text-4xl font-bold mb-4">{project.title}</h1>
-      <p className="text-muted-foreground text-lg mb-6">
-        {project.description}
-      </p>
 
-      <div className="flex gap-2 mb-10 flex-wrap">
+      <div className="flex gap-2 mb-6 flex-wrap">
         {project.tags.map((tag) => (
           <span
             key={tag}
@@ -58,48 +58,85 @@ export default async function CaseStudyPage({
         </span>
       </div>
 
-      {/* Placeholder hero image */}
-      <div className="aspect-video rounded-2xl bg-muted mb-12 flex items-center justify-center">
+      <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
+        {cs?.hero ?? project.description}
+      </p>
+
+      {/* Hero image placeholder */}
+      <div className="aspect-video rounded-2xl bg-gradient-to-br from-accent/20 via-accent-2/10 to-muted mb-16 flex items-center justify-center">
         <span className="text-muted-foreground">Case study hero image</span>
       </div>
 
-      {/* Case study content placeholder */}
-      <div className="prose prose-zinc dark:prose-invert max-w-none">
-        <h2>The Challenge</h2>
-        <p className="text-muted-foreground">
-          Case study content coming soon. This will include the problem
-          statement, research findings, and design goals.
-        </p>
+      {cs ? (
+        <div className="space-y-16">
+          {/* Challenge */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">The Challenge</h2>
+            <p className="text-muted-foreground leading-relaxed">{cs.challenge}</p>
+          </section>
 
-        <h2>Process</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose my-8">
-          {["Research", "Wireframes", "Visual Design", "Prototype"].map(
-            (step, i) => (
-              <div
-                key={step}
-                className="aspect-[4/3] rounded-xl bg-muted flex items-center justify-center"
-              >
-                <div className="text-center">
-                  <span className="text-3xl font-bold text-accent">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p className="text-sm text-muted-foreground mt-2">{step}</p>
+          {/* Process */}
+          <section>
+            <h2 className="text-2xl font-bold mb-8">Process</h2>
+            <div className="space-y-6">
+              {cs.process.map((step, i) => (
+                <div key={step.title} className="flex gap-5">
+                  <div className="shrink-0 w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                    <span className="text-sm font-bold text-accent">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{step.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {step.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )
-          )}
+              ))}
+            </div>
+          </section>
+
+          {/* Solution */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Solution</h2>
+            <p className="text-muted-foreground leading-relaxed">{cs.solution}</p>
+          </section>
+
+          {/* Results */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Results</h2>
+            <ul className="space-y-3">
+              {cs.results.map((r) => (
+                <li key={r} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                  <span className="text-muted-foreground">{r}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Tools */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Tools Used</h2>
+            <div className="flex flex-wrap gap-2">
+              {cs.tools.map((t) => (
+                <span
+                  key={t}
+                  className="px-4 py-2 rounded-xl bg-muted text-sm text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </section>
         </div>
-
-        <h2>Solution</h2>
-        <p className="text-muted-foreground">
-          Design solution details and final mockups will be showcased here.
-        </p>
-
-        <h2>Results</h2>
-        <p className="text-muted-foreground">
-          Impact metrics and key takeaways from the project.
-        </p>
-      </div>
+      ) : (
+        <div className="prose prose-zinc dark:prose-invert max-w-none">
+          <h2>The Challenge</h2>
+          <p className="text-muted-foreground">Case study content coming soon.</p>
+        </div>
+      )}
     </div>
   );
 }
