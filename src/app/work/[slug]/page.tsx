@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { projects } from "@/data/portfolio";
 import { caseStudies } from "@/data/case-studies";
 import { CaseStudyHero } from "./case-study-hero";
@@ -29,64 +29,62 @@ export default async function CaseStudyPage({
   params: Params;
 }) {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
-  if (!project) notFound();
-
+  const idx = projects.findIndex((p) => p.slug === slug);
+  if (idx === -1) notFound();
+  const project = projects[idx];
   const cs = caseStudies[slug];
+  const next = projects[(idx + 1) % projects.length];
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-16">
+    <div className="mx-auto max-w-4xl px-6 py-20">
       <Link
         href="/work"
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
       >
         <ArrowLeft size={14} /> Back to Work
       </Link>
 
-      <h1 className="text-3xl md:text-4xl font-bold mb-4">{project.title}</h1>
+      <h1 className="text-3xl md:text-5xl font-bold mb-5 leading-tight">
+        {project.title}
+      </h1>
 
-      <div className="flex gap-2 mb-6 flex-wrap">
+      <div className="flex gap-2 mb-4 flex-wrap">
         {project.tags.map((tag) => (
-          <span
-            key={tag}
-            className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground"
-          >
-            {tag}
-          </span>
+          <span key={tag} className="tag-chip">{tag}</span>
         ))}
-        <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">
-          {project.year}
-        </span>
+        <span className="tag-chip">{project.year}</span>
       </div>
 
-      <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
+      <p className="text-muted-foreground text-lg mb-12 leading-relaxed max-w-2xl">
         {cs?.hero ?? project.description}
       </p>
 
-      <CaseStudyHero slug={slug} />
+      <div className="mb-16 rounded-2xl overflow-hidden border border-border">
+        <CaseStudyHero slug={slug} />
+      </div>
 
       {cs ? (
-        <div className="space-y-16">
+        <div className="space-y-20">
           {/* Challenge */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">The Challenge</h2>
-            <p className="text-muted-foreground leading-relaxed">{cs.challenge}</p>
+            <h2 className="text-2xl font-bold mb-5">The Challenge</h2>
+            <p className="text-muted-foreground leading-relaxed max-w-2xl">
+              {cs.challenge}
+            </p>
           </section>
 
           {/* Process */}
           <section>
-            <h2 className="text-2xl font-bold mb-8">Process</h2>
-            <div className="space-y-6">
+            <h2 className="text-2xl font-bold mb-10">Process</h2>
+            <div className="space-y-8">
               {cs.process.map((step, i) => (
                 <div key={step.title} className="flex gap-5">
-                  <div className="shrink-0 w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <span className="text-sm font-bold text-accent">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                  <div className="step-number">
+                    {String(i + 1).padStart(2, "0")}
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">{step.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
+                  <div className="pt-1">
+                    <h3 className="font-semibold mb-2">{step.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed max-w-xl">
                       {step.description}
                     </p>
                   </div>
@@ -97,31 +95,36 @@ export default async function CaseStudyPage({
 
           {/* Solution */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">Solution</h2>
-            <p className="text-muted-foreground leading-relaxed">{cs.solution}</p>
+            <h2 className="text-2xl font-bold mb-5">Solution</h2>
+            <p className="text-muted-foreground leading-relaxed max-w-2xl">
+              {cs.solution}
+            </p>
           </section>
 
           {/* Results */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">Results</h2>
-            <ul className="space-y-3">
+            <h2 className="text-2xl font-bold mb-6">Results</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {cs.results.map((r) => (
-                <li key={r} className="flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
-                  <span className="text-muted-foreground">{r}</span>
-                </li>
+                <div
+                  key={r}
+                  className="flex items-start gap-3 p-4 rounded-xl bg-surface border border-border"
+                >
+                  <span className="w-2 h-2 rounded-full bg-accent mt-2 shrink-0" />
+                  <span className="text-muted-foreground text-sm">{r}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
 
           {/* Tools */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">Tools Used</h2>
-            <div className="flex flex-wrap gap-2">
+            <h2 className="text-2xl font-bold mb-5">Tools Used</h2>
+            <div className="flex flex-wrap gap-3">
               {cs.tools.map((t) => (
                 <span
                   key={t}
-                  className="px-4 py-2 rounded-xl bg-muted text-sm text-muted-foreground"
+                  className="px-4 py-2 rounded-xl bg-surface border border-border text-sm text-muted-foreground"
                 >
                   {t}
                 </span>
@@ -130,11 +133,30 @@ export default async function CaseStudyPage({
           </section>
         </div>
       ) : (
-        <div className="prose prose-zinc dark:prose-invert max-w-none">
-          <h2>The Challenge</h2>
+        <div>
+          <h2 className="text-2xl font-bold mb-4">The Challenge</h2>
           <p className="text-muted-foreground">Case study content coming soon.</p>
         </div>
       )}
+
+      {/* Next project */}
+      <div className="mt-24 pt-10 border-t border-border">
+        <Link
+          href={`/work/${next.slug}`}
+          className="group flex items-center justify-between"
+        >
+          <div>
+            <p className="text-sm text-muted-foreground mb-1">Next project</p>
+            <p className="text-xl font-semibold group-hover:text-accent transition-colors">
+              {next.title}
+            </p>
+          </div>
+          <ArrowRight
+            size={20}
+            className="text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all"
+          />
+        </Link>
+      </div>
     </div>
   );
 }
