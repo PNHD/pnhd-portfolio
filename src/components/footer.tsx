@@ -17,14 +17,14 @@ export function Footer() {
   return (
     <footer className="border-t border-border mt-auto">
       <div className="mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-20">
-        {/* Top — large CTA text */}
+        {/* Top — email CTA */}
         <div className="mb-16">
-          <p className="text-muted-foreground text-sm mb-3">
+          <p className="text-muted-foreground text-sm mb-2">
             Have a project in mind?
           </p>
           <a
             href={`mailto:${siteConfig.email}`}
-            className="heading-xl link-underline hover:text-accent transition-colors"
+            className="inline-block max-w-full break-words text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight link-underline hover:text-accent transition-colors"
           >
             {siteConfig.email}
           </a>
@@ -36,7 +36,7 @@ export function Footer() {
           <div>
             <p className="font-semibold mb-3">{siteConfig.name}</p>
             <p className="text-muted-foreground leading-relaxed">
-              UI Designer & 3D Artist
+              UI / Product Designer
               <br />
               Ho Chi Minh City, Vietnam
             </p>
