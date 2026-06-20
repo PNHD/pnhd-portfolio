@@ -1,42 +1,30 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Palette,
-  Box,
-  Wand2,
-  Bot,
-} from "lucide-react";
-import { ProjectCard } from "@/components/project-card";
+import { ArrowUp } from "lucide-react";
 import { thumbnails } from "@/components/project-thumbnails";
-import { HeroVisual } from "@/components/hero-visual";
-import { Marquee } from "@/components/marquee";
-import { CountUp } from "@/components/count-up";
-import { siteConfig, projects, skills, experiences } from "@/data/portfolio";
-import type { ReactNode } from "react";
+import { siteConfig, projects, experiences, skills } from "@/data/portfolio";
 
-const stats = [
-  { value: 8, suffix: "+", label: "Years of experience" },
-  { value: 6, suffix: "", label: "Companies & studios" },
-  { value: 50, suffix: "+", label: "Products shipped" },
-  { value: 100, suffix: "%", label: "Passion for craft" },
+const marqueeItems = [
+  "UI Design",
+  "Product Design",
+  "Design Systems",
+  "SaaS Dashboards",
+  "Mobile Apps",
+  "Motion",
+  "3D Art",
 ];
 
-const ease = [0.22, 1, 0.36, 1] as const;
-
-const categoryIcons: Record<string, ReactNode> = {
-  Design: <Palette size={18} />,
-  "3D": <Box size={18} />,
-  Motion: <Wand2 size={18} />,
-  "AI Tools": <Bot size={18} />,
-};
+const stats = [
+  { value: "8", suffix: "+", label: "Years Experience" },
+  { value: "6", suffix: "", label: "Companies" },
+  { value: "50", suffix: "+", label: "Projects Shipped" },
+];
 
 export default function Home() {
-  const featured = projects.filter((p) => p.featured);
-  const notFeatured = projects.filter((p) => !p.featured);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const [showTop, setShowTop] = useState(false);
 
   const grouped = skills.reduce(
     (acc, s) => {
@@ -46,386 +34,310 @@ export default function Home() {
     {} as Record<string, string[]>
   );
 
+  useEffect(() => {
+    // Reveal on scroll
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    document.querySelectorAll(".ed-reveal").forEach((el) => observer.observe(el));
+
+    // Scroll-to-top visibility
+    const onScroll = () => setShowTop(window.scrollY > 700);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    // Custom cursor (desktop only)
+    const cursor = cursorRef.current;
+    let raf = 0;
+    let mouseX = 0,
+      mouseY = 0,
+      curX = 0,
+      curY = 0;
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    const onMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor?.classList.add("visible");
+    };
+    const loop = () => {
+      curX += (mouseX - curX) * 0.2;
+      curY += (mouseY - curY) * 0.2;
+      if (cursor) {
+        cursor.style.left = curX + "px";
+        cursor.style.top = curY + "px";
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    const enter = () => cursor?.classList.add("hovering");
+    const leave = () => cursor?.classList.remove("hovering");
+    let hoverEls: Element[] = [];
+    if (fine && cursor) {
+      document.addEventListener("mousemove", onMove);
+      raf = requestAnimationFrame(loop);
+      hoverEls = [...document.querySelectorAll("a, button, .ed-card, .ed-skill-list li, .ed-timeline-item")];
+      hoverEls.forEach((el) => {
+        el.addEventListener("mouseenter", enter);
+        el.addEventListener("mouseleave", leave);
+      });
+    }
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+      hoverEls.forEach((el) => {
+        el.removeEventListener("mouseenter", enter);
+        el.removeEventListener("mouseleave", leave);
+      });
+    };
+  }, []);
+
+  const scrollTop = () => {
+    const lenis = (window as unknown as { lenis?: { scrollTo: (t: number) => void } }).lenis;
+    if (lenis) lenis.scrollTo(0);
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <>
-      {/* ══════════════════════════════════════
-          01 — HERO
-          ══════════════════════════════════════ */}
-      <section className="relative min-h-dvh flex flex-col justify-center overflow-hidden">
-        <div className="aurora" />
-        <div className="starfield" />
-        <div className="grid-fade" />
+    <div className="ed">
+      <div className="ed-grain" />
+      <div ref={cursorRef} className="ed-cursor" />
 
-        <div className="mx-auto max-w-7xl px-6 md:px-10 pt-32 md:pt-36 pb-16 relative z-10 w-full">
-          {/* Top row — name + status */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease }}
-            className="flex items-center justify-between mb-12 md:mb-16"
-          >
-            <p className="label">{siteConfig.name}</p>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-              </span>
-              <span className="hidden sm:inline">Available for work</span>
-            </div>
-          </motion.div>
-
-          {/* Two-column: text + visual */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-            {/* Left — copy */}
-            <div className="lg:col-span-6">
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.3, ease }}
-                className="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 rounded-full border border-border bg-surface/60 backdrop-blur-sm text-xs font-medium text-muted-foreground"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                UI / Product Designer · Ho Chi Minh City
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.4, ease }}
-                className="hero-headline"
-              >
-                <span className="block">Designing</span>
-                <span className="block">interfaces with</span>
-                <span className="block gradient-text">depth.</span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6, ease }}
-                className="text-muted-foreground text-base md:text-lg max-w-md leading-relaxed mt-8"
-              >
-                I craft intuitive, polished products with a sharp eye for
-                detail — across mobile, web, and SaaS interfaces.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7, ease }}
-                className="flex gap-4 mt-10"
-              >
-                <Link
-                  href="/work"
-                  className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:scale-[1.03] active:scale-[0.97] transition-transform"
-                >
-                  View Work
-                  <ArrowRight
-                    size={15}
-                    className="group-hover:translate-x-0.5 transition-transform"
-                  />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-border bg-surface/40 backdrop-blur-sm text-sm font-medium hover:bg-surface hover:border-foreground/20 transition-all"
-                >
-                  Contact
-                </Link>
-              </motion.div>
-            </div>
-
-            {/* Right — floating visual */}
-            <div className="lg:col-span-6">
-              <HeroVisual />
-            </div>
-          </div>
-
-          {/* Stats row */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.9, ease }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 mt-16 md:mt-20 pt-10 border-t border-border"
-          >
-            {stats.map((s) => (
-              <div key={s.label}>
-                <p className="stat-value">
-                  <CountUp to={s.value} suffix={s.suffix} />
-                </p>
-                <p className="text-sm text-muted-foreground mt-2">{s.label}</p>
-              </div>
-            ))}
-          </motion.div>
+      {/* ───── HERO ───── */}
+      <section id="hero" className="ed-hero">
+        <div className="ed-hero-bg ed-noise">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/projects/isometric-bedroom.jpg" alt="" />
         </div>
-      </section>
-
-      {/* Marquee band */}
-      <section className="border-y border-border bg-surface/30">
-        <Marquee />
-      </section>
-
-      {/* ══════════════════════════════════════
-          02 — SELECTED WORK
-          ══════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 md:px-10 py-24 md:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease }}
-          className="flex items-end justify-between mb-16"
-        >
-          <div>
-            <span className="section-index">02</span>
-            <h2 className="heading-xl mt-2">Selected Work</h2>
-          </div>
-          <Link
-            href="/work"
-            className="link-underline text-sm text-muted-foreground hover:text-foreground transition-colors pb-0.5"
-          >
-            All projects
-          </Link>
-        </motion.div>
-
-        {/* Featured hero project — full width */}
-        {featured[0] && (
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease }}
-            className="mb-10"
-          >
-            <Link href={`/work/${featured[0].slug}`} className="group block">
-              <div className="featured-card">
-                <div className="aspect-[16/10] md:aspect-[16/9] overflow-hidden relative">
-                  {(() => {
-                    const Thumb = thumbnails[featured[0].slug];
-                    return Thumb ? (
-                      <div className="w-full h-full card-image">
-                        <Thumb />
-                      </div>
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-accent/20 via-accent-2/10 to-transparent" />
-                    );
-                  })()}
-                  <div className="card-overlay" />
-                </div>
-                <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <div>
-                    <div className="flex gap-2 mb-2 flex-wrap">
-                      {featured[0].tags.map((tag) => (
-                        <span key={tag} className="tag-chip">{tag}</span>
-                      ))}
-                    </div>
-                    <h3 className="heading-lg group-hover:text-accent transition-colors">
-                      {featured[0].title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm mt-1.5 max-w-lg leading-relaxed">
-                      {featured[0].description}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium text-accent shrink-0">
-                    View project
-                    <ArrowUpRight
-                      size={16}
-                      className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                    />
-                  </div>
-                </div>
-              </div>
+        <div className="ed-hero-content">
+          <span className="ed-label">Available for work</span>
+          <h1 className="ed-hero-title">
+            Designing<br />
+            interfaces with<br />
+            <span className="ed-serif">depth</span> &amp;{" "}
+            <span className="ed-serif warm">intention</span>.
+          </h1>
+          <p className="ed-hero-sub">
+            {siteConfig.title} based in Ho Chi Minh City. 8+ years crafting
+            intuitive, visually rich experiences across mobile, web, and SaaS —
+            built on research and a sharp eye for detail.
+          </p>
+          <div className="ed-cta-row">
+            <Link href="/#work" className="ed-btn ed-btn-primary">
+              View Work →
             </Link>
-          </motion.div>
-        )}
-
-        {/* 2-column grid for remaining */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {featured.slice(1).map((project, i) => (
-            <motion.div
-              key={project.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: i * 0.1, ease }}
-            >
-              <ProjectCard project={project} />
-            </motion.div>
-          ))}
-          {notFeatured.map((project, i) => (
-            <motion.div
-              key={project.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: (featured.length - 1 + i) * 0.1, ease }}
-            >
-              <ProjectCard project={project} />
-            </motion.div>
-          ))}
+            <Link href="/#contact" className="ed-btn ed-btn-secondary">
+              Get in Touch
+            </Link>
+          </div>
+        </div>
+        <div className="ed-hero-meta">
+          <div>Ho Chi Minh City, VN</div>
+          <div className="ed-scroll-ind">
+            Scroll <span className="ed-scroll-line" />
+          </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          03 — ABOUT STRIP
-          ══════════════════════════════════════ */}
-      <section className="border-y border-border">
-        <div className="mx-auto max-w-7xl px-6 md:px-10 py-24 md:py-32">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease }}
-            className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16"
-          >
-            <div className="md:col-span-4">
-              <span className="section-index">03</span>
-              <h2 className="heading-xl mt-2">About</h2>
-            </div>
-            <div className="md:col-span-8 space-y-6 text-muted-foreground leading-relaxed">
-              <p className="text-foreground text-lg md:text-xl leading-relaxed">
-                I&apos;m a UI &amp; product designer focused on clean, intuitive
-                interfaces — turning complex flows into experiences that feel
-                effortless.
+      {/* ───── MARQUEE ───── */}
+      <div className="ed-marquee">
+        <div className="ed-marquee-track">
+          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="ed-marquee-item">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ───── WORK ───── */}
+      <section id="work" className="ed-section">
+        <div className="ed-container">
+          <div className="ed-section-label ed-reveal">
+            <span className="num">01</span> Selected Work
+          </div>
+          <h2 className="ed-section-title ed-reveal">
+            Crafted with <span className="ed-serif">precision</span>,<br />
+            designed for <span className="ed-serif">impact</span>.
+          </h2>
+          <div className="ed-project-grid">
+            {projects.map((project, i) => {
+              const Thumb = thumbnails[project.slug];
+              const large = i === 0 || i === projects.length - 1;
+              return (
+                <Link
+                  key={project.slug}
+                  href={`/work/${project.slug}`}
+                  className={`ed-card ed-reveal${large ? " large" : ""}`}
+                >
+                  <div className="ed-project-img ed-noise">
+                    {Thumb ? <Thumb /> : null}
+                  </div>
+                  <div className="ed-project-info">
+                    <div>
+                      <h3>{project.title}</h3>
+                      <p className="ed-project-desc">{project.description}</p>
+                      <div className="ed-tags">
+                        {project.tags.map((tag) => (
+                          <span key={tag} className="ed-tag">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <span className="ed-year">{project.year}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ───── ABOUT ───── */}
+      <section id="about" className="ed-section ed-alt">
+        <div className="ed-container">
+          <div className="ed-section-label ed-reveal">
+            <span className="num">02</span> About
+          </div>
+          <div className="ed-about-grid">
+            <div className="ed-about-text ed-reveal">
+              <h2 className="ed-section-title" style={{ marginBottom: "2rem" }}>
+                Designing with <span className="ed-serif">clarity</span> &amp;{" "}
+                <span className="ed-serif warm">craft</span>.
+              </h2>
+              <p>
+                I&apos;m a <strong>UI &amp; product designer</strong> focused on
+                clean, intuitive interfaces — turning complex flows into
+                experiences that feel effortless.
               </p>
               <p>
-                Over 8 years, I&apos;ve designed across mobile apps, SaaS
-                dashboards, e-commerce, and branding for 6 companies
-                including S3Corp., Shopline, and Select Technology. I&apos;m
-                passionate about research-driven design that puts users first.
+                Over <strong>8+ years</strong> I&apos;ve designed across mobile
+                apps, SaaS dashboards, e-commerce, and branding for 6 companies
+                including <strong>S3Corp.</strong>, <strong>Shopline</strong>,
+                and <strong>Select Technology</strong>. I care most about
+                research-driven design that puts users first.
               </p>
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors mt-4"
-              >
-                <span className="link-underline">Read more about me</span>
-                <ArrowRight size={14} />
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          04 — EXPERIENCE
-          ══════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 md:px-10 py-24 md:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease }}
-        >
-          <span className="section-index">04</span>
-          <h2 className="heading-xl mt-2 mb-14">Experience</h2>
-        </motion.div>
-
-        <div className="space-y-0 divide-y divide-border">
-          {experiences.map((exp, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: i * 0.05, ease }}
-              className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-8 py-7 first:pt-0"
-            >
-              <p className="mono text-muted-foreground md:col-span-3 pt-0.5">
-                {exp.period}
-              </p>
-              <div className="md:col-span-4">
-                <h3 className="font-semibold">{exp.role}</h3>
-                <p className="text-sm text-accent">{exp.company}</p>
+              <div className="ed-stats">
+                {stats.map((s) => (
+                  <div key={s.label} className="ed-stat">
+                    <div className="ed-stat-num">
+                      <span className="ed-serif">{s.value}</span>
+                      {s.suffix}
+                    </div>
+                    <div className="ed-stat-label">{s.label}</div>
+                  </div>
+                ))}
               </div>
-              <p className="md:col-span-5 text-sm text-muted-foreground leading-relaxed">
-                {exp.description}
-              </p>
-            </motion.div>
-          ))}
+            </div>
+            <div className="ed-about-img ed-noise ed-reveal">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/projects/stylized-tree.jpg" alt="3D render by Dang Pham" />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          05 — SKILLS
-          ══════════════════════════════════════ */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-7xl px-6 md:px-10 py-24 md:py-32">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease }}
-          >
-            <span className="section-index">05</span>
-            <h2 className="heading-xl mt-2 mb-14">Tools & Skills</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {Object.entries(grouped).map(([category, items], i) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ delay: i * 0.08, duration: 0.6, ease }}
-                className="glow-card p-6"
-              >
-                <div className="w-10 h-10 rounded-xl bg-accent/8 flex items-center justify-center text-accent mb-5">
-                  {categoryIcons[category]}
+      {/* ───── EXPERIENCE ───── */}
+      <section id="experience" className="ed-section">
+        <div className="ed-container">
+          <div className="ed-section-label ed-reveal">
+            <span className="num">03</span> Experience
+          </div>
+          <h2 className="ed-section-title ed-reveal">
+            A decade of <span className="ed-serif">crafting</span><br />
+            digital experiences.
+          </h2>
+          <div className="ed-reveal">
+            {experiences.map((exp, i) => (
+              <div key={i} className="ed-timeline-item">
+                <div className="ed-timeline-date">{exp.period}</div>
+                <div className="ed-timeline-content">
+                  <h3>{exp.role}</h3>
+                  <div className="ed-company">{exp.company}</div>
+                  <p>{exp.description}</p>
                 </div>
-                <p className="text-sm font-semibold mb-4">{category}</p>
-                <ul className="space-y-2.5">
-                  {items.map((item) => (
-                    <li
-                      key={item}
-                      className="text-sm text-muted-foreground flex items-center gap-2.5"
-                    >
-                      <span className="w-1 h-1 rounded-full bg-accent/40 shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          06 — CTA
-          ══════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 md:px-10 pb-28">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease }}
-          className="rounded-2xl border border-border p-10 md:p-20 text-center relative overflow-hidden spotlight"
-        >
-          <div className="aurora opacity-70" />
-          <div className="grid-fade" />
-          <div className="relative z-10">
-            <span className="section-index">06</span>
-            <h2 className="heading-xl mt-4 mb-5">
-              Let&apos;s work{" "}
-              <span className="gradient-text">together</span>
-            </h2>
-            <p className="text-muted-foreground max-w-md mx-auto mb-10 leading-relaxed">
-              Have a project in mind? I&apos;d love to bring your vision to
-              life with thoughtful UI design and 3D artistry.
-            </p>
-            <Link
-              href="/contact"
-              className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-foreground text-background text-sm font-medium hover:scale-[1.03] active:scale-[0.97] transition-transform"
-            >
-              Get in Touch
-              <ArrowRight
-                size={15}
-                className="group-hover:translate-x-0.5 transition-transform"
-              />
-            </Link>
+      {/* ───── SKILLS ───── */}
+      <section id="skills" className="ed-section ed-alt">
+        <div className="ed-container">
+          <div className="ed-section-label ed-reveal">
+            <span className="num">04</span> Tools &amp; Skills
           </div>
-        </motion.div>
+          <h2 className="ed-section-title ed-reveal">
+            The <span className="ed-serif">toolkit</span>.
+          </h2>
+          <div className="ed-skills-grid ed-reveal">
+            {Object.entries(grouped).map(([category, items]) => (
+              <div key={category} className="ed-skill-cat">
+                <h3>{category}</h3>
+                <ul className="ed-skill-list">
+                  {items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
-    </>
+
+      {/* ───── CONTACT ───── */}
+      <section id="contact" className="ed-contact">
+        <div className="ed-contact-bg ed-noise">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/projects/cauldron-bitcoin.jpg" alt="" />
+        </div>
+        <div className="ed-contact-content">
+          <div className="ed-label ed-reveal" style={{ justifyContent: "center" }}>
+            Let&apos;s work together
+          </div>
+          <h2 className="ed-contact-title ed-reveal">
+            Have a project in <span className="ed-serif">mind</span>?
+          </h2>
+          <p className="ed-contact-sub ed-reveal">
+            I&apos;d love to help bring your product to life with thoughtful,
+            detail-driven design.
+          </p>
+          <a href={`mailto:${siteConfig.email}`} className="ed-contact-email ed-reveal">
+            {siteConfig.email}
+          </a>
+          <div className="ed-contact-socials ed-reveal">
+            <a href={siteConfig.links.dribbble} target="_blank" rel="noopener noreferrer">
+              Dribbble
+            </a>
+            <a href={siteConfig.links.behance} target="_blank" rel="noopener noreferrer">
+              Behance
+            </a>
+            <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Scroll to top */}
+      <button
+        onClick={scrollTop}
+        className={`ed-totop${showTop ? " show" : ""}`}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp size={18} />
+      </button>
+    </div>
   );
 }

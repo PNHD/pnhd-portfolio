@@ -20,6 +20,8 @@ export function SmoothScroll() {
       touchMultiplier: 1.6,
     });
 
+    (window as unknown as { lenis?: Lenis }).lenis = lenis;
+
     let raf = 0;
     const loop = (time: number) => {
       lenis.raf(time);
@@ -27,8 +29,25 @@ export function SmoothScroll() {
     };
     raf = requestAnimationFrame(loop);
 
+    // Smooth-scroll same-page anchor links (e.g. /#work) via Lenis.
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement)?.closest?.('a[href*="#"]') as
+        | HTMLAnchorElement
+        | null;
+      if (!a) return;
+      const url = new URL(a.href, location.href);
+      if (url.pathname !== location.pathname || !url.hash || url.hash === "#") return;
+      const el = document.querySelector(url.hash);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el as HTMLElement, { offset: -70 });
+      history.pushState(null, "", url.hash);
+    };
+    document.addEventListener("click", onClick);
+
     return () => {
       cancelAnimationFrame(raf);
+      document.removeEventListener("click", onClick);
       lenis.destroy();
     };
   }, []);

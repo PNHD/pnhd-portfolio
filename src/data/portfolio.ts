@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Dang Pham",
-  title: "UI Designer",
+  title: "UI / Product Designer",
   tagline: "Crafting intuitive, polished interfaces for modern products.",
   description:
     "UI & Product Designer based in Ho Chi Minh City, Vietnam. Specializing in mobile, web, and SaaS interface design.",
@@ -80,41 +80,42 @@ export const experiences: Experience[] = [
     role: "UI Designer",
     period: "Apr 2022 — Apr 2025",
     description:
-      "Collaborated with clients to develop illustrations, App UI Design, and animations. Crafted visually captivating materials tailored to client requirements.",
+      "Designed app interfaces, illustrations, and motion for client products — turning briefs into polished, on-brand visuals.",
   },
   {
     company: "Shopline Vietnam",
     role: "Senior Graphic Designer",
     period: "Mar 2021 — Mar 2022",
     description:
-      "Supported design needs for sales and marketing. Worked closely with the marketing team to create compelling campaign graphics.",
+      "Drove design for sales and marketing, partnering with the marketing team to ship campaign graphics that converted.",
   },
   {
     company: "Select Technology",
     role: "UX/UI Designer",
     period: "Aug 2020 — Feb 2021",
     description:
-      "Planned and implemented new designs for Aura App (Mobile and Panel).",
+      "Led the redesign of the Aura app across mobile and web panel — from user flows to final UI.",
   },
   {
     company: "Epsilo",
     role: "UX/UI Designer",
     period: "Aug 2019 — Dec 2019",
     description:
-      "Designed website layouts and animations for The Scale Group, Epsilo, and other multimedia designs.",
+      "Built website layouts and motion design for The Scale Group, Epsilo, and other multimedia work.",
   },
   {
     company: "AA Distribution Software",
     role: "Senior Graphic Designer",
     period: "2017 — 2019",
     description:
-      "Designed banners and Shop-in-Shop layouts on ecommerce channels (Tiki, Lazada, Shopee).",
+      "Crafted banners and Shop-in-Shop storefronts across Tiki, Lazada, and Shopee.",
   },
   {
     company: "Mat Bao Corporation",
     role: "Graphic Designer",
     period: "2016 — 2017",
-    description: "Designed banners, websites, and marketing materials.",
+    description:
+      "Produced banners, websites, and marketing materials across brand campaigns.",
   },
 ];
 

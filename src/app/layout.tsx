@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, Instrument_Serif, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { Header } from "@/components/header";
@@ -7,9 +7,16 @@ import { Footer } from "@/components/footer";
 import { siteConfig } from "@/data/portfolio";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space",
   subsets: ["latin"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 const geistMono = Geist_Mono({
@@ -34,9 +41,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${spaceGrotesk.variable} ${instrumentSerif.variable} ${geistMono.variable}`}
     >
-      <body className="min-h-screen flex flex-col font-sans antialiased noise">
+      <body className="min-h-screen flex flex-col font-sans antialiased">
         <ThemeProvider>
           <SmoothScroll />
           <Header />
