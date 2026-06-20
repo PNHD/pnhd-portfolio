@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Instrument_Serif, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { SiteEffects } from "@/components/site-effects";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { siteConfig } from "@/data/portfolio";
@@ -46,6 +47,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col font-sans antialiased">
         <ThemeProvider>
           <SmoothScroll />
+          <SiteEffects />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
-import { ArrowUp } from "lucide-react";
-import { thumbnails } from "@/components/project-thumbnails";
 import { siteConfig, projects, experiences, skills } from "@/data/portfolio";
 
 const marqueeItems = [
@@ -22,10 +20,15 @@ const stats = [
   { value: "50", suffix: "+", label: "Projects Shipped" },
 ];
 
-export default function Home() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const [showTop, setShowTop] = useState(false);
+// CSS-art per project (see globals.css .ed-art-*)
+const projectArt: Record<string, string> = {
+  "nova-ui-kit": "ed-art-nova",
+  "meditation-app": "ed-art-serenity",
+  "analytics-dashboard": "ed-art-pulse",
+  "3d-landing-page": "ed-art-elevate",
+};
 
+export default function Home() {
   const grouped = skills.reduce(
     (acc, s) => {
       (acc[s.category] ??= []).push(s.name);
@@ -48,75 +51,16 @@ export default function Home() {
       { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
     document.querySelectorAll(".ed-reveal").forEach((el) => observer.observe(el));
-
-    // Scroll-to-top visibility
-    const onScroll = () => setShowTop(window.scrollY > 700);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    // Custom cursor (desktop only)
-    const cursor = cursorRef.current;
-    let raf = 0;
-    let mouseX = 0,
-      mouseY = 0,
-      curX = 0,
-      curY = 0;
-    const fine = window.matchMedia("(pointer: fine)").matches;
-    const onMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursor?.classList.add("visible");
-    };
-    const loop = () => {
-      curX += (mouseX - curX) * 0.2;
-      curY += (mouseY - curY) * 0.2;
-      if (cursor) {
-        cursor.style.left = curX + "px";
-        cursor.style.top = curY + "px";
-      }
-      raf = requestAnimationFrame(loop);
-    };
-    const enter = () => cursor?.classList.add("hovering");
-    const leave = () => cursor?.classList.remove("hovering");
-    let hoverEls: Element[] = [];
-    if (fine && cursor) {
-      document.addEventListener("mousemove", onMove);
-      raf = requestAnimationFrame(loop);
-      hoverEls = [...document.querySelectorAll("a, button, .ed-card, .ed-skill-list li, .ed-timeline-item")];
-      hoverEls.forEach((el) => {
-        el.addEventListener("mouseenter", enter);
-        el.addEventListener("mouseleave", leave);
-      });
-    }
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      document.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-      hoverEls.forEach((el) => {
-        el.removeEventListener("mouseenter", enter);
-        el.removeEventListener("mouseleave", leave);
-      });
-    };
+    return () => observer.disconnect();
   }, []);
-
-  const scrollTop = () => {
-    const lenis = (window as unknown as { lenis?: { scrollTo: (t: number) => void } }).lenis;
-    if (lenis) lenis.scrollTo(0);
-    else window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <div className="ed">
-      <div className="ed-grain" />
-      <div ref={cursorRef} className="ed-cursor" />
-
       {/* ───── HERO ───── */}
       <section id="hero" className="ed-hero">
-        <div className="ed-hero-bg ed-noise">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/projects/isometric-bedroom.jpg" alt="" />
+        <div className="ed-hero-orbs">
+          <div className="ed-orb ed-orb-1" />
+          <div className="ed-orb ed-orb-2" />
         </div>
         <div className="ed-hero-content">
           <span className="ed-label">Available for work</span>
@@ -171,16 +115,16 @@ export default function Home() {
           </h2>
           <div className="ed-project-grid">
             {projects.map((project, i) => {
-              const Thumb = thumbnails[project.slug];
               const large = i === 0 || i === projects.length - 1;
+              const art = projectArt[project.slug] ?? "ed-art-nova";
               return (
                 <Link
                   key={project.slug}
                   href={`/work/${project.slug}`}
                   className={`ed-card ed-reveal${large ? " large" : ""}`}
                 >
-                  <div className="ed-project-img ed-noise">
-                    {Thumb ? <Thumb /> : null}
+                  <div className="ed-project-img">
+                    <div className={`ed-art ${art}`} />
                   </div>
                   <div className="ed-project-info">
                     <div>
@@ -209,39 +153,33 @@ export default function Home() {
           <div className="ed-section-label ed-reveal">
             <span className="num">02</span> About
           </div>
-          <div className="ed-about-grid">
-            <div className="ed-about-text ed-reveal">
-              <h2 className="ed-section-title" style={{ marginBottom: "2rem" }}>
-                Designing with <span className="ed-serif">clarity</span> &amp;{" "}
-                <span className="ed-serif warm">craft</span>.
-              </h2>
-              <p>
-                I&apos;m a <strong>UI &amp; product designer</strong> focused on
-                clean, intuitive interfaces — turning complex flows into
-                experiences that feel effortless.
-              </p>
-              <p>
-                Over <strong>8+ years</strong> I&apos;ve designed across mobile
-                apps, SaaS dashboards, e-commerce, and branding for 6 companies
-                including <strong>S3Corp.</strong>, <strong>Shopline</strong>,
-                and <strong>Select Technology</strong>. I care most about
-                research-driven design that puts users first.
-              </p>
-              <div className="ed-stats">
-                {stats.map((s) => (
-                  <div key={s.label} className="ed-stat">
-                    <div className="ed-stat-num">
-                      <span className="ed-serif">{s.value}</span>
-                      {s.suffix}
-                    </div>
-                    <div className="ed-stat-label">{s.label}</div>
+          <div className="ed-about-text ed-reveal" style={{ maxWidth: "760px" }}>
+            <h2 className="ed-section-title" style={{ marginBottom: "2rem" }}>
+              Designing with <span className="ed-serif">clarity</span> &amp;{" "}
+              <span className="ed-serif warm">craft</span>.
+            </h2>
+            <p>
+              I&apos;m a <strong>UI &amp; product designer</strong> focused on
+              clean, intuitive interfaces — turning complex flows into
+              experiences that feel effortless.
+            </p>
+            <p>
+              Over <strong>8+ years</strong> I&apos;ve designed across mobile
+              apps, SaaS dashboards, e-commerce, and branding for 6 companies
+              including <strong>S3Corp.</strong>, <strong>Shopline</strong>, and{" "}
+              <strong>Select Technology</strong>. I care most about
+              research-driven design that puts users first.
+            </p>
+            <div className="ed-stats">
+              {stats.map((s) => (
+                <div key={s.label} className="ed-stat">
+                  <div className="ed-stat-num">
+                    <span className="ed-serif">{s.value}</span>
+                    {s.suffix}
                   </div>
-                ))}
-              </div>
-            </div>
-            <div className="ed-about-img ed-noise ed-reveal">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/projects/stylized-tree.jpg" alt="3D render by Dang Pham" />
+                  <div className="ed-stat-label">{s.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -298,10 +236,7 @@ export default function Home() {
 
       {/* ───── CONTACT ───── */}
       <section id="contact" className="ed-contact">
-        <div className="ed-contact-bg ed-noise">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/projects/cauldron-bitcoin.jpg" alt="" />
-        </div>
+        <div className="ed-contact-orb" />
         <div className="ed-contact-content">
           <div className="ed-label ed-reveal" style={{ justifyContent: "center" }}>
             Let&apos;s work together
@@ -327,14 +262,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Scroll to top */}
-      <button
-        onClick={scrollTop}
-        className={`ed-totop${showTop ? " show" : ""}`}
-        aria-label="Scroll to top"
-      >
-        <ArrowUp size={18} />
-      </button>
     </div>
   );
 }
