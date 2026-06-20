@@ -323,9 +323,6 @@ export default function Home() {
             <a href={siteConfig.links.behance} target="_blank" rel="noopener noreferrer">
               Behance
             </a>
-            <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
           </div>
         </div>
       </section>

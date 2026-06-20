@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { siteConfig } from "@/data/portfolio";
 
 const nav = [
   { label: "Work", href: "/#work" },

@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Non-app tooling / standalone scripts — not part of the Next build.
+    ".claude/**",
+    "figma-plugin/**",
   ]),
 ]);
 
