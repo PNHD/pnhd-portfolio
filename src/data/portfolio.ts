@@ -4,6 +4,7 @@ export const siteConfig = {
   tagline: "Crafting intuitive, polished interfaces for modern products.",
   description:
     "UI & Product Designer based in Ho Chi Minh City, Vietnam. Specializing in mobile, web, and SaaS interface design.",
+  url: "https://dangpham.pages.dev",
   email: "phamnhathaidang@gmail.com",
   links: {
     dribbble: "https://dribbble.com/pnhd",
@@ -17,7 +18,6 @@ export type Project = {
   title: string;
   description: string;
   tags: string[];
-  thumbnail: string;
   year: string;
   featured: boolean;
   externalLink?: { label: string; href: string };
@@ -30,7 +30,6 @@ export const projects: Project[] = [
     description:
       "A production-ready SaaS UI kit with 200+ components, 80+ screens, light & dark themes. Token-based design system with full auto layout.",
     tags: ["UI Kit", "Dashboard", "SaaS", "Figma"],
-    thumbnail: "/projects/nova-thumb.jpg",
     year: "2026",
     featured: true,
     externalLink: { label: "Buy on UI8", href: "https://ui8.net" },
@@ -41,7 +40,6 @@ export const projects: Project[] = [
     description:
       "A calming mobile experience redesigned from the ground up. Focus on accessibility, micro-interactions, and a soothing color palette.",
     tags: ["Mobile", "UI", "Concept"],
-    thumbnail: "/projects/meditation-thumb.jpg",
     year: "2026",
     featured: true,
   },
@@ -51,7 +49,6 @@ export const projects: Project[] = [
     description:
       "A data-rich SaaS dashboard designed for clarity. Complex data presented through clean charts, filters, and responsive layouts.",
     tags: ["Web", "UI", "Dashboard"],
-    thumbnail: "/projects/dashboard-thumb.jpg",
     year: "2026",
     featured: true,
   },
@@ -61,7 +58,6 @@ export const projects: Project[] = [
     description:
       "Where 3D illustration meets modern UI. A landing page concept featuring custom Blender renders integrated into a sleek interface.",
     tags: ["Web", "3D", "UI"],
-    thumbnail: "/projects/3d-landing-thumb.jpg",
     year: "2026",
     featured: false,
   },

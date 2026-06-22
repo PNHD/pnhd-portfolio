@@ -26,11 +26,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: `${siteConfig.name} — ${siteConfig.title}`,
     template: `%s — ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  keywords: [
+    "UI Designer",
+    "Product Designer",
+    "SaaS UI",
+    "Dashboard Design",
+    "Figma",
+    "Dang Pham",
+    "Ho Chi Minh City",
+  ],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    siteName: `${siteConfig.name} — ${siteConfig.title}`,
+    title: `${siteConfig.name} — ${siteConfig.title}`,
+    description: siteConfig.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} — ${siteConfig.title}`,
+    description: siteConfig.description,
+  },
 };
 
 export default function RootLayout({
@@ -38,6 +64,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteConfig.name,
+    jobTitle: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    email: `mailto:${siteConfig.email}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Ho Chi Minh City",
+      addressCountry: "VN",
+    },
+    sameAs: [
+      siteConfig.links.dribbble,
+      siteConfig.links.behance,
+      siteConfig.links.github,
+    ],
+  };
   return (
     <html
       lang="en"
@@ -45,6 +90,10 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${instrumentSerif.variable} ${geistMono.variable}`}
     >
       <body className="min-h-screen flex flex-col font-sans antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ThemeProvider>
           <SmoothScroll />
           <SiteEffects />
