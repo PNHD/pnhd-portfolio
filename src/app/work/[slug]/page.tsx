@@ -1,19 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ExternalLink, Check } from "lucide-react";
-import { projects } from "@/data/portfolio";
-import { caseStudies } from "@/data/case-studies";
 import type { Metadata } from "next";
+import { projects } from "@/data/portfolio";
 
 type Params = Promise<{ slug: string }>;
-
-// CSS-art per project (shared with homepage cards — see globals.css .ed-art-*)
-const projectArt: Record<string, string> = {
-  "nova-ui-kit": "ed-art-nova",
-  "meditation-app": "ed-art-serenity",
-  "analytics-dashboard": "ed-art-pulse",
-  "3d-landing-page": "ed-art-elevate",
-};
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -21,109 +11,126 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
-  if (!project) return {};
-  return { title: project.title, description: project.description };
+  const p = projects.find((x) => x.slug === slug);
+  if (!p) return {};
+  return { title: `${p.name} — ${p.title}`, description: p.blurb };
 }
 
-export default async function CaseStudyPage({ params }: { params: Params }) {
+export default async function CaseStudy({ params }: { params: Params }) {
   const { slug } = await params;
   const idx = projects.findIndex((p) => p.slug === slug);
   if (idx === -1) notFound();
-  const project = projects[idx];
-  const cs = caseStudies[slug];
+  const p = projects[idx];
   const next = projects[(idx + 1) % projects.length];
-  const art = projectArt[slug] ?? "ed-art-nova";
 
   return (
-    <div className="ed ed-case">
-      <div className="ed-case-wrap">
-        <Link href="/#work" className="ed-case-back">
-          <ArrowLeft size={14} /> Back to Work
-        </Link>
+    <div className="case wrap">
+      <Link className="case-back" href="/#work">
+        ← Back to work
+      </Link>
 
-        <div className="ed-section-label">
-          <span className="num">{project.year}</span> Case Study
+      <div className="case-head">
+        <div>
+          <div className="case-num mono">{p.num} / Selected Work</div>
+          <h1 className="case-title dsp">
+            {p.name}
+            <small>{p.title}</small>
+          </h1>
         </div>
-        <h1 className="ed-case-title">{project.title}</h1>
-
-        <div className="ed-case-meta">
-          {project.tags.map((tag) => (
-            <span key={tag} className="ed-tag">{tag}</span>
-          ))}
-          {project.externalLink && (
-            <a
-              href={project.externalLink.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ed-case-buy"
-            >
-              {project.externalLink.label} <ExternalLink size={12} />
-            </a>
-          )}
-        </div>
-
-        <p className="ed-case-lead">{cs?.hero ?? project.description}</p>
-
-        <div className="ed-case-hero">
-          <div className={`ed-art ${art}`} />
-        </div>
-
-        {cs && (
-          <>
-            <section className="ed-case-section">
-              <h2>The <span className="ed-serif">Challenge</span></h2>
-              <p>{cs.challenge}</p>
-            </section>
-
-            <section className="ed-case-section">
-              <h2><span className="ed-serif">Process</span></h2>
-              <div className="ed-case-steps">
-                {cs.process.map((step, i) => (
-                  <div key={step.title} className="ed-case-step">
-                    <div className="ed-case-num">{String(i + 1).padStart(2, "0")}</div>
-                    <div>
-                      <h3>{step.title}</h3>
-                      <p>{step.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="ed-case-section">
-              <h2>The <span className="ed-serif">Solution</span></h2>
-              <p>{cs.solution}</p>
-            </section>
-
-            <section className="ed-case-section">
-              <h2><span className="ed-serif">Results</span></h2>
-              <ul className="ed-results">
-                {cs.results.map((r) => (
-                  <li key={r}><Check size={16} /> {r}</li>
-                ))}
-              </ul>
-            </section>
-
-            <section className="ed-case-section">
-              <h2><span className="ed-serif">Tools</span></h2>
-              <div className="ed-tools">
-                {cs.tools.map((t) => (
-                  <span key={t} className="ed-tool">{t}</span>
-                ))}
-              </div>
-            </section>
-          </>
-        )}
-
-        <Link href={`/work/${next.slug}`} className="ed-case-next">
-          <div>
-            <div className="ed-case-next-label">Next Project</div>
-            <div className="ed-case-next-title">{next.title}</div>
+        <div>
+          <p className="case-blurb">{p.blurb}</p>
+          <div className="case-tags">
+            {p.tags.map((t) => (
+              <span key={t} className="wtag">
+                {t}
+              </span>
+            ))}
           </div>
-          <ArrowRight size={20} />
-        </Link>
+        </div>
       </div>
+
+      <div className="case-hero-img">
+        <div className="ph-grid" />
+        <span className="ph-dim mono">{p.heroDim}</span>
+        <span className="ph-lab">{p.heroLab}</span>
+      </div>
+
+      <div className="facts">
+        <div className="fact">
+          <div className="k">Role</div>
+          <div className="v dsp">{p.facts.role}</div>
+        </div>
+        <div className="fact">
+          <div className="k">Timeline</div>
+          <div className="v dsp">{p.facts.timeline}</div>
+        </div>
+        <div className="fact">
+          <div className="k">Type</div>
+          <div className="v dsp">{p.facts.type}</div>
+        </div>
+        <div className="fact">
+          <div className="k">Platform</div>
+          <div className="v dsp">{p.facts.platform}</div>
+        </div>
+      </div>
+
+      <div className="case-block">
+        <h3>Overview</h3>
+        <div className="body">
+          <p>{p.intro}</p>
+        </div>
+      </div>
+
+      <div className="case-block">
+        <h3>The challenge</h3>
+        <div className="body">
+          <p>{p.challenge}</p>
+        </div>
+      </div>
+
+      <div className="case-block">
+        <h3>Approach</h3>
+        <div className="approach-list">
+          {p.approach.map((step) => (
+            <div className="approach-item" key={step.n}>
+              <span className="ai-n">{step.n}</span>
+              <span className="ai-t">{step.t}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="case-gallery">
+        {p.gallery.map((g) => (
+          <div className="gph" key={g.lab}>
+            <div className="ph-grid" />
+            <span className="ph-dim mono">{g.dim}</span>
+            <span className="ph-lab">{g.lab}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="case-out">
+        <h3>Outcome</h3>
+        <div className="out-grid">
+          {p.outcomes.map((o) => (
+            <div className="outcome" key={o.lab}>
+              <div className="num dsp">{o.num}</div>
+              <div className="lab">{o.lab}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Link className="case-next" href={`/work/${next.slug}`}>
+        <span>
+          <span className="cn-k">Next project</span>
+          <span className="cn-n dsp">
+            {next.name} — {next.title}
+          </span>
+        </span>
+        <span className="cn-arr">↗</span>
+      </Link>
     </div>
   );
 }

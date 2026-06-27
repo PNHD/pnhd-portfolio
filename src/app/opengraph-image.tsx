@@ -28,7 +28,7 @@ export default function OpengraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 92, fontWeight: 700, lineHeight: 1.05 }}>{siteConfig.name}</div>
-          <div style={{ fontSize: 46, color: "#f97316", marginTop: 12 }}>{siteConfig.title}</div>
+          <div style={{ fontSize: 46, color: "#2F6BFF", marginTop: 12 }}>{siteConfig.title}</div>
           <div style={{ fontSize: 30, color: "#d4d4d8", maxWidth: 960, marginTop: 20 }}>
             {siteConfig.tagline}
           </div>
