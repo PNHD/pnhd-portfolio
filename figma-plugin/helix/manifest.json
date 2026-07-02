@@ -1,0 +1,7 @@
+{
+  "name": "Helix Crypto UI Kit Generator",
+  "id": "helix-crypto-ui-kit-generator-local",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"]
+}
