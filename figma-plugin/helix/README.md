@@ -6,17 +6,19 @@ Works on **Figma Free**: scripts detect plan limits (1 variable mode, 3 pages) a
 
 ## How to Use
 
-### Method 1: Figma Console (Recommended)
-1. Open **Figma Desktop**
-2. **Menu → Plugins → Development → Show/Hide Console** (`Ctrl+Alt+I` / `Cmd+Option+I`)
-3. Paste each script in order into the Console and press Enter
-4. Wait for the ✅ message before running the next one
+### Method 1: One-click plugin (Recommended)
+`code.js` is a pre-built bundle of all 5 scripts with a menu — no pasting needed.
+1. Open **Figma Desktop**, create a new design file
+2. **Plugins → Development → Import plugin from manifest…** → pick `manifest.json` in this folder
+3. **Plugins → Development → Helix Crypto UI Kit Generator → 🚀 Run ALL (00 → 03)**
+4. Or run each part separately from the same submenu (00 → 03, in order)
 
-### Method 2: Figma Plugin
-1. **Plugins → Development → New Plugin → Figma Design → "Empty"**
-2. Point the manifest at this folder (or copy `manifest.json` + `code.js`)
-3. Paste each script's content into `code.js`, save, then **Plugins → Development → Helix Crypto UI Kit Generator**
-4. Repeat for each script in order
+If you edit the `00-…03-…` source scripts, regenerate the bundle with `node build.js`.
+
+### Method 2: Figma Console (no import)
+1. **Menu → Plugins → Development → Show/Hide Console** (`Ctrl+Alt+I` / `Cmd+Option+I`)
+2. Paste each script (`00 → 03`) into the Console in order and press Enter
+3. Wait for the ✅ message before running the next one
 
 ## Script Order (IMPORTANT — run sequentially)
 

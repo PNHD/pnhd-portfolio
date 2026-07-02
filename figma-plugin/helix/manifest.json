@@ -3,5 +3,14 @@
   "id": "helix-crypto-ui-kit-generator-local",
   "api": "1.0.0",
   "main": "code.js",
-  "editorType": ["figma"]
+  "editorType": ["figma"],
+  "menu": [
+    { "name": "🚀 Run ALL (00 → 03)", "command": "all" },
+    { "separator": true },
+    { "name": "00 · Pages + Variables", "command": "s00" },
+    { "name": "01 · Styles + Style Guide", "command": "s01" },
+    { "name": "02 · Core Components", "command": "s02" },
+    { "name": "02b · Extra Components", "command": "s02b" },
+    { "name": "03 · Screens (Web + Mobile)", "command": "s03" }
+  ]
 }
