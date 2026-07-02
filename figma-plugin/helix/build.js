@@ -26,8 +26,9 @@ const __done = (msg) => { figma.notify(String(msg), { timeout: 4000 }); console.
 
 `;
 
-// icon pack goes first so every part can resolve HELIX_ICONS
+// icon + coin packs go first so every part can resolve HELIX_ICONS / HELIX_COINS
 out += fs.readFileSync(path.join(__dirname, "icons-svg.js"), "utf8") + "\n";
+out += fs.readFileSync(path.join(__dirname, "coins-svg.js"), "utf8") + "\n";
 
 for (const [fnName, file] of parts) {
   let src = fs.readFileSync(path.join(__dirname, file), "utf8");
@@ -51,8 +52,8 @@ out += `(async () => {
       catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
     }
     figma.closePlugin(fails.length
-      ? "⚠️ Helix v6 generated with errors — " + fails.join(" · ")
-      : "✅ Helix Crypto UI Kit v6 — 8-page kit, 20 screens, descriptions, variables bound");
+      ? "⚠️ Helix v7 generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit v7 — 8-page kit, 20 screens, real coin logos, variables bound");
   } else {
     try {
       await registry[figma.command]();

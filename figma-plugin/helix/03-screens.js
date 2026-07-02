@@ -81,7 +81,24 @@
   const H = (o) => frame("HORIZONTAL", { cross: "CENTER", ...(o || {}) });
   const V = (o) => frame("VERTICAL", { cross: "MIN", ...(o || {}) });
   const fill = (node) => { node.layoutSizingHorizontal = "FILL"; return node; };
+  // Real coin logos from HELIX_COINS (coins-svg.js, MIT) — falls back to a tinted dot
+  const COIN_HEX = { "#F7931A": "btc", "#627EEA": "eth", "#14F195": "sol", "#F3BA2F": "bnb", "#00AAE4": "xrp", "#0033AD": "ada", "#E84142": "avax", "#2A5ADA": "link", "#2775CA": "usdc", "#8247E5": "matic" };
+  const coinLogo = (slug, size, fallbackHex) => {
+    const svg = (typeof HELIX_COINS !== "undefined" && HELIX_COINS[slug]) ? HELIX_COINS[slug] : null;
+    if (!svg) {
+      const e = figma.createEllipse();
+      e.resize(size, size);
+      e.fills = [solid(fallbackHex || "#3F4656")];
+      return e;
+    }
+    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
+    node.name = "coin/" + slug;
+    node.fills = [];
+    return node;
+  };
   const coinDot = (col, s) => {
+    const slug = COIN_HEX[col];
+    if (slug) return coinLogo(slug, s, col);
     const e = figma.createEllipse();
     e.resize(s, s);
     e.fills = [solid(col)];

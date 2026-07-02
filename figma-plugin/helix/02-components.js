@@ -137,6 +137,21 @@
     }
     return ensurePage(createName, createMatcher);
   }
+  // Real coin logos from HELIX_COINS (coins-svg.js, MIT) — falls back to a tinted dot
+  const COIN_HEX = { "#F7931A": "btc", "#627EEA": "eth", "#14F195": "sol", "#F3BA2F": "bnb", "#00AAE4": "xrp", "#0033AD": "ada", "#E84142": "avax", "#2A5ADA": "link", "#2775CA": "usdc", "#8247E5": "matic" };
+  const coinLogo = (slug, size, fallbackHex) => {
+    const svg = (typeof HELIX_COINS !== "undefined" && HELIX_COINS[slug]) ? HELIX_COINS[slug] : null;
+    if (!svg) {
+      const e = figma.createEllipse();
+      e.resize(size, size);
+      e.fills = [solid(fallbackHex || "#3F4656")];
+      return e;
+    }
+    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
+    node.name = "coin/" + slug;
+    node.fills = [];
+    return node;
+  };
   const page = resolvePage(["🧩 Components"], "🧩 Components", /Components/);
   await gotoPage(page);
   // Buyer-facing descriptions shown in the inspect panel
@@ -359,10 +374,7 @@
     const token = autol(figma.createFrame(), "HORIZONTAL", { px: 11, py: 7, gap: 7 });
     token.cornerRadius = 10;
     token.fills = [solid("#FFFFFF", 0.06)];
-    const coin = figma.createEllipse();
-    coin.resize(20, 20);
-    coin.fills = [solid("#2775CA")];
-    token.appendChild(coin);
+    token.appendChild(coinLogo("usdc", 20, "#2775CA"));
     token.appendChild(txt("USDC", F.bodySemi, 13.5, "#F2F4F8"));
     token.appendChild(icon("caret-down-bold", 12, "#9AA4B2"));
     right.appendChild(token);
@@ -385,10 +397,8 @@
     c.fills = [solid("#FFFFFF", 0.04)];
     c.strokes = [solid("#FFFFFF", 0.1)];
     c.strokeWeight = 1;
-    const coin = figma.createEllipse();
+    const coin = coinLogo("eth", 20, "#627EEA");
     coin.name = "Icon";
-    coin.resize(20, 20);
-    coin.fills = [solid("#627EEA")];
     c.appendChild(coin);
     const label = txt("Ethereum", F.bodyMed, 14, "#F2F4F8");
     c.appendChild(label);
@@ -593,9 +603,9 @@
   // CHIP / CHAIN — Ethereum / Solana / Polygon
   // ═════════════════════════════════════════════
   {
-    const chains = { Ethereum: "#627EEA", Solana: "#14F195", Polygon: "#8247E5" };
+    const chains = { Ethereum: ["eth", "#627EEA"], Solana: ["sol", "#14F195"], Polygon: ["matic", "#8247E5"] };
     const comps = [];
-    for (const [cn, col] of Object.entries(chains)) {
+    for (const [cn, [slug, col]] of Object.entries(chains)) {
       const c = figma.createComponent();
       c.name = `Chain=${cn}`;
       autol(c, "HORIZONTAL", { px: 11, gap: 7 });
@@ -604,10 +614,8 @@
       c.fills = [solid("#FFFFFF", 0.05)];
       c.strokes = [solid("#FFFFFF", 0.08)];
       c.strokeWeight = 1;
-      const coin = figma.createEllipse();
+      const coin = coinLogo(slug, 18, col);
       coin.name = "Coin";
-      coin.resize(18, 18);
-      coin.fills = [solid(col)];
       c.appendChild(coin);
       c.appendChild(txt(cn, F.bodyMed, 12.5, "#C8CFDA"));
       comps.push(c);

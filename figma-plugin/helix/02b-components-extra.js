@@ -160,6 +160,21 @@
     }
     return ensurePage(createName, createMatcher);
   }
+  // Real coin logos from HELIX_COINS (coins-svg.js, MIT) — falls back to a tinted dot
+  const COIN_HEX = { "#F7931A": "btc", "#627EEA": "eth", "#14F195": "sol", "#F3BA2F": "bnb", "#00AAE4": "xrp", "#0033AD": "ada", "#E84142": "avax", "#2A5ADA": "link", "#2775CA": "usdc", "#8247E5": "matic" };
+  const coinLogo = (slug, size, fallbackHex) => {
+    const svg = (typeof HELIX_COINS !== "undefined" && HELIX_COINS[slug]) ? HELIX_COINS[slug] : null;
+    if (!svg) {
+      const e = figma.createEllipse();
+      e.resize(size, size);
+      e.fills = [solid(fallbackHex || "#3F4656")];
+      return e;
+    }
+    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
+    node.name = "coin/" + slug;
+    node.fills = [];
+    return node;
+  };
   const page = resolvePage(["🗂 Components · Data", "🧩 Components"], "🧩 Components", /Components/);
   await gotoPage(page);
   const DESCRIPTIONS = {
@@ -262,10 +277,8 @@
 
       const head = autol(figma.createFrame(), "HORIZONTAL", { gap: 11, main: "MIN" });
       head.fills = [];
-      const coin = figma.createEllipse();
+      const coin = coinLogo(up ? "btc" : "sol", 38, up ? "#F7931A" : "#14F195");
       coin.name = "Coin";
-      coin.resize(38, 38);
-      coin.fills = [solid(up ? "#F7931A" : "#14F195")];
       head.appendChild(coin);
       const id = autol(figma.createFrame(), "VERTICAL", { gap: 1, cross: "MIN" });
       id.fills = [];
@@ -716,10 +729,7 @@
       const id = autol(figma.createFrame(), "HORIZONTAL", { gap: 11, main: "MIN" });
       id.name = "Asset";
       id.fills = [];
-      const coin = figma.createEllipse();
-      coin.resize(30, 30);
-      coin.fills = [solid(d.coin)];
-      id.appendChild(coin);
+      id.appendChild(coinLogo(dir === "Up" ? "btc" : "sol", 30, d.coin));
       const nameCol = autol(figma.createFrame(), "VERTICAL", { gap: 1, cross: "MIN" });
       nameCol.fills = [];
       nameCol.appendChild(txt(d.name, F.bodySemi, 13.5, "#F2F4F8"));

@@ -7,18 +7,18 @@ Works on **Figma Free**: scripts detect plan limits (1 variable mode, 3 pages) a
 ## How to Use
 
 ### Method 1: One-click plugin (Recommended)
-`code.js` is a pre-built bundle of the icon pack + all 7 scripts with a menu — no pasting needed.
+`code.js` is a pre-built bundle of the icon + coin packs + all 7 scripts with a menu — no pasting needed.
 1. Open **Figma Desktop**, create a new design file
 2. **Plugins → Development → Import plugin from manifest…** → pick `manifest.json` in this folder
 3. **Plugins → Development → Helix Crypto UI Kit Generator → 🚀 Run ALL (00 → 04)**
 4. Or run each part separately from the same submenu (00 → 04, in order)
-5. The success toast says **“Helix Crypto UI Kit v6”** — if you don't see “v6”, the plugin is running an old `code.js`; replace the folder and re-run
+5. The success toast says **“Helix Crypto UI Kit v7”** — if you don't see “v7”, the plugin is running an old `code.js`; replace the folder and re-run
 
 If you edit the `00-…04-…` source scripts, regenerate the bundle with `node build.js`.
 
 ### Method 2: Figma Console (no import)
 1. **Menu → Plugins → Development → Show/Hide Console** (`Ctrl+Alt+I` / `Cmd+Option+I`)
-2. Paste `icons-svg.js` first, then each script (`00 → 04`) in order and press Enter
+2. Paste `icons-svg.js`, then `coins-svg.js`, then each script (`00 → 04`) in order and press Enter
 3. Wait for the ✅ message before running the next one
 
 ## Script Order (IMPORTANT — run sequentially)
@@ -26,6 +26,7 @@ If you edit the `00-…04-…` source scripts, regenerate the bundle with `node 
 | # | File | What it creates |
 |---|------|-----------------|
 | — | `icons-svg.js` | **Icon pack** — 70 real Phosphor icons (MIT) embedded as SVG, used by every later script. Console method: paste this FIRST |
+| — | `coins-svg.js` | **Coin logo pack** — 12 coin logos (BTC, ETH, SOL, BNB, XRP, ADA, AVAX, LINK, DOT, MATIC, USDC, USDT) from cryptocurrency-icons (MIT — safe to resell, unlike scraping brand-logo sites). Console: paste right after the icon pack |
 | 0 | `00-variables.js` | **Pages** — probes your plan: full 8-page layout (📕 Cover / 🚀 Getting Started / 🎨 Foundations / 🧩 Components / 🗂 Components · Data / 🖥 Screens · Web / 📱 Screens · Mobile / 🎯 Prototype) or 3-page lite on Figma Free + **Variables**: Accent ramp 50–950, Bg/Border/Text tokens (Dark + Light), semantic colors, Spacing (4pt), Radius |
 | 1 | `01-foundation.js` | **Cover 1600×1200** (UI8 thumbnail-ready) + **Getting Started** doc frame + **Styles**: 40+ paint styles (incl. accent gradients), 28 text styles (Space Grotesk / Plus Jakarta Sans / JetBrains Mono), elevation + glow + focus-ring effects, Style Guide frame |
 | 2 | `02-components.js` | **Core components** (sectioned, with buyer-facing descriptions): Button (5 types × 3 sizes × 3 states), Icon Button, Input, Amount Input, Select, Checkbox, Radio, Toggle, Segmented, Badge/Status, Badge/Change, Badge/Special, Chip/Chain, Avatar (4×3), Avatar Group, Tab, Pill/Timeframe, Breadcrumb, Pagination |
@@ -52,7 +53,7 @@ If you edit the `00-…04-…` source scripts, regenerate the bundle with `node 
 
 ## After generating — polish checklist (before UI8)
 
-1. Swap the coin-colored circles for real coin logos (cryptocurrency-icons set, free) and drop real photos into avatars
+1. Drop real photos into the Avatar components (coin logos are already real — MIT cryptocurrency-icons)
 2. Export `.fig`, package with the Cover frame (1600×1200) as thumbnail + screen previews for UI8
 
 Icons are already real (Phosphor, MIT license — attribution not required but appreciated). Fills are already bound to Variables by `04-bind-variables.js`.
