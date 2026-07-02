@@ -152,14 +152,40 @@
     }
     return s;
   };
-  const page = ensurePage("🧩 Components", /Components/);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const page = resolvePage(["🗂 Components · Data", "🧩 Components"], "🧩 Components", /Components/);
   await gotoPage(page);
+  const DESCRIPTIONS = {
+    "Stat Card": "KPI tile: icon, delta badge, label and headline value.",
+    "Coin Card": "Asset snapshot with logo, price and 7-day sparkline. Trend: Up / Down.",
+    "Wallet Card": "Gradient balance card with wallet address. Hero element for wallet screens.",
+    "Alert": "Inline banner. Tones: Success, Warning, Danger, Info — icon + title + body.",
+    "Toast": "Floating notification with icon tile, message and dismiss.",
+    "Tooltip": "Small contextual hint with pointer arrow.",
+    "Progress Bar": "Linear progress with label and percentage.",
+    "Progress Circle": "Radial progress ring with center value.",
+    "Slider": "Single-thumb range input (slippage, allocation…).",
+    "Stepper": "3-step flow indicator: done / current / upcoming.",
+    "Skeleton": "Loading placeholder bars.",
+    "Donut Chart": "Portfolio allocation donut with legend.",
+    "Bar Chart": "Mini volume/bar chart block.",
+    "Markets Table Row": "Full market row: rank, asset, price, 24h change, sparkline, action. Trend: Up / Down.",
+    "Order Book Row": "Ask/Bid book row with depth bar. Side: Ask / Bid.",
+  };
   const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
   const placedSets = [];
   let yOffset = 0; // continue below whatever 02-components.js created
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    if (DESCRIPTIONS[name]) { try { set.description = DESCRIPTIONS[name]; } catch (e) {} }
     page.appendChild(set);
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;

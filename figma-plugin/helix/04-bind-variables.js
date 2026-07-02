@@ -91,10 +91,11 @@
   // On Pro, light screens must resolve variables in the Light mode
   let lightModeSet = 0;
   if (lightModeId) {
-    const scrPage = figma.root.children.find((p) => /Screens/.test(p.name));
-    if (scrPage && scrPage.findAll) {
+    const scrPages = figma.root.children.filter((p) => /Screens/.test(p.name));
+    for (const sp of scrPages) {
+      if (!sp.findAll) continue;
       // screens may sit inside Sections — search frames recursively
-      const lightFrames = scrPage.findAll((n) => n.type === "FRAME" && /Light/.test(n.name) && !!n.setExplicitVariableModeForCollection);
+      const lightFrames = sp.findAll((n) => n.type === "FRAME" && /Light/.test(n.name) && !!n.setExplicitVariableModeForCollection);
       for (const node of lightFrames) {
         node.setExplicitVariableModeForCollection(darkCol, lightModeId);
         lightModeSet++;

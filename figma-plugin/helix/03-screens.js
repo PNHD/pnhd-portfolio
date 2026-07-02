@@ -118,23 +118,24 @@
     return node;
   };
   // Instance of a component built by 02/02b — screens consume the library
-  const compPage = figma.root.children.find((p) => /Components/.test(p.name));
+  const compPages = figma.root.children.filter((p) => /Components/.test(p.name));
   const findSet = (setName) => {
-    if (!compPage) return null;
-    const direct = compPage.children.find((n) => n.name === setName);
-    if (direct) return direct;
-    // component sets live inside named Sections on the Components page
-    for (const sec of compPage.children) {
-      if (sec.children) {
-        const hit = sec.children.find((n) => n.name === setName);
-        if (hit) return hit;
+    for (const pg of compPages) {
+      const direct = pg.children.find((n) => n.name === setName);
+      if (direct) return direct;
+      // component sets live inside named Sections on the component pages
+      for (const sec of pg.children) {
+        if (sec.children) {
+          const hit = sec.children.find((n) => n.name === setName);
+          if (hit) return hit;
+        }
       }
     }
     return null;
   };
   const setCache = {};
   const inst = (setName, variantName, textOverride) => {
-    if (!compPage) return null;
+    if (!compPages.length) return null;
     if (!(setName in setCache)) setCache[setName] = findSet(setName);
     const set = setCache[setName];
     if (!set) return null;
@@ -200,7 +201,16 @@
     if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
     try { figma.currentPage = p; } catch (e) {}
   }
-  const scrPage = ensurePage("📱 Screens", /Screens/);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const scrPage = resolvePage(["🖥 Screens · Web", "📱 Screens"], "📱 Screens", /Screens/);
+  const mobPage = resolvePage(["📱 Screens · Mobile", "📱 Screens"], "📱 Screens", /Screens/);
   await gotoPage(scrPage);
 
   // Each screen lives in a named Section — organized, titled, never overlapping
@@ -771,24 +781,24 @@
   // MOBILE SCREENS — 390×844
   // ════════════════════════════════════════════════════════
   let mobileSection = null;
+  let yMob = 0;
+  for (const ch of mobPage.children) yMob = Math.max(yMob, ch.y + ch.height + 160);
   {
     const mobileTitle = "📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap";
     if (figma.createSection) {
       mobileSection = figma.createSection();
       mobileSection.name = mobileTitle;
-      scrPage.appendChild(mobileSection);
-      mobileSection.x = 0; mobileSection.y = yCursor;
+      mobPage.appendChild(mobileSection);
+      mobileSection.x = 0; mobileSection.y = yMob;
       mobileSection.resizeWithoutConstraints(1410 + 390 + 120, 844 + 120);
-      yCursor += 844 + 220;
     } else {
       const t = txt(mobileTitle, F.disp, 26, "#F2F4F8");
-      scrPage.appendChild(t);
-      t.x = 0; t.y = yCursor;
-      yCursor += 60;
+      mobPage.appendChild(t);
+      t.x = 0; t.y = yMob;
+      yMob += 60;
     }
   }
-  const yMobile = mobileSection ? 60 : yCursor;
-  if (!mobileSection) yCursor += 844 + 120;
+  const yMobile = mobileSection ? 60 : yMob;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -805,7 +815,7 @@
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    (mobileSection || scrPage).appendChild(p);
+    (mobileSection || mobPage).appendChild(p);
     p.x = mobileSection ? x + 60 : x;
     p.y = yMobile;
     statusBar(p);

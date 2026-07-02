@@ -91,22 +91,40 @@ async function part00() {
   const rgba = (h, a) => ({ ...hex(h), a });
 
   // ═════════════════════════════════════════════
-  // PAGE STRUCTURE — exactly 3 pages (fits Figma Free)
-  // Reuses empty default "Page N" by renaming before creating new ones.
+  // PAGE STRUCTURE — 8 pro pages when the plan allows,
+  // 3-page lite layout on Figma Free (3-page limit).
   // ═════════════════════════════════════════════
-  function ensurePage(name, matcher) {
-    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
-    if (found) return found;
-    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
-    if (spare) { spare.name = name; return spare; }
-    try { const p = figma.createPage(); p.name = name; return p; }
-    catch (e) { return figma.currentPage; } // page limit — fall back
+  const FULL_PAGES = [
+    "📕 Cover", "🚀 Getting Started", "🎨 Foundations",
+    "🧩 Components", "🗂 Components · Data",
+    "🖥 Screens · Web", "📱 Screens · Mobile", "🎯 Prototype",
+  ];
+  const LITE_PAGES = ["🏠 Cover · Foundations", "🧩 Components", "📱 Screens"];
+  const findP = (n) => figma.root.children.find((p) => p.name === n);
+  let pagePlan;
+  if (FULL_PAGES.every(findP)) {
+    pagePlan = "full";
+  } else if (LITE_PAGES.every(findP)) {
+    pagePlan = "lite";
+  } else {
+    // probe how many pages this plan allows (Figma Free caps at 3 total)
+    const temps = [];
+    for (let i = 0; i < FULL_PAGES.length; i++) {
+      try { const t = figma.createPage(); t.name = "HELIX_TMP_" + i; temps.push(t); }
+      catch (e) { break; }
+    }
+    const spare = figma.root.children.filter((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    const capacity = temps.length + spare.length;
+    const targets = capacity >= FULL_PAGES.length ? FULL_PAGES : LITE_PAGES;
+    pagePlan = targets === FULL_PAGES ? "full" : "lite";
+    let ti = 0;
+    for (const name of targets) {
+      if (findP(name)) continue;
+      const slot = spare.length ? spare.shift() : temps[ti++];
+      if (slot) slot.name = name;
+    }
+    for (; ti < temps.length; ti++) { try { temps[ti].remove(); } catch (e) {} }
   }
-  let pagesCreated = true;
-  const p1 = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
-  const p2 = ensurePage("🧩 Components", /Components/);
-  const p3 = ensurePage("📱 Screens", /Screens/);
-  if (new Set([p1, p2, p3]).size < 3) pagesCreated = false;
 
   // ═════════════════════════════════════════════
   // COLOR VARIABLES — Dark (default) + Light
@@ -206,8 +224,8 @@ async function part00() {
   const modeNote = lightModeId
     ? "Dark + Light modes"
     : "Dark mode + separate (Light) collection — Figma Free";
-  const pageNote = pagesCreated ? "" : " · page limit hit, some content will share a page";
-  __done(`✅ Helix: 3 pages + variables created (${modeNote})${pageNote}`);
+  const pageNote = pagePlan === "full" ? "8 pages" : "3 pages (Free lite layout)";
+  __done(`✅ Helix: ${pageNote} + variables created (${modeNote})`);
 }
 
 // ─────────── 01-foundation.js ───────────
@@ -414,8 +432,18 @@ async function part01() {
     }
     return s;
   };
-  const guide = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
-  await gotoPage(guide);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const coverPage = resolvePage(["📕 Cover", /Cover/], "🏠 Cover · Foundations", /Cover|Foundations/);
+  const gsPage = figma.root.children.find((p) => /Getting Started/.test(p.name)) || coverPage;
+  const guide = figma.root.children.find((p) => /Foundations/.test(p.name) && !/Cover/.test(p.name)) || coverPage;
+  await gotoPage(coverPage);
 
   // ── COVER (1600×1200 — UI8 thumbnail ratio) ──
   {
@@ -430,7 +458,7 @@ async function part01() {
     cover.primaryAxisAlignItems = "CENTER";
     cover.counterAxisAlignItems = "CENTER";
     cover.itemSpacing = 30;
-    guide.appendChild(cover);
+    coverPage.appendChild(cover);
     cover.x = 0; cover.y = 0;
 
     const glow = (h, x, y, s, a) => {
@@ -537,8 +565,8 @@ async function part01() {
     gs.fills = [solid("#12151C")];
     gs.strokes = [solid("#FFFFFF", 0.07)];
     gs.strokeWeight = 1;
-    guide.appendChild(gs);
-    gs.x = 1680; gs.y = 0;
+    gsPage.appendChild(gs);
+    if (gsPage === coverPage) { gs.x = 1680; gs.y = 0; } else { gs.x = 0; gs.y = 0; }
 
     const block = (font, size, chars, color) => {
       const t = figma.createText();
@@ -559,7 +587,7 @@ async function part01() {
     block(F.bodySemi, 18, "3 · Components", "#A5ABFC");
     block(F.body, 15, "All components are variant-driven and built with Auto Layout. Swap the placeholder circles for real coin logos (cryptocurrency-icons) and avatars, and drop in Phosphor icons from the free community library.", "#C8CFDA");
     block(F.bodySemi, 18, "4 · Screens", "#A5ABFC");
-    block(F.body, 15, "The 📱 Screens page contains 20 production screens — 12 desktop (Trading Terminal, Portfolio, Markets, Asset & NFT Detail, Wallet, Send & Receive, Staking, Transactions, Settings, Sign in…) and 8 mobile — assembled from component instances and organized in named sections.", "#C8CFDA");
+    block(F.body, 15, "The Screens pages contain 20 production screens — 12 desktop (Trading Terminal, Portfolio, Markets, Asset & NFT Detail, Wallet, Send & Receive, Staking, Transactions, Settings, Sign in…) and 8 mobile — assembled from component instances, each inside a named section.", "#C8CFDA");
     block(F.bodySemi, 18, "License", "#A5ABFC");
     block(F.body, 15, "Standard license: unlimited personal & client projects. Extended license: use in end products for sale. © Dang Pham (Wonton Design).", "#C8CFDA");
   }
@@ -577,7 +605,7 @@ async function part01() {
   frame.cornerRadius = 24;
   frame.fills = [solid("#0A0C10")];
   guide.appendChild(frame);
-  frame.x = 0; frame.y = 1320; // below the Cover
+  if (guide === coverPage) { frame.x = 0; frame.y = 1320; } else { frame.x = 0; frame.y = 0; }
 
   function sectionTitle(label) {
     const t = figma.createText();
@@ -648,13 +676,45 @@ async function part01() {
     t.layoutSizingHorizontal = "FILL";
   }
 
-  const coverFrame = guide.children.find((n) => n.name === "Cover / UI8 Thumbnail");
-  const gsFrame = guide.children.find((n) => n.name === "Getting Started");
-  if (coverFrame) wrapSection(guide, "🖼 Cover", [coverFrame]);
-  if (gsFrame) wrapSection(guide, "📘 Getting Started", [gsFrame]);
+  const coverFrame = coverPage.children.find((n) => n.name === "Cover / UI8 Thumbnail");
+  const gsFrame = gsPage.children.find((n) => n.name === "Getting Started");
+  if (coverFrame) wrapSection(coverPage, "🖼 Cover", [coverFrame]);
+  if (gsFrame) wrapSection(gsPage, "📘 Getting Started", [gsFrame]);
   wrapSection(guide, "🎨 Style Guide", [frame]);
+
+  // Prototype starter note (own page on the full layout)
+  const protoPage = figma.root.children.find((p) => /Prototype/.test(p.name));
+  if (protoPage && !protoPage.children.length) {
+    const note = figma.createFrame();
+    note.name = "How to prototype";
+    note.layoutMode = "VERTICAL";
+    note.primaryAxisSizingMode = "AUTO";
+    note.counterAxisSizingMode = "FIXED";
+    note.resize(720, 100);
+    note.primaryAxisSizingMode = "AUTO";
+    note.paddingLeft = 40; note.paddingRight = 40;
+    note.paddingTop = 40; note.paddingBottom = 40;
+    note.itemSpacing = 14;
+    note.cornerRadius = 20;
+    note.fills = [solid("#12151C")];
+    note.strokes = [solid("#FFFFFF", 0.07)];
+    note.strokeWeight = 1;
+    protoPage.appendChild(note);
+    const nTitle = figma.createText();
+    nTitle.fontName = F.disp; nTitle.fontSize = 24;
+    nTitle.characters = "🎯 Prototype playground";
+    nTitle.fills = [solid("#F2F4F8")];
+    note.appendChild(nTitle);
+    const nBody = figma.createText();
+    nBody.fontName = F.body; nBody.fontSize = 14;
+    nBody.characters = "Duplicate any screens from 🖥 Screens · Web or 📱 Screens · Mobile onto this page and wire them with Figma's Prototype tab (e.g. Onboarding → Portfolio → Coin Detail → Swap). Keeping flows here leaves the master screens untouched.";
+    nBody.fills = [solid("#9AA4B2")];
+    note.appendChild(nBody);
+    nBody.layoutSizingHorizontal = "FILL";
+  }
+
   figma.viewport.scrollAndZoomIntoView([frame]);
-  __done("✅ Helix foundation: Cover, Getting Started, styles, style guide (sectioned)");
+  __done("✅ Helix foundation: Cover, Getting Started, styles, style guide, prototype note");
 }
 
 // ─────────── 02-components.js ───────────
@@ -782,8 +842,38 @@ async function part02() {
     }
     return s;
   };
-  const page = ensurePage("🧩 Components", /Components/);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const page = resolvePage(["🧩 Components"], "🧩 Components", /Components/);
   await gotoPage(page);
+  // Buyer-facing descriptions shown in the inspect panel
+  const DESCRIPTIONS = {
+    "Button": "Primary action. Variants: Type (Primary gradient / Secondary / Outline / Ghost / Danger) × Size (SM 32 / MD 42 / LG 48) × State (Default / Loading / Disabled).",
+    "Icon Button": "Square icon-only action. Style (Subtle / Primary) × Size (SM / MD). Swap the glyph inside.",
+    "Input": "Text field with label + helper. States: Default, Focus (accent ring), Error.",
+    "Amount Input": "Crypto amount entry with fiat equivalent, MAX shortcut and token selector.",
+    "Select": "Dropdown trigger with leading token icon. Used for networks and assets.",
+    "Checkbox": "Binary selection. States: Checked (gradient) / Unchecked.",
+    "Radio": "Single choice from a group. States: Selected / Unselected.",
+    "Toggle": "On/Off switch, gradient when active.",
+    "Segmented Control": "Exclusive tab-style switcher (Spot / Margin / Futures).",
+    "Badge / Status": "Transaction states: Confirmed, Pending, Failed, Draft — dot + tinted pill.",
+    "Badge / Change": "Price delta chip with trend arrow. Direction: Up / Down.",
+    "Badge / Special": "Marketing badges: NEW (gradient) and Verified (seal).",
+    "Chip / Chain": "Network chip: Ethereum, Solana, Polygon. Swap the dot for the chain logo.",
+    "Avatar": "User avatar. Size SM–XL × Type (Default / Status dot / Gradient ring). Drop a photo in the Photo layer.",
+    "Avatar Group": "Stacked avatars with +N overflow counter.",
+    "Tab": "Underline navigation tab. States: Active / Inactive.",
+    "Pill / Timeframe": "Chart range selector (24H · 1W · 1M · 1Y). States: Active / Inactive.",
+    "Breadcrumb": "Hierarchy trail with caret separators.",
+    "Pagination Item": "Page control cell: Active number, Default number, or Arrow.",
+  };
   // createComponent() lands on currentPage, which may NOT be our page on
   // newer Figma builds — always reparent explicitly before combining.
   const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
@@ -792,6 +882,7 @@ async function part02() {
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    if (DESCRIPTIONS[name]) { try { set.description = DESCRIPTIONS[name]; } catch (e) {} }
     page.appendChild(set); // ensure it lives on the Components page
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;
@@ -1556,14 +1647,40 @@ async function part02b() {
     }
     return s;
   };
-  const page = ensurePage("🧩 Components", /Components/);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const page = resolvePage(["🗂 Components · Data", "🧩 Components"], "🧩 Components", /Components/);
   await gotoPage(page);
+  const DESCRIPTIONS = {
+    "Stat Card": "KPI tile: icon, delta badge, label and headline value.",
+    "Coin Card": "Asset snapshot with logo, price and 7-day sparkline. Trend: Up / Down.",
+    "Wallet Card": "Gradient balance card with wallet address. Hero element for wallet screens.",
+    "Alert": "Inline banner. Tones: Success, Warning, Danger, Info — icon + title + body.",
+    "Toast": "Floating notification with icon tile, message and dismiss.",
+    "Tooltip": "Small contextual hint with pointer arrow.",
+    "Progress Bar": "Linear progress with label and percentage.",
+    "Progress Circle": "Radial progress ring with center value.",
+    "Slider": "Single-thumb range input (slippage, allocation…).",
+    "Stepper": "3-step flow indicator: done / current / upcoming.",
+    "Skeleton": "Loading placeholder bars.",
+    "Donut Chart": "Portfolio allocation donut with legend.",
+    "Bar Chart": "Mini volume/bar chart block.",
+    "Markets Table Row": "Full market row: rank, asset, price, 24h change, sparkline, action. Trend: Up / Down.",
+    "Order Book Row": "Ask/Bid book row with depth bar. Side: Ask / Bid.",
+  };
   const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
   const placedSets = [];
   let yOffset = 0; // continue below whatever 02-components.js created
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    if (DESCRIPTIONS[name]) { try { set.description = DESCRIPTIONS[name]; } catch (e) {} }
     page.appendChild(set);
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;
@@ -2307,23 +2424,24 @@ async function part03() {
     return node;
   };
   // Instance of a component built by 02/02b — screens consume the library
-  const compPage = figma.root.children.find((p) => /Components/.test(p.name));
+  const compPages = figma.root.children.filter((p) => /Components/.test(p.name));
   const findSet = (setName) => {
-    if (!compPage) return null;
-    const direct = compPage.children.find((n) => n.name === setName);
-    if (direct) return direct;
-    // component sets live inside named Sections on the Components page
-    for (const sec of compPage.children) {
-      if (sec.children) {
-        const hit = sec.children.find((n) => n.name === setName);
-        if (hit) return hit;
+    for (const pg of compPages) {
+      const direct = pg.children.find((n) => n.name === setName);
+      if (direct) return direct;
+      // component sets live inside named Sections on the component pages
+      for (const sec of pg.children) {
+        if (sec.children) {
+          const hit = sec.children.find((n) => n.name === setName);
+          if (hit) return hit;
+        }
       }
     }
     return null;
   };
   const setCache = {};
   const inst = (setName, variantName, textOverride) => {
-    if (!compPage) return null;
+    if (!compPages.length) return null;
     if (!(setName in setCache)) setCache[setName] = findSet(setName);
     const set = setCache[setName];
     if (!set) return null;
@@ -2389,7 +2507,16 @@ async function part03() {
     if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
     try { figma.currentPage = p; } catch (e) {}
   }
-  const scrPage = ensurePage("📱 Screens", /Screens/);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const scrPage = resolvePage(["🖥 Screens · Web", "📱 Screens"], "📱 Screens", /Screens/);
+  const mobPage = resolvePage(["📱 Screens · Mobile", "📱 Screens"], "📱 Screens", /Screens/);
   await gotoPage(scrPage);
 
   // Each screen lives in a named Section — organized, titled, never overlapping
@@ -2960,24 +3087,24 @@ async function part03() {
   // MOBILE SCREENS — 390×844
   // ════════════════════════════════════════════════════════
   let mobileSection = null;
+  let yMob = 0;
+  for (const ch of mobPage.children) yMob = Math.max(yMob, ch.y + ch.height + 160);
   {
     const mobileTitle = "📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap";
     if (figma.createSection) {
       mobileSection = figma.createSection();
       mobileSection.name = mobileTitle;
-      scrPage.appendChild(mobileSection);
-      mobileSection.x = 0; mobileSection.y = yCursor;
+      mobPage.appendChild(mobileSection);
+      mobileSection.x = 0; mobileSection.y = yMob;
       mobileSection.resizeWithoutConstraints(1410 + 390 + 120, 844 + 120);
-      yCursor += 844 + 220;
     } else {
       const t = txt(mobileTitle, F.disp, 26, "#F2F4F8");
-      scrPage.appendChild(t);
-      t.x = 0; t.y = yCursor;
-      yCursor += 60;
+      mobPage.appendChild(t);
+      t.x = 0; t.y = yMob;
+      yMob += 60;
     }
   }
-  const yMobile = mobileSection ? 60 : yCursor;
-  if (!mobileSection) yCursor += 844 + 120;
+  const yMobile = mobileSection ? 60 : yMob;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -2994,7 +3121,7 @@ async function part03() {
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    (mobileSection || scrPage).appendChild(p);
+    (mobileSection || mobPage).appendChild(p);
     p.x = mobileSection ? x + 60 : x;
     p.y = yMobile;
     statusBar(p);
@@ -3396,23 +3523,24 @@ async function part03b() {
     node.fills = [];
     return node;
   };
-  const compPage = figma.root.children.find((p) => /Components/.test(p.name));
+  const compPages = figma.root.children.filter((p) => /Components/.test(p.name));
   const findSet = (setName) => {
-    if (!compPage) return null;
-    const direct = compPage.children.find((n) => n.name === setName);
-    if (direct) return direct;
-    // component sets live inside named Sections on the Components page
-    for (const sec of compPage.children) {
-      if (sec.children) {
-        const hit = sec.children.find((n) => n.name === setName);
-        if (hit) return hit;
+    for (const pg of compPages) {
+      const direct = pg.children.find((n) => n.name === setName);
+      if (direct) return direct;
+      // component sets live inside named Sections on the component pages
+      for (const sec of pg.children) {
+        if (sec.children) {
+          const hit = sec.children.find((n) => n.name === setName);
+          if (hit) return hit;
+        }
       }
     }
     return null;
   };
   const setCache = {};
   const inst = (setName, variantName, textOverride) => {
-    if (!compPage) return null;
+    if (!compPages.length) return null;
     if (!(setName in setCache)) setCache[setName] = findSet(setName);
     const set = setCache[setName];
     if (!set) return null;
@@ -3484,7 +3612,16 @@ async function part03b() {
     if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
     try { figma.currentPage = p; } catch (e) {}
   }
-  const scrPage = ensurePage("📱 Screens", /Screens/);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const scrPage = resolvePage(["🖥 Screens · Web", "📱 Screens"], "📱 Screens", /Screens/);
+  const mobPage = resolvePage(["📱 Screens · Mobile", "📱 Screens"], "📱 Screens", /Screens/);
   await gotoPage(scrPage);
 
   // Each screen lives in a named Section — organized, titled, never overlapping
@@ -4175,24 +4312,24 @@ async function part03b() {
   // MOBILE — Wallet · Receive QR · NFT Gallery · Profile
   // ════════════════════════════════════════════════════════
   let mobileSection = null;
+  let yMob = 0;
+  for (const ch of mobPage.children) yMob = Math.max(yMob, ch.y + ch.height + 160);
   {
     const mobileTitle = "📱  Mobile · Wallet / Receive QR / NFT Gallery / Profile";
     if (figma.createSection) {
       mobileSection = figma.createSection();
       mobileSection.name = mobileTitle;
-      scrPage.appendChild(mobileSection);
-      mobileSection.x = 0; mobileSection.y = yCursor;
+      mobPage.appendChild(mobileSection);
+      mobileSection.x = 0; mobileSection.y = yMob;
       mobileSection.resizeWithoutConstraints(1410 + 390 + 120, 844 + 120);
-      yCursor += 844 + 220;
     } else {
       const t = txt(mobileTitle, F.disp, 26, "#F2F4F8");
-      scrPage.appendChild(t);
-      t.x = 0; t.y = yCursor;
-      yCursor += 60;
+      mobPage.appendChild(t);
+      t.x = 0; t.y = yMob;
+      yMob += 60;
     }
   }
-  const yMobile = mobileSection ? 60 : yCursor;
-  if (!mobileSection) yCursor += 844 + 120;
+  const yMobile = mobileSection ? 60 : yMob;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -4208,7 +4345,7 @@ async function part03b() {
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    (mobileSection || scrPage).appendChild(p);
+    (mobileSection || mobPage).appendChild(p);
     p.x = mobileSection ? x + 60 : x;
     p.y = yMobile;
     statusBar(p);
@@ -4499,10 +4636,11 @@ async function part04() {
   // On Pro, light screens must resolve variables in the Light mode
   let lightModeSet = 0;
   if (lightModeId) {
-    const scrPage = figma.root.children.find((p) => /Screens/.test(p.name));
-    if (scrPage && scrPage.findAll) {
+    const scrPages = figma.root.children.filter((p) => /Screens/.test(p.name));
+    for (const sp of scrPages) {
+      if (!sp.findAll) continue;
       // screens may sit inside Sections — search frames recursively
-      const lightFrames = scrPage.findAll((n) => n.type === "FRAME" && /Light/.test(n.name) && !!n.setExplicitVariableModeForCollection);
+      const lightFrames = sp.findAll((n) => n.type === "FRAME" && /Light/.test(n.name) && !!n.setExplicitVariableModeForCollection);
       for (const node of lightFrames) {
         node.setExplicitVariableModeForCollection(darkCol, lightModeId);
         lightModeSet++;
@@ -4524,8 +4662,8 @@ async function part04() {
       catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
     }
     figma.closePlugin(fails.length
-      ? "⚠️ Helix v5 generated with errors — " + fails.join(" · ")
-      : "✅ Helix Crypto UI Kit v5 — 20 screens in sections, components live, variables bound");
+      ? "⚠️ Helix v6 generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit v6 — 8-page kit, 20 screens, descriptions, variables bound");
   } else {
     try {
       await registry[figma.command]();

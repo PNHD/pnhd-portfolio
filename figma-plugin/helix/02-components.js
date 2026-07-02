@@ -129,8 +129,38 @@
     }
     return s;
   };
-  const page = ensurePage("🧩 Components", /Components/);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const page = resolvePage(["🧩 Components"], "🧩 Components", /Components/);
   await gotoPage(page);
+  // Buyer-facing descriptions shown in the inspect panel
+  const DESCRIPTIONS = {
+    "Button": "Primary action. Variants: Type (Primary gradient / Secondary / Outline / Ghost / Danger) × Size (SM 32 / MD 42 / LG 48) × State (Default / Loading / Disabled).",
+    "Icon Button": "Square icon-only action. Style (Subtle / Primary) × Size (SM / MD). Swap the glyph inside.",
+    "Input": "Text field with label + helper. States: Default, Focus (accent ring), Error.",
+    "Amount Input": "Crypto amount entry with fiat equivalent, MAX shortcut and token selector.",
+    "Select": "Dropdown trigger with leading token icon. Used for networks and assets.",
+    "Checkbox": "Binary selection. States: Checked (gradient) / Unchecked.",
+    "Radio": "Single choice from a group. States: Selected / Unselected.",
+    "Toggle": "On/Off switch, gradient when active.",
+    "Segmented Control": "Exclusive tab-style switcher (Spot / Margin / Futures).",
+    "Badge / Status": "Transaction states: Confirmed, Pending, Failed, Draft — dot + tinted pill.",
+    "Badge / Change": "Price delta chip with trend arrow. Direction: Up / Down.",
+    "Badge / Special": "Marketing badges: NEW (gradient) and Verified (seal).",
+    "Chip / Chain": "Network chip: Ethereum, Solana, Polygon. Swap the dot for the chain logo.",
+    "Avatar": "User avatar. Size SM–XL × Type (Default / Status dot / Gradient ring). Drop a photo in the Photo layer.",
+    "Avatar Group": "Stacked avatars with +N overflow counter.",
+    "Tab": "Underline navigation tab. States: Active / Inactive.",
+    "Pill / Timeframe": "Chart range selector (24H · 1W · 1M · 1Y). States: Active / Inactive.",
+    "Breadcrumb": "Hierarchy trail with caret separators.",
+    "Pagination Item": "Page control cell: Active number, Default number, or Arrow.",
+  };
   // createComponent() lands on currentPage, which may NOT be our page on
   // newer Figma builds — always reparent explicitly before combining.
   const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
@@ -139,6 +169,7 @@
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    if (DESCRIPTIONS[name]) { try { set.description = DESCRIPTIONS[name]; } catch (e) {} }
     page.appendChild(set); // ensure it lives on the Components page
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;

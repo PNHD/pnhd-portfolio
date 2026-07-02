@@ -208,8 +208,18 @@
     }
     return s;
   };
-  const guide = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
-  await gotoPage(guide);
+  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
+  function resolvePage(candidates, createName, createMatcher) {
+    for (const t of candidates) {
+      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
+      if (p) return p;
+    }
+    return ensurePage(createName, createMatcher);
+  }
+  const coverPage = resolvePage(["📕 Cover", /Cover/], "🏠 Cover · Foundations", /Cover|Foundations/);
+  const gsPage = figma.root.children.find((p) => /Getting Started/.test(p.name)) || coverPage;
+  const guide = figma.root.children.find((p) => /Foundations/.test(p.name) && !/Cover/.test(p.name)) || coverPage;
+  await gotoPage(coverPage);
 
   // ── COVER (1600×1200 — UI8 thumbnail ratio) ──
   {
@@ -224,7 +234,7 @@
     cover.primaryAxisAlignItems = "CENTER";
     cover.counterAxisAlignItems = "CENTER";
     cover.itemSpacing = 30;
-    guide.appendChild(cover);
+    coverPage.appendChild(cover);
     cover.x = 0; cover.y = 0;
 
     const glow = (h, x, y, s, a) => {
@@ -331,8 +341,8 @@
     gs.fills = [solid("#12151C")];
     gs.strokes = [solid("#FFFFFF", 0.07)];
     gs.strokeWeight = 1;
-    guide.appendChild(gs);
-    gs.x = 1680; gs.y = 0;
+    gsPage.appendChild(gs);
+    if (gsPage === coverPage) { gs.x = 1680; gs.y = 0; } else { gs.x = 0; gs.y = 0; }
 
     const block = (font, size, chars, color) => {
       const t = figma.createText();
@@ -353,7 +363,7 @@
     block(F.bodySemi, 18, "3 · Components", "#A5ABFC");
     block(F.body, 15, "All components are variant-driven and built with Auto Layout. Swap the placeholder circles for real coin logos (cryptocurrency-icons) and avatars, and drop in Phosphor icons from the free community library.", "#C8CFDA");
     block(F.bodySemi, 18, "4 · Screens", "#A5ABFC");
-    block(F.body, 15, "The 📱 Screens page contains 20 production screens — 12 desktop (Trading Terminal, Portfolio, Markets, Asset & NFT Detail, Wallet, Send & Receive, Staking, Transactions, Settings, Sign in…) and 8 mobile — assembled from component instances and organized in named sections.", "#C8CFDA");
+    block(F.body, 15, "The Screens pages contain 20 production screens — 12 desktop (Trading Terminal, Portfolio, Markets, Asset & NFT Detail, Wallet, Send & Receive, Staking, Transactions, Settings, Sign in…) and 8 mobile — assembled from component instances, each inside a named section.", "#C8CFDA");
     block(F.bodySemi, 18, "License", "#A5ABFC");
     block(F.body, 15, "Standard license: unlimited personal & client projects. Extended license: use in end products for sale. © Dang Pham (Wonton Design).", "#C8CFDA");
   }
@@ -371,7 +381,7 @@
   frame.cornerRadius = 24;
   frame.fills = [solid("#0A0C10")];
   guide.appendChild(frame);
-  frame.x = 0; frame.y = 1320; // below the Cover
+  if (guide === coverPage) { frame.x = 0; frame.y = 1320; } else { frame.x = 0; frame.y = 0; }
 
   function sectionTitle(label) {
     const t = figma.createText();
@@ -442,11 +452,43 @@
     t.layoutSizingHorizontal = "FILL";
   }
 
-  const coverFrame = guide.children.find((n) => n.name === "Cover / UI8 Thumbnail");
-  const gsFrame = guide.children.find((n) => n.name === "Getting Started");
-  if (coverFrame) wrapSection(guide, "🖼 Cover", [coverFrame]);
-  if (gsFrame) wrapSection(guide, "📘 Getting Started", [gsFrame]);
+  const coverFrame = coverPage.children.find((n) => n.name === "Cover / UI8 Thumbnail");
+  const gsFrame = gsPage.children.find((n) => n.name === "Getting Started");
+  if (coverFrame) wrapSection(coverPage, "🖼 Cover", [coverFrame]);
+  if (gsFrame) wrapSection(gsPage, "📘 Getting Started", [gsFrame]);
   wrapSection(guide, "🎨 Style Guide", [frame]);
+
+  // Prototype starter note (own page on the full layout)
+  const protoPage = figma.root.children.find((p) => /Prototype/.test(p.name));
+  if (protoPage && !protoPage.children.length) {
+    const note = figma.createFrame();
+    note.name = "How to prototype";
+    note.layoutMode = "VERTICAL";
+    note.primaryAxisSizingMode = "AUTO";
+    note.counterAxisSizingMode = "FIXED";
+    note.resize(720, 100);
+    note.primaryAxisSizingMode = "AUTO";
+    note.paddingLeft = 40; note.paddingRight = 40;
+    note.paddingTop = 40; note.paddingBottom = 40;
+    note.itemSpacing = 14;
+    note.cornerRadius = 20;
+    note.fills = [solid("#12151C")];
+    note.strokes = [solid("#FFFFFF", 0.07)];
+    note.strokeWeight = 1;
+    protoPage.appendChild(note);
+    const nTitle = figma.createText();
+    nTitle.fontName = F.disp; nTitle.fontSize = 24;
+    nTitle.characters = "🎯 Prototype playground";
+    nTitle.fills = [solid("#F2F4F8")];
+    note.appendChild(nTitle);
+    const nBody = figma.createText();
+    nBody.fontName = F.body; nBody.fontSize = 14;
+    nBody.characters = "Duplicate any screens from 🖥 Screens · Web or 📱 Screens · Mobile onto this page and wire them with Figma's Prototype tab (e.g. Onboarding → Portfolio → Coin Detail → Swap). Keeping flows here leaves the master screens untouched.";
+    nBody.fills = [solid("#9AA4B2")];
+    note.appendChild(nBody);
+    nBody.layoutSizingHorizontal = "FILL";
+  }
+
   figma.viewport.scrollAndZoomIntoView([frame]);
-  figma.closePlugin("✅ Helix foundation: Cover, Getting Started, styles, style guide (sectioned)");
+  figma.closePlugin("✅ Helix foundation: Cover, Getting Started, styles, style guide, prototype note");
 })();
