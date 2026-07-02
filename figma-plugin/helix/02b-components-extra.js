@@ -104,14 +104,40 @@
     try { const p = figma.createPage(); p.name = name; return p; }
     catch (e) { return figma.currentPage; }
   }
+  // Real Phosphor icon from HELIX_ICONS (icons-svg.js). Falls back to a dot
+  // if the icon pack was not pasted/bundled first.
+  const icon = (key, size, colorHex, opacity) => {
+    const svg = (typeof HELIX_ICONS !== "undefined" && HELIX_ICONS[key]) ? HELIX_ICONS[key] : null;
+    if (!svg) {
+      const e = figma.createEllipse();
+      e.resize(size, size);
+      e.fills = [solid(colorHex, opacity)];
+      return e;
+    }
+    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
+    node.name = "icon/" + key;
+    const paint = [solid(colorHex, opacity)];
+    for (const child of node.findAll(() => true)) {
+      if ("fills" in child && Array.isArray(child.fills) && child.fills.length) child.fills = paint;
+      if ("strokes" in child && Array.isArray(child.strokes) && child.strokes.length) child.strokes = paint;
+    }
+    node.fills = [];
+    return node;
+  };
+
   const page = ensurePage("🧩 Components", /Components/);
   figma.currentPage = page;
   let yOffset = 0; // continue below whatever 02-components.js created
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
+    tag.name = "label/" + name;
+    page.appendChild(tag);
+    tag.x = 0; tag.y = yOffset;
+    yOffset += 34;
     set.x = 0; set.y = yOffset;
-    yOffset += set.height + 120;
+    yOffset += set.height + 96;
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -143,7 +169,7 @@
     tile.counterAxisSizingMode = "FIXED";
     tile.cornerRadius = 12;
     tile.fills = [solid("#6366F1", 0.14)];
-    tile.appendChild(vec(18, 14, "M 1 13 L 1 6 M 6 13 L 6 1 M 11 13 L 11 8 M 16 13 L 16 4", "#6366F1", 2.4));
+    tile.appendChild(icon("chart-bar-fill", 22, "#6366F1"));
     top.appendChild(tile);
     const delta = autol(figma.createFrame(), "HORIZONTAL", { px: 8, py: 3, gap: 4 });
     delta.name = "Delta";
@@ -229,11 +255,7 @@
     const head = autol(figma.createFrame(), "HORIZONTAL", { main: "SPACE_BETWEEN" });
     head.fills = [];
     head.appendChild(txt("Main Wallet", F.bodySemi, 12.5, "#FFFFFF", 0.85));
-    const cube = figma.createRectangle();
-    cube.resize(18, 18);
-    cube.cornerRadius = 4;
-    cube.fills = [solid("#FFFFFF", 0.85)];
-    head.appendChild(cube);
+    head.appendChild(icon("cube-fill", 20, "#FFFFFF", 0.85));
     c.appendChild(head);
     head.layoutSizingHorizontal = "FILL";
 
@@ -250,7 +272,7 @@
     const foot = autol(figma.createFrame(), "HORIZONTAL", { main: "SPACE_BETWEEN" });
     foot.fills = [];
     foot.appendChild(txt("0x7f3a…b29c", F.mono, 12.5, "#FFFFFF", 0.78));
-    foot.appendChild(txt("⧉", F.body, 14, "#FFFFFF", 0.78));
+    foot.appendChild(icon("copy", 15, "#FFFFFF", 0.78));
     c.appendChild(foot);
     foot.layoutSizingHorizontal = "FILL";
     placeSet(c, "Wallet Card");
@@ -261,10 +283,10 @@
   // ═════════════════════════════════════════════
   {
     const tones = {
-      Success: { bg: solid("#10B981", 0.09), bd: solid("#10B981", 0.22), icon: "#34D399", tc: "#D1FAE5", title: "Transaction confirmed", body: "0.5 ETH sent successfully." },
-      Warning: { bg: solid("#F59E0B", 0.09), bd: solid("#F59E0B", 0.22), icon: "#FBBF24", tc: "#FEF3C7", title: "Network congestion",     body: "Gas fees are elevated." },
-      Danger:  { bg: solid("#F43F5E", 0.09), bd: solid("#F43F5E", 0.22), icon: "#FB7185", tc: "#FECDD3", title: "Swap failed",            body: "Slippage tolerance exceeded." },
-      Info:    { bg: solid("#6366F1", 0.09), bd: solid("#6366F1", 0.22), icon: "#A5ABFC", tc: "#E0E3FF", title: "New staking pool",       body: "Earn up to 6.4% APY." },
+      Success: { bg: solid("#10B981", 0.09), bd: solid("#10B981", 0.22), icon: "#34D399", ik: "check-circle-fill", tc: "#D1FAE5", title: "Transaction confirmed", body: "0.5 ETH sent successfully." },
+      Warning: { bg: solid("#F59E0B", 0.09), bd: solid("#F59E0B", 0.22), icon: "#FBBF24", ik: "warning-fill",      tc: "#FEF3C7", title: "Network congestion",     body: "Gas fees are elevated." },
+      Danger:  { bg: solid("#F43F5E", 0.09), bd: solid("#F43F5E", 0.22), icon: "#FB7185", ik: "x-circle-fill",     tc: "#FECDD3", title: "Swap failed",            body: "Slippage tolerance exceeded." },
+      Info:    { bg: solid("#6366F1", 0.09), bd: solid("#6366F1", 0.22), icon: "#A5ABFC", ik: "info-fill",         tc: "#E0E3FF", title: "New staking pool",       body: "Earn up to 6.4% APY." },
     };
     const comps = [];
     for (const [tn, tc] of Object.entries(tones)) {
@@ -278,11 +300,7 @@
       c.fills = [tc.bg];
       c.strokes = [tc.bd];
       c.strokeWeight = 1;
-      const ic = figma.createEllipse();
-      ic.name = "Icon";
-      ic.resize(20, 20);
-      ic.fills = [solid(tc.icon)];
-      c.appendChild(ic);
+      c.appendChild(icon(tc.ik, 20, tc.icon));
       const col = autol(figma.createFrame(), "VERTICAL", { gap: 2, cross: "MIN" });
       col.fills = [];
       col.appendChild(txt(tc.title, F.bodySemi, 13, tc.tc));
@@ -316,7 +334,7 @@
     tile.counterAxisSizingMode = "FIXED";
     tile.cornerRadius = 10;
     tile.fills = [solid("#34D399", 0.14)];
-    tile.appendChild(vec(14, 14, "M 12 2 L 2 12 M 2 6 L 2 12 L 8 12", "#34D399", 2));
+    tile.appendChild(icon("arrow-down-left-fill", 18, "#34D399"));
     c.appendChild(tile);
     const col = autol(figma.createFrame(), "VERTICAL", { gap: 2, cross: "MIN" });
     col.fills = [];
@@ -324,7 +342,7 @@
     col.appendChild(txt("Just now · from 0x9f…21", F.body, 11.5, "#5E6776"));
     c.appendChild(col);
     col.layoutSizingHorizontal = "FILL";
-    const close = vec(10, 10, "M 0 0 L 10 10 M 10 0 L 0 10", "#5E6776", 1.6);
+    const close = icon("x-bold", 12, "#5E6776");
     close.name = "Close";
     c.appendChild(close);
     placeSet(c, "Toast");

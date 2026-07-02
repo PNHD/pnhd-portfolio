@@ -82,14 +82,40 @@
     try { const p = figma.createPage(); p.name = name; return p; }
     catch (e) { return figma.currentPage; }
   }
+  // Real Phosphor icon from HELIX_ICONS (icons-svg.js). Falls back to a dot
+  // if the icon pack was not pasted/bundled first.
+  const icon = (key, size, colorHex, opacity) => {
+    const svg = (typeof HELIX_ICONS !== "undefined" && HELIX_ICONS[key]) ? HELIX_ICONS[key] : null;
+    if (!svg) {
+      const e = figma.createEllipse();
+      e.resize(size, size);
+      e.fills = [solid(colorHex, opacity)];
+      return e;
+    }
+    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
+    node.name = "icon/" + key;
+    const paint = [solid(colorHex, opacity)];
+    for (const child of node.findAll(() => true)) {
+      if ("fills" in child && Array.isArray(child.fills) && child.fills.length) child.fills = paint;
+      if ("strokes" in child && Array.isArray(child.strokes) && child.strokes.length) child.strokes = paint;
+    }
+    node.fills = [];
+    return node;
+  };
+
   const page = ensurePage("🧩 Components", /Components/);
   figma.currentPage = page;
   let yOffset = 0;
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
+    tag.name = "label/" + name;
+    page.appendChild(tag);
+    tag.x = 0; tag.y = yOffset;
+    yOffset += 34;
     set.x = 0; set.y = yOffset;
-    yOffset += set.height + 120;
+    yOffset += set.height + 96;
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -180,9 +206,7 @@
         c.cornerRadius = sc.r;
         c.fills = stc.grad ? [ACCENT_GRAD] : [stc.bg];
         if (stc.bd) { c.strokes = [stc.bd]; c.strokeWeight = 1; }
-        const half = sc.s * 0.4;
-        const plus = vec(half * 2 - sc.s * 0.4, half * 2 - sc.s * 0.4, `M ${half - sc.s * 0.2} 0 L ${half - sc.s * 0.2} ${half * 2 - sc.s * 0.4} M 0 ${half - sc.s * 0.2} L ${half * 2 - sc.s * 0.4} ${half - sc.s * 0.2}`, stc.icon, 2);
-        plus.name = "Icon";
+        const plus = icon("plus-bold", Math.round(sc.s * 0.45), stc.icon);
         c.appendChild(plus);
         comps.push(c);
       }
@@ -220,11 +244,12 @@
       field.strokes = [sc.bd];
       field.strokeWeight = sc.bw;
       if (sc.ring) field.effects = [{ type: "DROP_SHADOW", color: { ...hex("#6366F1"), a: 0.18 }, offset: { x: 0, y: 0 }, radius: 0, spread: 4, visible: true, blendMode: "NORMAL" }];
-      const dot = figma.createEllipse();
-      dot.name = "Icon";
-      dot.resize(16, 16);
-      dot.fills = [solid(st === "Error" ? "#FB7185" : st === "Focus" ? "#6366F1" : "#5E6776")];
-      field.appendChild(dot);
+      const fieldIcon = icon(
+        st === "Error" ? "warning-fill" : st === "Focus" ? "lock-key" : "envelope-simple",
+        17,
+        st === "Error" ? "#FB7185" : st === "Focus" ? "#6366F1" : "#5E6776"
+      );
+      field.appendChild(fieldIcon);
       const value = txt(sc.value, F.body, 14, sc.vc);
       value.name = "Value";
       field.appendChild(value);
@@ -275,7 +300,7 @@
     coin.fills = [solid("#2775CA")];
     token.appendChild(coin);
     token.appendChild(txt("USDC", F.bodySemi, 13.5, "#F2F4F8"));
-    token.appendChild(vec(10, 6, "M 0 0 L 5 5 L 10 0", "#9AA4B2", 1.5));
+    token.appendChild(icon("caret-down-bold", 12, "#9AA4B2"));
     right.appendChild(token);
     c.appendChild(right);
 
@@ -304,7 +329,7 @@
     const label = txt("Ethereum", F.bodyMed, 14, "#F2F4F8");
     c.appendChild(label);
     label.layoutSizingHorizontal = "FILL";
-    c.appendChild(vec(10, 6, "M 0 0 L 5 5 L 10 0", "#9AA4B2", 1.5));
+    c.appendChild(icon("caret-down-bold", 13, "#9AA4B2"));
     placeSet(c, "Select");
   }
 
@@ -493,11 +518,7 @@
       c.minHeight = 24;
       c.cornerRadius = 7;
       c.fills = [solid("#0EA5E9", 0.14)];
-      const seal = figma.createEllipse();
-      seal.name = "Seal";
-      seal.resize(13, 13);
-      seal.fills = [solid("#38BDF8")];
-      c.appendChild(seal);
+      c.appendChild(icon("seal-check-fill", 14, "#38BDF8"));
       c.appendChild(txt("Verified", F.bodySemi, 11.5, "#38BDF8"));
       comps.push(c);
     }

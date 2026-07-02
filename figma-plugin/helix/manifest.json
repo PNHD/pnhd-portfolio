@@ -5,12 +5,14 @@
   "main": "code.js",
   "editorType": ["figma"],
   "menu": [
-    { "name": "🚀 Run ALL (00 → 03)", "command": "all" },
+    { "name": "🚀 Run ALL (00 → 04)", "command": "all" },
     { "separator": true },
     { "name": "00 · Pages + Variables", "command": "s00" },
     { "name": "01 · Styles + Style Guide", "command": "s01" },
     { "name": "02 · Core Components", "command": "s02" },
     { "name": "02b · Extra Components", "command": "s02b" },
-    { "name": "03 · Screens (Web + Mobile)", "command": "s03" }
+    { "name": "03 · Screens 1-7", "command": "s03" },
+    { "name": "03b · Screens 8-20", "command": "s03b" },
+    { "name": "04 · Bind Variables", "command": "s04" }
   ]
 }

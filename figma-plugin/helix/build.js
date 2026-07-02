@@ -12,6 +12,8 @@ const parts = [
   ["part02", "02-components.js"],
   ["part02b", "02b-components-extra.js"],
   ["part03", "03-screens.js"],
+  ["part03b", "03b-screens-extra.js"],
+  ["part04", "04-bind-variables.js"],
 ];
 
 let out = `// ============================================================
@@ -23,6 +25,9 @@ let out = `// ============================================================
 const __done = (msg) => { figma.notify(String(msg), { timeout: 4000 }); console.log(msg); };
 
 `;
+
+// icon pack goes first so every part can resolve HELIX_ICONS
+out += fs.readFileSync(path.join(__dirname, "icons-svg.js"), "utf8") + "\n";
 
 for (const [fnName, file] of parts) {
   let src = fs.readFileSync(path.join(__dirname, file), "utf8");
@@ -36,8 +41,8 @@ for (const [fnName, file] of parts) {
 }
 
 out += `(async () => {
-  const registry = { s00: part00, s01: part01, s02: part02, s02b: part02b, s03: part03 };
-  const order = ["s00", "s01", "s02", "s02b", "s03"];
+  const registry = { s00: part00, s01: part01, s02: part02, s02b: part02b, s03: part03, s03b: part03b, s04: part04 };
+  const order = ["s00", "s01", "s02", "s02b", "s03", "s03b", "s04"];
   if (!figma.command || figma.command === "all") {
     // isolate failures so one bad part never blocks the rest
     const fails = [];
@@ -46,8 +51,8 @@ out += `(async () => {
       catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
     }
     figma.closePlugin(fails.length
-      ? "⚠️ Helix generated with errors — " + fails.join(" · ")
-      : "✅ Helix Crypto UI Kit — all parts generated");
+      ? "⚠️ Helix v4 generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit v4 — 20 screens, icons & variables bound");
   } else {
     try {
       await registry[figma.command]();
