@@ -16,30 +16,22 @@ async function part00() {
   const rgba = (h, a) => ({ ...hex(h), a });
 
   // ═════════════════════════════════════════════
-  // PAGE STRUCTURE (matches the kit's Figma panel)
+  // PAGE STRUCTURE — exactly 3 pages (fits Figma Free)
+  // Reuses empty default "Page N" by renaming before creating new ones.
   // ═════════════════════════════════════════════
-  const pageNames = [
-    "Cover",
-    "Getting started",
-    "🎨 Foundations",
-    "🧩 Components",
-    "🖥 Screens · Web",
-    "📱 Screens · Mobile",
-    "🎯 Prototype",
-  ];
-  let pagesCreated = true;
-  for (const name of pageNames) {
-    if (!figma.root.children.find((p) => p.name === name)) {
-      try {
-        const page = figma.createPage();
-        page.name = name;
-      } catch (e) {
-        // Figma Free: 3-page limit — later scripts fall back to currentPage
-        pagesCreated = false;
-        break;
-      }
-    }
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; } // page limit — fall back
   }
+  let pagesCreated = true;
+  const p1 = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
+  const p2 = ensurePage("🧩 Components", /Components/);
+  const p3 = ensurePage("📱 Screens", /Screens/);
+  if (new Set([p1, p2, p3]).size < 3) pagesCreated = false;
 
   // ═════════════════════════════════════════════
   // COLOR VARIABLES — Dark (default) + Light
@@ -139,8 +131,8 @@ async function part00() {
   const modeNote = lightModeId
     ? "Dark + Light modes"
     : "Dark mode + separate (Light) collection — Figma Free";
-  const pageNote = pagesCreated ? "" : " · page limit hit (Free), using current pages";
-  __done(`✅ Helix pages + variables created (${modeNote})${pageNote}`);
+  const pageNote = pagesCreated ? "" : " · page limit hit, some content will share a page";
+  __done(`✅ Helix: 3 pages + variables created (${modeNote})${pageNote}`);
 }
 
 // ─────────── 01-foundation.js ───────────
@@ -311,10 +303,164 @@ async function part01() {
   effect("Blur/Backdrop", [{ type: "BACKGROUND_BLUR", radius: 18, visible: true }]);
 
   // ═════════════════════════════════════════════
-  // STYLE GUIDE PAGE
+  // COVER + GETTING STARTED + STYLE GUIDE PAGE
   // ═════════════════════════════════════════════
-  const guide = figma.root.children.find((p) => p.name === "🎨 Foundations") || figma.currentPage;
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; }
+  }
+  const guide = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
   figma.currentPage = guide;
+
+  // ── COVER (1600×1200 — UI8 thumbnail ratio) ──
+  {
+    const cover = figma.createFrame();
+    cover.name = "Cover / UI8 Thumbnail";
+    cover.resize(1600, 1200);
+    cover.fills = [solid("#0A0C10")];
+    cover.clipsContent = true;
+    cover.layoutMode = "VERTICAL";
+    cover.primaryAxisSizingMode = "FIXED";
+    cover.counterAxisSizingMode = "FIXED";
+    cover.primaryAxisAlignItems = "CENTER";
+    cover.counterAxisAlignItems = "CENTER";
+    cover.itemSpacing = 30;
+    guide.appendChild(cover);
+    cover.x = 0; cover.y = 0;
+
+    const glow = (h, x, y, s, a) => {
+      const g = figma.createEllipse();
+      g.resize(s, s);
+      g.fills = [solid(h, a)];
+      g.effects = [{ type: "LAYER_BLUR", radius: 220, visible: true }];
+      cover.appendChild(g);
+      g.layoutPositioning = "ABSOLUTE";
+      g.x = x; g.y = y;
+      return g;
+    };
+    glow("#6366F1", 60, -180, 720, 0.5);
+    glow("#8B5CF6", 980, 560, 780, 0.45);
+    glow("#22D3EE", 620, 900, 520, 0.25);
+
+    const mark = figma.createFrame();
+    mark.name = "Logo";
+    mark.resize(112, 112);
+    mark.cornerRadius = 30;
+    mark.fills = [grad135("#6366F1", "#8B5CF6")];
+    mark.effects = [{ type: "DROP_SHADOW", color: { ...hex("#6366F1"), a: 0.6 }, offset: { x: 0, y: 20 }, radius: 60, spread: -10, visible: true, blendMode: "NORMAL" }];
+    mark.layoutMode = "HORIZONTAL";
+    mark.primaryAxisSizingMode = "FIXED";
+    mark.counterAxisSizingMode = "FIXED";
+    mark.primaryAxisAlignItems = "CENTER";
+    mark.counterAxisAlignItems = "CENTER";
+    const helixVec = figma.createVector();
+    helixVec.resize(52, 56);
+    helixVec.vectorPaths = [{ windingRule: "NONE", data: "M 16 2 C 36 15 36 22 16 30 C -4 38 -4 45 16 54 M 36 2 C 16 15 16 22 36 30 C 56 38 56 45 36 54" }];
+    helixVec.strokes = [solid("#FFFFFF")];
+    helixVec.strokeWeight = 6;
+    helixVec.strokeCap = "ROUND";
+    helixVec.fills = [];
+    mark.appendChild(helixVec);
+    cover.appendChild(mark);
+
+    const title = figma.createText();
+    title.fontName = F.disp;
+    title.fontSize = 148;
+    title.letterSpacing = { value: -4, unit: "PERCENT" };
+    title.characters = "Helix";
+    title.fills = [solid("#F2F4F8")];
+    cover.appendChild(title);
+
+    const sub = figma.createText();
+    sub.fontName = F.bodyMed;
+    sub.fontSize = 30;
+    sub.characters = "The complete crypto UI kit";
+    sub.fills = [solid("#9AA4B2")];
+    cover.appendChild(sub);
+
+    const chips = figma.createFrame();
+    chips.layoutMode = "HORIZONTAL";
+    chips.primaryAxisSizingMode = "AUTO";
+    chips.counterAxisSizingMode = "AUTO";
+    chips.itemSpacing = 14;
+    chips.fills = [];
+    for (const label of ["320+ COMPONENTS", "7 SCREENS", "LIGHT & DARK", "AUTO LAYOUT", "VARIABLES"]) {
+      const chip = figma.createFrame();
+      chip.layoutMode = "HORIZONTAL";
+      chip.primaryAxisSizingMode = "AUTO";
+      chip.counterAxisSizingMode = "AUTO";
+      chip.paddingLeft = 18; chip.paddingRight = 18;
+      chip.paddingTop = 10; chip.paddingBottom = 10;
+      chip.cornerRadius = 999;
+      chip.fills = [solid("#FFFFFF", 0.05)];
+      chip.strokes = [solid("#FFFFFF", 0.12)];
+      chip.strokeWeight = 1;
+      const ct = figma.createText();
+      ct.fontName = F.mono;
+      ct.fontSize = 14;
+      ct.letterSpacing = { value: 10, unit: "PERCENT" };
+      ct.characters = label;
+      ct.fills = [solid("#C8CFDA")];
+      chip.appendChild(ct);
+      chips.appendChild(chip);
+    }
+    cover.appendChild(chips);
+
+    const foot = figma.createText();
+    foot.fontName = F.mono;
+    foot.fontSize = 15;
+    foot.characters = "v2.0 · Designed by Dang Pham · Available on UI8";
+    foot.fills = [solid("#5E6776")];
+    cover.appendChild(foot);
+    foot.layoutPositioning = "ABSOLUTE";
+    foot.x = 560; foot.y = 1130;
+  }
+
+  // ── GETTING STARTED ──
+  {
+    const gs = figma.createFrame();
+    gs.name = "Getting Started";
+    gs.layoutMode = "VERTICAL";
+    gs.primaryAxisSizingMode = "AUTO";
+    gs.counterAxisSizingMode = "FIXED";
+    gs.resize(900, 100);
+    gs.paddingLeft = 56; gs.paddingRight = 56;
+    gs.paddingTop = 56; gs.paddingBottom = 56;
+    gs.itemSpacing = 22;
+    gs.cornerRadius = 24;
+    gs.fills = [solid("#12151C")];
+    gs.strokes = [solid("#FFFFFF", 0.07)];
+    gs.strokeWeight = 1;
+    guide.appendChild(gs);
+    gs.x = 1680; gs.y = 0;
+
+    const block = (font, size, chars, color) => {
+      const t = figma.createText();
+      t.fontName = font;
+      t.fontSize = size;
+      t.characters = chars;
+      t.fills = [solid(color)];
+      gs.appendChild(t);
+      t.layoutSizingHorizontal = "FILL";
+      return t;
+    };
+    block(F.disp, 34, "Getting started", "#F2F4F8");
+    block(F.body, 16, "Thanks for picking up Helix — a crypto / Web3 design system for exchanges, wallets, DeFi dashboards and NFT marketplaces.", "#9AA4B2");
+    block(F.bodySemi, 18, "1 · Fonts", "#A5ABFC");
+    block(F.body, 15, "Space Grotesk (display), Plus Jakarta Sans (body) and JetBrains Mono (numeric) — all free on Google Fonts and available in Figma by default.", "#C8CFDA");
+    block(F.bodySemi, 18, "2 · Tokens & modes", "#A5ABFC");
+    block(F.body, 15, "Colors, spacing and radii live in Variables (Helix Colors / Spacing / Radius). On Figma Pro, Light & Dark are modes of one collection; on Free, Light ships as a second collection.", "#C8CFDA");
+    block(F.bodySemi, 18, "3 · Components", "#A5ABFC");
+    block(F.body, 15, "All components are variant-driven and built with Auto Layout. Swap the placeholder circles for real coin logos (cryptocurrency-icons) and avatars, and drop in Phosphor icons from the free community library.", "#C8CFDA");
+    block(F.bodySemi, 18, "4 · Screens", "#A5ABFC");
+    block(F.body, 15, "The 📱 Screens page contains 3 desktop screens (Trading Terminal, Portfolio Dashboard, NFT Marketplace) and 4 mobile screens (Onboarding, Portfolio, Coin Detail, Swap), assembled from the components.", "#C8CFDA");
+    block(F.bodySemi, 18, "License", "#A5ABFC");
+    block(F.body, 15, "Standard license: unlimited personal & client projects. Extended license: use in end products for sale. © Dang Pham (Wonton Design).", "#C8CFDA");
+  }
 
   const frame = figma.createFrame();
   frame.name = "Style Guide";
@@ -328,6 +474,7 @@ async function part01() {
   frame.cornerRadius = 24;
   frame.fills = [solid("#0A0C10")];
   guide.appendChild(frame);
+  frame.x = 0; frame.y = 1320; // below the Cover
 
   function sectionTitle(label) {
     const t = figma.createText();
@@ -399,7 +546,7 @@ async function part01() {
   }
 
   figma.viewport.scrollAndZoomIntoView([frame]);
-  __done("✅ Helix foundation: paint styles, 28 text styles, effect styles, style guide");
+  __done("✅ Helix foundation: Cover, Getting Started, paint/text/effect styles, style guide");
 }
 
 // ─────────── 02-components.js ───────────
@@ -472,7 +619,15 @@ async function part02() {
     return n;
   };
 
-  const page = figma.root.children.find((p) => p.name === "🧩 Components") || figma.currentPage;
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; }
+  }
+  const page = ensurePage("🧩 Components", /Components/);
   figma.currentPage = page;
   let yOffset = 0;
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
@@ -1171,7 +1326,15 @@ async function part02b() {
     return d;
   };
 
-  const page = figma.root.children.find((p) => p.name === "🧩 Components") || figma.currentPage;
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; }
+  }
+  const page = ensurePage("🧩 Components", /Components/);
   figma.currentPage = page;
   let yOffset = 0; // continue below whatever 02-components.js created
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
@@ -1897,19 +2060,41 @@ async function part03() {
     return b;
   };
 
-  const webPage = figma.root.children.find((p) => p.name === "🖥 Screens · Web") || figma.currentPage;
-  const mobPage = figma.root.children.find((p) => p.name === "📱 Screens · Mobile") || figma.currentPage;
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; }
+  }
+  const scrPage = ensurePage("📱 Screens", /Screens/);
+  figma.currentPage = scrPage;
+
+  // sequential vertical layout — never overlaps, even on re-runs / shared pages
+  let yCursor = 0;
+  for (const ch of scrPage.children) yCursor = Math.max(yCursor, ch.y + ch.height + 160);
+  const sectionLabel = (label) => {
+    const t = txt(label, F.disp, 26, "#F2F4F8");
+    scrPage.appendChild(t);
+    t.x = 0; t.y = yCursor;
+    yCursor += 60;
+  };
+  const placeScreen = (node, hgt) => {
+    node.x = 0; node.y = yCursor;
+    yCursor += hgt + 120;
+  };
 
   // ════════════════════════════════════════════════════════
   // SCREEN 1 — TRADING TERMINAL (desktop · dark)
   // ════════════════════════════════════════════════════════
-  figma.currentPage = webPage;
   {
+    sectionLabel("🖥  Trading Terminal · Desktop · Dark");
     const root = H({ name: "Trading Terminal · Dark", bg: solid("#0B0E13"), pw: "FIXED", ch: "FIXED", cross: "MIN" });
     root.resize(1440, 720);
     root.clipsContent = true;
-    webPage.appendChild(root);
-    root.x = 0; root.y = 0;
+    scrPage.appendChild(root);
+    placeScreen(root, 720);
 
     // ── Icon rail ──
     const rail = V({ py: 18, gap: 8, cross: "CENTER", bg: solid("#0B0E13"), bd: solid("#FFFFFF", 0.06) });
@@ -2149,11 +2334,12 @@ async function part03() {
   // SCREEN 2 — PORTFOLIO DASHBOARD (desktop · light)
   // ════════════════════════════════════════════════════════
   {
+    sectionLabel("🖥  Portfolio Dashboard · Desktop · Light");
     const root = H({ name: "Portfolio Dashboard · Light", bg: solid("#F6F7F9"), pw: "FIXED", ch: "FIXED", cross: "MIN" });
     root.resize(1440, 800);
     root.clipsContent = true;
-    webPage.appendChild(root);
-    root.x = 0; root.y = 860;
+    scrPage.appendChild(root);
+    placeScreen(root, 800);
 
     // ── Sidebar ──
     const side = V({ px: 16, py: 20, gap: 4, bg: solid("#FFFFFF"), bd: solid("#E6E8EC") });
@@ -2341,11 +2527,12 @@ async function part03() {
   // SCREEN 3 — NFT MARKETPLACE (desktop · dark)
   // ════════════════════════════════════════════════════════
   {
+    sectionLabel("🖥  NFT Marketplace · Desktop · Dark");
     const root = V({ name: "NFT Marketplace · Dark", bg: solid("#0B0E13"), pw: "FIXED", ch: "FIXED", px: 28, py: 24, gap: 22 });
     root.resize(1440, 1040);
     root.clipsContent = true;
-    webPage.appendChild(root);
-    root.x = 0; root.y = 1740;
+    scrPage.appendChild(root);
+    placeScreen(root, 1040);
 
     const top = H({ gap: 18 });
     top.appendChild(txt("Marketplace", F.dispBold, 19, "#FFFFFF"));
@@ -2449,7 +2636,9 @@ async function part03() {
   // ════════════════════════════════════════════════════════
   // MOBILE SCREENS — 390×844
   // ════════════════════════════════════════════════════════
-  figma.currentPage = mobPage;
+  sectionLabel("📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap");
+  const yMobile = yCursor;
+  yCursor += 844 + 120;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -2466,8 +2655,8 @@ async function part03() {
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    mobPage.appendChild(p);
-    p.x = x; p.y = 0;
+    scrPage.appendChild(p);
+    p.x = x; p.y = yMobile;
     statusBar(p);
     return p;
   };
@@ -2757,15 +2946,22 @@ async function part03() {
 (async () => {
   const registry = { s00: part00, s01: part01, s02: part02, s02b: part02b, s03: part03 };
   const order = ["s00", "s01", "s02", "s02b", "s03"];
-  try {
-    if (!figma.command || figma.command === "all") {
-      for (const key of order) await registry[key]();
-      figma.closePlugin("✅ Helix Crypto UI Kit — all parts generated");
-    } else {
+  if (!figma.command || figma.command === "all") {
+    // isolate failures so one bad part never blocks the rest
+    const fails = [];
+    for (const key of order) {
+      try { await registry[key](); }
+      catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
+    }
+    figma.closePlugin(fails.length
+      ? "⚠️ Helix generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit — all parts generated");
+  } else {
+    try {
       await registry[figma.command]();
       figma.closePlugin("✅ Helix part done: " + figma.command);
+    } catch (e) {
+      figma.closePlugin("❌ " + (e && e.message ? e.message : e));
     }
-  } catch (e) {
-    figma.closePlugin("❌ " + (e && e.message ? e.message : e));
   }
 })();

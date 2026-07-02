@@ -15,30 +15,22 @@
   const rgba = (h, a) => ({ ...hex(h), a });
 
   // ═════════════════════════════════════════════
-  // PAGE STRUCTURE (matches the kit's Figma panel)
+  // PAGE STRUCTURE — exactly 3 pages (fits Figma Free)
+  // Reuses empty default "Page N" by renaming before creating new ones.
   // ═════════════════════════════════════════════
-  const pageNames = [
-    "Cover",
-    "Getting started",
-    "🎨 Foundations",
-    "🧩 Components",
-    "🖥 Screens · Web",
-    "📱 Screens · Mobile",
-    "🎯 Prototype",
-  ];
-  let pagesCreated = true;
-  for (const name of pageNames) {
-    if (!figma.root.children.find((p) => p.name === name)) {
-      try {
-        const page = figma.createPage();
-        page.name = name;
-      } catch (e) {
-        // Figma Free: 3-page limit — later scripts fall back to currentPage
-        pagesCreated = false;
-        break;
-      }
-    }
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; } // page limit — fall back
   }
+  let pagesCreated = true;
+  const p1 = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
+  const p2 = ensurePage("🧩 Components", /Components/);
+  const p3 = ensurePage("📱 Screens", /Screens/);
+  if (new Set([p1, p2, p3]).size < 3) pagesCreated = false;
 
   // ═════════════════════════════════════════════
   // COLOR VARIABLES — Dark (default) + Light
@@ -138,6 +130,6 @@
   const modeNote = lightModeId
     ? "Dark + Light modes"
     : "Dark mode + separate (Light) collection — Figma Free";
-  const pageNote = pagesCreated ? "" : " · page limit hit (Free), using current pages";
-  figma.closePlugin(`✅ Helix pages + variables created (${modeNote})${pageNote}`);
+  const pageNote = pagesCreated ? "" : " · page limit hit, some content will share a page";
+  figma.closePlugin(`✅ Helix: 3 pages + variables created (${modeNote})${pageNote}`);
 })();

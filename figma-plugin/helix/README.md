@@ -24,11 +24,11 @@ If you edit the `00-…03-…` source scripts, regenerate the bundle with `node 
 
 | # | File | What it creates |
 |---|------|-----------------|
-| 0 | `00-variables.js` | Pages (Cover → Prototype) + **Variables**: Accent ramp 50–950, Bg/Border/Text tokens (Dark + Light), semantic Success/Danger/Warning/Info, Spacing (4pt), Radius |
-| 1 | `01-foundation.js` | **Styles**: 40+ paint styles (incl. accent gradients), 28 text styles (Space Grotesk / Plus Jakarta Sans / JetBrains Mono), elevation + glow + focus-ring effects, Style Guide frame |
+| 0 | `00-variables.js` | **3 pages** (fits Figma Free): 🏠 Cover · Foundations / 🧩 Components / 📱 Screens + **Variables**: Accent ramp 50–950, Bg/Border/Text tokens (Dark + Light), semantic Success/Danger/Warning/Info, Spacing (4pt), Radius |
+| 1 | `01-foundation.js` | **Cover 1600×1200** (UI8 thumbnail-ready) + **Getting Started** doc frame + **Styles**: 40+ paint styles (incl. accent gradients), 28 text styles (Space Grotesk / Plus Jakarta Sans / JetBrains Mono), elevation + glow + focus-ring effects, Style Guide frame |
 | 2 | `02-components.js` | **Core components**: Button (5 types × 3 sizes × 3 states), Icon Button, Input, Amount Input, Select, Checkbox, Radio, Toggle, Segmented, Badge/Status, Badge/Change, Badge/Special, Chip/Chain, Avatar (4×3), Avatar Group, Tab, Pill/Timeframe, Breadcrumb, Pagination |
 | 3 | `02b-components-extra.js` | **Extra components**: Stat Card, Coin Card (sparkline), Wallet Card (gradient), Alert ×4, Toast, Tooltip, Progress Bar/Circle, Slider, Stepper, Skeleton, Donut Chart, Bar Chart, Markets Table Row, Order Book Row |
-| 4 | `03-screens.js` | **Screens** — Web: Trading Terminal (dark, candles + order book), Portfolio Dashboard (light), NFT Marketplace (dark). Mobile 390×844: Onboarding, Portfolio, Coin Detail, Swap |
+| 4 | `03-screens.js` | **Screens** (all on 📱 Screens page, labeled, never overlapping) — Web: Trading Terminal (dark, candles + order book), Portfolio Dashboard (light), NFT Marketplace (dark). Mobile 390×844: Onboarding, Portfolio, Coin Detail, Swap |
 
 ## Design Tokens
 
@@ -41,8 +41,8 @@ If you edit the `00-…03-…` source scripts, regenerate the bundle with `node 
 
 ## Figma Free notes
 
+- **Run in a FRESH file** (one empty "Page 1"). The generator renames the empty default page and creates exactly 2 more — 3 pages total, exactly the Free limit. Re-running in a file that already has content will stack duplicates.
 - **Variable modes**: Free allows 1 mode per collection. On Free you get `Helix Colors` (Dark) + `Helix Colors (Light)` as a second collection instead of a mode switch. On Pro you get one collection with Dark/Light modes.
-- **Pages**: Free allows 3 pages per file. If page creation is blocked, scripts build onto the current page — organize into pages after upgrading, or keep everything on fewer pages before exporting.
 
 ## After generating — polish checklist (before UI8)
 

@@ -107,19 +107,41 @@
     return b;
   };
 
-  const webPage = figma.root.children.find((p) => p.name === "🖥 Screens · Web") || figma.currentPage;
-  const mobPage = figma.root.children.find((p) => p.name === "📱 Screens · Mobile") || figma.currentPage;
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; }
+  }
+  const scrPage = ensurePage("📱 Screens", /Screens/);
+  figma.currentPage = scrPage;
+
+  // sequential vertical layout — never overlaps, even on re-runs / shared pages
+  let yCursor = 0;
+  for (const ch of scrPage.children) yCursor = Math.max(yCursor, ch.y + ch.height + 160);
+  const sectionLabel = (label) => {
+    const t = txt(label, F.disp, 26, "#F2F4F8");
+    scrPage.appendChild(t);
+    t.x = 0; t.y = yCursor;
+    yCursor += 60;
+  };
+  const placeScreen = (node, hgt) => {
+    node.x = 0; node.y = yCursor;
+    yCursor += hgt + 120;
+  };
 
   // ════════════════════════════════════════════════════════
   // SCREEN 1 — TRADING TERMINAL (desktop · dark)
   // ════════════════════════════════════════════════════════
-  figma.currentPage = webPage;
   {
+    sectionLabel("🖥  Trading Terminal · Desktop · Dark");
     const root = H({ name: "Trading Terminal · Dark", bg: solid("#0B0E13"), pw: "FIXED", ch: "FIXED", cross: "MIN" });
     root.resize(1440, 720);
     root.clipsContent = true;
-    webPage.appendChild(root);
-    root.x = 0; root.y = 0;
+    scrPage.appendChild(root);
+    placeScreen(root, 720);
 
     // ── Icon rail ──
     const rail = V({ py: 18, gap: 8, cross: "CENTER", bg: solid("#0B0E13"), bd: solid("#FFFFFF", 0.06) });
@@ -359,11 +381,12 @@
   // SCREEN 2 — PORTFOLIO DASHBOARD (desktop · light)
   // ════════════════════════════════════════════════════════
   {
+    sectionLabel("🖥  Portfolio Dashboard · Desktop · Light");
     const root = H({ name: "Portfolio Dashboard · Light", bg: solid("#F6F7F9"), pw: "FIXED", ch: "FIXED", cross: "MIN" });
     root.resize(1440, 800);
     root.clipsContent = true;
-    webPage.appendChild(root);
-    root.x = 0; root.y = 860;
+    scrPage.appendChild(root);
+    placeScreen(root, 800);
 
     // ── Sidebar ──
     const side = V({ px: 16, py: 20, gap: 4, bg: solid("#FFFFFF"), bd: solid("#E6E8EC") });
@@ -551,11 +574,12 @@
   // SCREEN 3 — NFT MARKETPLACE (desktop · dark)
   // ════════════════════════════════════════════════════════
   {
+    sectionLabel("🖥  NFT Marketplace · Desktop · Dark");
     const root = V({ name: "NFT Marketplace · Dark", bg: solid("#0B0E13"), pw: "FIXED", ch: "FIXED", px: 28, py: 24, gap: 22 });
     root.resize(1440, 1040);
     root.clipsContent = true;
-    webPage.appendChild(root);
-    root.x = 0; root.y = 1740;
+    scrPage.appendChild(root);
+    placeScreen(root, 1040);
 
     const top = H({ gap: 18 });
     top.appendChild(txt("Marketplace", F.dispBold, 19, "#FFFFFF"));
@@ -659,7 +683,9 @@
   // ════════════════════════════════════════════════════════
   // MOBILE SCREENS — 390×844
   // ════════════════════════════════════════════════════════
-  figma.currentPage = mobPage;
+  sectionLabel("📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap");
+  const yMobile = yCursor;
+  yCursor += 844 + 120;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -676,8 +702,8 @@
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    mobPage.appendChild(p);
-    p.x = x; p.y = 0;
+    scrPage.appendChild(p);
+    p.x = x; p.y = yMobile;
     statusBar(p);
     return p;
   };

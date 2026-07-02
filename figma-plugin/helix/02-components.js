@@ -74,7 +74,15 @@
     return n;
   };
 
-  const page = figma.root.children.find((p) => p.name === "🧩 Components") || figma.currentPage;
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; }
+  }
+  const page = ensurePage("🧩 Components", /Components/);
   figma.currentPage = page;
   let yOffset = 0;
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);

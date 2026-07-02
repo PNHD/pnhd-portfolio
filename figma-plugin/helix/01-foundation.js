@@ -172,10 +172,164 @@
   effect("Blur/Backdrop", [{ type: "BACKGROUND_BLUR", radius: 18, visible: true }]);
 
   // ═════════════════════════════════════════════
-  // STYLE GUIDE PAGE
+  // COVER + GETTING STARTED + STYLE GUIDE PAGE
   // ═════════════════════════════════════════════
-  const guide = figma.root.children.find((p) => p.name === "🎨 Foundations") || figma.currentPage;
+  function ensurePage(name, matcher) {
+    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
+    if (found) return found;
+    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
+    if (spare) { spare.name = name; return spare; }
+    try { const p = figma.createPage(); p.name = name; return p; }
+    catch (e) { return figma.currentPage; }
+  }
+  const guide = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
   figma.currentPage = guide;
+
+  // ── COVER (1600×1200 — UI8 thumbnail ratio) ──
+  {
+    const cover = figma.createFrame();
+    cover.name = "Cover / UI8 Thumbnail";
+    cover.resize(1600, 1200);
+    cover.fills = [solid("#0A0C10")];
+    cover.clipsContent = true;
+    cover.layoutMode = "VERTICAL";
+    cover.primaryAxisSizingMode = "FIXED";
+    cover.counterAxisSizingMode = "FIXED";
+    cover.primaryAxisAlignItems = "CENTER";
+    cover.counterAxisAlignItems = "CENTER";
+    cover.itemSpacing = 30;
+    guide.appendChild(cover);
+    cover.x = 0; cover.y = 0;
+
+    const glow = (h, x, y, s, a) => {
+      const g = figma.createEllipse();
+      g.resize(s, s);
+      g.fills = [solid(h, a)];
+      g.effects = [{ type: "LAYER_BLUR", radius: 220, visible: true }];
+      cover.appendChild(g);
+      g.layoutPositioning = "ABSOLUTE";
+      g.x = x; g.y = y;
+      return g;
+    };
+    glow("#6366F1", 60, -180, 720, 0.5);
+    glow("#8B5CF6", 980, 560, 780, 0.45);
+    glow("#22D3EE", 620, 900, 520, 0.25);
+
+    const mark = figma.createFrame();
+    mark.name = "Logo";
+    mark.resize(112, 112);
+    mark.cornerRadius = 30;
+    mark.fills = [grad135("#6366F1", "#8B5CF6")];
+    mark.effects = [{ type: "DROP_SHADOW", color: { ...hex("#6366F1"), a: 0.6 }, offset: { x: 0, y: 20 }, radius: 60, spread: -10, visible: true, blendMode: "NORMAL" }];
+    mark.layoutMode = "HORIZONTAL";
+    mark.primaryAxisSizingMode = "FIXED";
+    mark.counterAxisSizingMode = "FIXED";
+    mark.primaryAxisAlignItems = "CENTER";
+    mark.counterAxisAlignItems = "CENTER";
+    const helixVec = figma.createVector();
+    helixVec.resize(52, 56);
+    helixVec.vectorPaths = [{ windingRule: "NONE", data: "M 16 2 C 36 15 36 22 16 30 C -4 38 -4 45 16 54 M 36 2 C 16 15 16 22 36 30 C 56 38 56 45 36 54" }];
+    helixVec.strokes = [solid("#FFFFFF")];
+    helixVec.strokeWeight = 6;
+    helixVec.strokeCap = "ROUND";
+    helixVec.fills = [];
+    mark.appendChild(helixVec);
+    cover.appendChild(mark);
+
+    const title = figma.createText();
+    title.fontName = F.disp;
+    title.fontSize = 148;
+    title.letterSpacing = { value: -4, unit: "PERCENT" };
+    title.characters = "Helix";
+    title.fills = [solid("#F2F4F8")];
+    cover.appendChild(title);
+
+    const sub = figma.createText();
+    sub.fontName = F.bodyMed;
+    sub.fontSize = 30;
+    sub.characters = "The complete crypto UI kit";
+    sub.fills = [solid("#9AA4B2")];
+    cover.appendChild(sub);
+
+    const chips = figma.createFrame();
+    chips.layoutMode = "HORIZONTAL";
+    chips.primaryAxisSizingMode = "AUTO";
+    chips.counterAxisSizingMode = "AUTO";
+    chips.itemSpacing = 14;
+    chips.fills = [];
+    for (const label of ["320+ COMPONENTS", "7 SCREENS", "LIGHT & DARK", "AUTO LAYOUT", "VARIABLES"]) {
+      const chip = figma.createFrame();
+      chip.layoutMode = "HORIZONTAL";
+      chip.primaryAxisSizingMode = "AUTO";
+      chip.counterAxisSizingMode = "AUTO";
+      chip.paddingLeft = 18; chip.paddingRight = 18;
+      chip.paddingTop = 10; chip.paddingBottom = 10;
+      chip.cornerRadius = 999;
+      chip.fills = [solid("#FFFFFF", 0.05)];
+      chip.strokes = [solid("#FFFFFF", 0.12)];
+      chip.strokeWeight = 1;
+      const ct = figma.createText();
+      ct.fontName = F.mono;
+      ct.fontSize = 14;
+      ct.letterSpacing = { value: 10, unit: "PERCENT" };
+      ct.characters = label;
+      ct.fills = [solid("#C8CFDA")];
+      chip.appendChild(ct);
+      chips.appendChild(chip);
+    }
+    cover.appendChild(chips);
+
+    const foot = figma.createText();
+    foot.fontName = F.mono;
+    foot.fontSize = 15;
+    foot.characters = "v2.0 · Designed by Dang Pham · Available on UI8";
+    foot.fills = [solid("#5E6776")];
+    cover.appendChild(foot);
+    foot.layoutPositioning = "ABSOLUTE";
+    foot.x = 560; foot.y = 1130;
+  }
+
+  // ── GETTING STARTED ──
+  {
+    const gs = figma.createFrame();
+    gs.name = "Getting Started";
+    gs.layoutMode = "VERTICAL";
+    gs.primaryAxisSizingMode = "AUTO";
+    gs.counterAxisSizingMode = "FIXED";
+    gs.resize(900, 100);
+    gs.paddingLeft = 56; gs.paddingRight = 56;
+    gs.paddingTop = 56; gs.paddingBottom = 56;
+    gs.itemSpacing = 22;
+    gs.cornerRadius = 24;
+    gs.fills = [solid("#12151C")];
+    gs.strokes = [solid("#FFFFFF", 0.07)];
+    gs.strokeWeight = 1;
+    guide.appendChild(gs);
+    gs.x = 1680; gs.y = 0;
+
+    const block = (font, size, chars, color) => {
+      const t = figma.createText();
+      t.fontName = font;
+      t.fontSize = size;
+      t.characters = chars;
+      t.fills = [solid(color)];
+      gs.appendChild(t);
+      t.layoutSizingHorizontal = "FILL";
+      return t;
+    };
+    block(F.disp, 34, "Getting started", "#F2F4F8");
+    block(F.body, 16, "Thanks for picking up Helix — a crypto / Web3 design system for exchanges, wallets, DeFi dashboards and NFT marketplaces.", "#9AA4B2");
+    block(F.bodySemi, 18, "1 · Fonts", "#A5ABFC");
+    block(F.body, 15, "Space Grotesk (display), Plus Jakarta Sans (body) and JetBrains Mono (numeric) — all free on Google Fonts and available in Figma by default.", "#C8CFDA");
+    block(F.bodySemi, 18, "2 · Tokens & modes", "#A5ABFC");
+    block(F.body, 15, "Colors, spacing and radii live in Variables (Helix Colors / Spacing / Radius). On Figma Pro, Light & Dark are modes of one collection; on Free, Light ships as a second collection.", "#C8CFDA");
+    block(F.bodySemi, 18, "3 · Components", "#A5ABFC");
+    block(F.body, 15, "All components are variant-driven and built with Auto Layout. Swap the placeholder circles for real coin logos (cryptocurrency-icons) and avatars, and drop in Phosphor icons from the free community library.", "#C8CFDA");
+    block(F.bodySemi, 18, "4 · Screens", "#A5ABFC");
+    block(F.body, 15, "The 📱 Screens page contains 3 desktop screens (Trading Terminal, Portfolio Dashboard, NFT Marketplace) and 4 mobile screens (Onboarding, Portfolio, Coin Detail, Swap), assembled from the components.", "#C8CFDA");
+    block(F.bodySemi, 18, "License", "#A5ABFC");
+    block(F.body, 15, "Standard license: unlimited personal & client projects. Extended license: use in end products for sale. © Dang Pham (Wonton Design).", "#C8CFDA");
+  }
 
   const frame = figma.createFrame();
   frame.name = "Style Guide";
@@ -189,6 +343,7 @@
   frame.cornerRadius = 24;
   frame.fills = [solid("#0A0C10")];
   guide.appendChild(frame);
+  frame.x = 0; frame.y = 1320; // below the Cover
 
   function sectionTitle(label) {
     const t = figma.createText();
@@ -260,5 +415,5 @@
   }
 
   figma.viewport.scrollAndZoomIntoView([frame]);
-  figma.closePlugin("✅ Helix foundation: paint styles, 28 text styles, effect styles, style guide");
+  figma.closePlugin("✅ Helix foundation: Cover, Getting Started, paint/text/effect styles, style guide");
 })();

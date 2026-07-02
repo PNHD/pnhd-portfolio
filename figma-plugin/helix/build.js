@@ -38,16 +38,23 @@ for (const [fnName, file] of parts) {
 out += `(async () => {
   const registry = { s00: part00, s01: part01, s02: part02, s02b: part02b, s03: part03 };
   const order = ["s00", "s01", "s02", "s02b", "s03"];
-  try {
-    if (!figma.command || figma.command === "all") {
-      for (const key of order) await registry[key]();
-      figma.closePlugin("✅ Helix Crypto UI Kit — all parts generated");
-    } else {
+  if (!figma.command || figma.command === "all") {
+    // isolate failures so one bad part never blocks the rest
+    const fails = [];
+    for (const key of order) {
+      try { await registry[key](); }
+      catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
+    }
+    figma.closePlugin(fails.length
+      ? "⚠️ Helix generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit — all parts generated");
+  } else {
+    try {
       await registry[figma.command]();
       figma.closePlugin("✅ Helix part done: " + figma.command);
+    } catch (e) {
+      figma.closePlugin("❌ " + (e && e.message ? e.message : e));
     }
-  } catch (e) {
-    figma.closePlugin("❌ " + (e && e.message ? e.message : e));
   }
 })();
 `;
