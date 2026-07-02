@@ -12,7 +12,7 @@ Works on **Figma Free**: scripts detect plan limits (1 variable mode, 3 pages) a
 2. **Plugins → Development → Import plugin from manifest…** → pick `manifest.json` in this folder
 3. **Plugins → Development → Helix Crypto UI Kit Generator → 🚀 Run ALL (00 → 04)**
 4. Or run each part separately from the same submenu (00 → 04, in order)
-5. The success toast says **“Helix Crypto UI Kit v7”** — if you don't see “v7”, the plugin is running an old `code.js`; replace the folder and re-run
+5. The success toast says **“Helix Crypto UI Kit v8”** — if you don't see “v8”, the plugin is running an old `code.js`; replace the folder and re-run
 
 If you edit the `00-…04-…` source scripts, regenerate the bundle with `node build.js`.
 
@@ -33,7 +33,7 @@ If you edit the `00-…04-…` source scripts, regenerate the bundle with `node 
 | 3 | `02b-components-extra.js` | **Extra components**: Stat Card, Coin Card (sparkline), Wallet Card (gradient), Alert ×4, Toast, Tooltip, Progress Bar/Circle, Slider, Stepper, Skeleton, Donut Chart, Bar Chart, Markets Table Row, Order Book Row |
 | 4 | `03-screens.js` | **Screens 1–7** — Trading Terminal (candles + order book), Portfolio Dashboard (light), NFT Marketplace + mobile Onboarding, Portfolio, Coin Detail, Swap. Screens are assembled from **component instances** (Buttons, Pills, Badges, Avatars…) |
 | 5 | `03b-screens-extra.js` | **Screens 8–20** — Markets Overview, Asset Detail, Wallet & Balances, Send & Receive (QR), Staking & Earn, Transactions, Settings & Security, Sign in & 2FA, NFT Detail + mobile Wallet, Receive QR, NFT Gallery, Profile & Settings — **20 screens total** |
-| 6 | `04-bind-variables.js` | **Variable binding pass** — rebinds ~1,400 solid fills/strokes on Components + Screens pages to the Helix Variables; on Pro also flips light screens to the Light mode |
+| 6 | `04-bind-variables.js` | **Binding pass** — rebinds full-opacity fills/strokes to Helix Variables (translucent tints preserved), links **every text node to a Text Style**, and on paid plans flips light screens to the Light mode |
 
 ## Design Tokens
 

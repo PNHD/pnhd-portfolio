@@ -62,12 +62,16 @@
     let changed = false;
     const next = paints.map((p) => {
       if (p.type !== "SOLID") return p;
+      // translucent tints (12–14% badge/alert backgrounds) must stay as-is:
+      // binding can drop paint opacity and turn them into solid blocks
+      if (p.opacity !== undefined && p.opacity < 1) return p;
       if (p.boundVariables && p.boundVariables.color) return p;
       const v = resolve(toHex(p.color));
       if (!v) return p;
       changed = true;
       bound++;
-      return figma.variables.setBoundVariableForPaint(p, "color", v);
+      const bp = figma.variables.setBoundVariableForPaint(p, "color", v);
+      return { ...bp, opacity: p.opacity === undefined ? 1 : p.opacity };
     });
     return changed ? next : null;
   };
@@ -103,5 +107,58 @@
     }
   }
 
-  figma.closePlugin(`✅ Variables bound: ${bound} fills/strokes${lightModeId ? ` · ${lightModeSet} light screen(s) set to Light mode` : " (Free: light tokens use the (Light) collection)"}`);
+  // ═════════════════════════════════════════════
+  // TEXT STYLES — link every text node to a style
+  // Uses exact font+size matches; creates zero-shift
+  // "Type/…" styles (auto line-height) for in-between sizes
+  // so the inspect panel always shows a named style.
+  // ═════════════════════════════════════════════
+  const localTextStyles = figma.getLocalTextStylesAsync
+    ? await figma.getLocalTextStylesAsync()
+    : (figma.getLocalTextStyles ? figma.getLocalTextStyles() : []);
+  const tsKey = (fn, size) => fn.family + "|" + fn.style + "|" + size;
+  const tsMap = {};
+  for (const st of localTextStyles) {
+    // only auto line-height styles are safe to attach without layout shifts
+    if (st.lineHeight && st.lineHeight.unit === "AUTO" && st.fontName && typeof st.fontSize === "number") {
+      tsMap[tsKey(st.fontName, st.fontSize)] = st;
+    }
+  }
+  const famShort = { "Space Grotesk": "Grotesk", "Plus Jakarta Sans": "Jakarta", "JetBrains Mono": "Mono" };
+  const loadedFonts = {};
+  const ensureFont = async (fn) => {
+    const k = fn.family + "|" + fn.style;
+    if (!loadedFonts[k]) { await figma.loadFontAsync(fn); loadedFonts[k] = true; }
+  };
+  let textBound = 0;
+  let stylesCreated = 0;
+  const bindText = async (node) => {
+    if (node.type === "TEXT" && node.fontName && node.fontName !== figma.mixed && !node.textStyleId && typeof node.fontSize === "number") {
+      const fn = node.fontName;
+      const key = tsKey(fn, node.fontSize);
+      let st = tsMap[key];
+      if (!st) {
+        try {
+          await ensureFont(fn);
+          st = figma.createTextStyle();
+          st.name = `Type/${famShort[fn.family] || fn.family} ${fn.style} ${node.fontSize}`;
+          st.fontName = fn;
+          st.fontSize = node.fontSize;
+          tsMap[key] = st;
+          stylesCreated++;
+        } catch (e) { st = null; }
+      }
+      if (st) {
+        try {
+          if (node.setTextStyleIdAsync) await node.setTextStyleIdAsync(st.id);
+          else node.textStyleId = st.id;
+          textBound++;
+        } catch (e) {}
+      }
+    }
+    if (node.children) for (const ch of node.children) await bindText(ch);
+  };
+  for (const page of pages) for (const node of page.children) await bindText(node);
+
+  figma.closePlugin(`✅ Variables bound: ${bound} paints · ${textBound} texts linked to styles (${stylesCreated} new)${lightModeId ? ` · ${lightModeSet} light screen(s) in Light mode` : ""}`);
 })();

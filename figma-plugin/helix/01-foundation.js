@@ -383,73 +383,228 @@
   guide.appendChild(frame);
   if (guide === coverPage) { frame.x = 0; frame.y = 1320; } else { frame.x = 0; frame.y = 0; }
 
-  function sectionTitle(label) {
-    const t = figma.createText();
-    t.fontName = F.disp;
-    t.fontSize = 26;
-    t.characters = label;
-    t.fills = [solid("#F2F4F8")];
-    frame.appendChild(t);
-    return t;
-  }
-  function swatchRow(entries, sw, sh) {
-    const row = figma.createFrame();
-    row.layoutMode = "HORIZONTAL";
-    row.primaryAxisSizingMode = "AUTO";
-    row.counterAxisSizingMode = "AUTO";
-    row.itemSpacing = 12;
-    row.fills = [];
-    for (const [label, h] of entries) {
-      const cell = figma.createFrame();
-      cell.layoutMode = "VERTICAL";
-      cell.primaryAxisSizingMode = "AUTO";
-      cell.counterAxisSizingMode = "AUTO";
-      cell.itemSpacing = 8;
-      cell.fills = [];
-      const chip = figma.createRectangle();
-      chip.resize(sw || 88, sh || 64);
-      chip.cornerRadius = 10;
-      chip.fills = [solid(h)];
-      chip.strokes = [solid("#FFFFFF", 0.1)];
-      chip.strokeWeight = 1;
-      cell.appendChild(chip);
-      const t = figma.createText();
-      t.fontName = F.mono;
-      t.fontSize = 11;
-      t.characters = `${label}\n${h}`;
-      t.fills = [solid("#9AA4B2")];
-      cell.appendChild(t);
-      row.appendChild(cell);
-    }
-    frame.appendChild(row);
-    return row;
-  }
-
-  sectionTitle("Color · Accent ramp");
-  swatchRow(Object.entries(ramp).map(([s, h]) => [s, h]));
-  sectionTitle("Neutrals · Dark");
-  swatchRow(Object.entries(dark).map(([n, h]) => [n, h]));
-  sectionTitle("Neutrals · Light");
-  swatchRow(Object.entries(light).map(([n, h]) => [n, h]));
-  sectionTitle("Semantic");
-  swatchRow([["Success", "#10B981"], ["Danger", "#F43F5E"], ["Warning", "#F59E0B"], ["Info", "#0EA5E9"], ["Violet", "#8B5CF6"], ["Bitcoin", "#F7931A"]]);
-
-  sectionTitle("Typography");
-  const specs = [
-    [F.disp, 56, "Trade smarter.", "#F2F4F8"],
-    [F.disp, 32, "Portfolio overview", "#F2F4F8"],
-    [F.body, 16, "Track assets across every chain in real time, with portfolio analytics that update the moment the market moves.", "#C8CFDA"],
-    [F.bodySemi, 11, "MARKET CAPITALIZATION", "#9AA4B2"],
-    [F.monoMed, 22, "$94,210.50  +2.41%  0x7f3a…b29c", "#F2F4F8"],
-  ];
-  for (const [font, size, chars, color] of specs) {
+  // ── Style guide builders — card presentation matching the HTML design ──
+  const gFrame = (dir, o) => {
+    o = o || {};
+    const n = figma.createFrame();
+    n.layoutMode = dir;
+    n.primaryAxisSizingMode = "AUTO";
+    n.counterAxisSizingMode = "AUTO";
+    n.primaryAxisAlignItems = o.main || "MIN";
+    n.counterAxisAlignItems = o.cross || (dir === "HORIZONTAL" ? "CENTER" : "MIN");
+    n.itemSpacing = o.gap || 0;
+    n.paddingLeft = n.paddingRight = o.px !== undefined ? o.px : (o.p || 0);
+    n.paddingTop = n.paddingBottom = o.py !== undefined ? o.py : (o.p || 0);
+    n.fills = o.bg ? [o.bg] : [];
+    if (o.r) n.cornerRadius = o.r;
+    if (o.bd) { n.strokes = [o.bd]; n.strokeWeight = o.bw || 1; }
+    return n;
+  };
+  const gTxt = (chars, font, size, colorHex, ls) => {
     const t = figma.createText();
     t.fontName = font;
     t.fontSize = size;
+    if (ls) t.letterSpacing = { value: ls, unit: "PERCENT" };
     t.characters = chars;
-    t.fills = [solid(color)];
-    frame.appendChild(t);
-    t.layoutSizingHorizontal = "FILL";
+    t.fills = [solid(colorHex)];
+    return t;
+  };
+  const guideCard = (parent, title, meta, opts) => {
+    opts = opts || {};
+    const c = gFrame("VERTICAL", { p: 30, gap: 22, r: 22, bg: solid(opts.bg || "#12151C"), bd: solid(opts.light ? "#0E121B" : "#FFFFFF", 0.07) });
+    const head = gFrame("HORIZONTAL", { gap: 10 });
+    const dot = figma.createRectangle();
+    dot.resize(10, 10);
+    dot.cornerRadius = 3;
+    dot.fills = [grad135("#6366F1", "#8B5CF6")];
+    head.appendChild(dot);
+    head.appendChild(gTxt(title, F.bodySemi, 15, opts.light ? "#0E121B" : "#F2F4F8"));
+    const sp = figma.createFrame();
+    sp.fills = [];
+    head.appendChild(sp);
+    sp.layoutSizingHorizontal = "FILL";
+    if (meta) head.appendChild(gTxt(meta, F.mono, 11, opts.light ? "#9099A6" : "#5E6776"));
+    c.appendChild(head);
+    head.layoutSizingHorizontal = "FILL";
+    parent.appendChild(c);
+    c.layoutSizingHorizontal = "FILL";
+    return c;
+  };
+
+  // 1 · Color ramp — contiguous bar + step/hex labels (like the HTML)
+  {
+    const c = guideCard(frame, "Color · Primary", "--accent · 11 steps");
+    const entries = Object.entries(ramp);
+    const bar = gFrame("HORIZONTAL", {});
+    entries.forEach(([step, h], i) => {
+      const sw = figma.createRectangle();
+      sw.resize(60, 72);
+      sw.fills = [solid(h)];
+      if (i === 0) { sw.topLeftRadius = 12; sw.bottomLeftRadius = 12; }
+      if (i === entries.length - 1) { sw.topRightRadius = 12; sw.bottomRightRadius = 12; }
+      bar.appendChild(sw);
+      sw.layoutSizingHorizontal = "FILL";
+    });
+    c.appendChild(bar);
+    bar.layoutSizingHorizontal = "FILL";
+    const labels = gFrame("HORIZONTAL", {});
+    entries.forEach(([step, h]) => {
+      const cell = gFrame("VERTICAL", { gap: 2, cross: "CENTER" });
+      cell.appendChild(gTxt(step, F.monoSemi, 11, "#C8CFDA"));
+      cell.appendChild(gTxt(h.toUpperCase(), F.mono, 9.5, "#5E6776"));
+      labels.appendChild(cell);
+      cell.layoutSizingHorizontal = "FILL";
+    });
+    c.appendChild(labels);
+    labels.layoutSizingHorizontal = "FILL";
+  }
+
+  // 2 · Neutrals — dark & light cards side by side
+  {
+    const pair = gFrame("HORIZONTAL", { gap: 22, cross: "MIN" });
+    frame.appendChild(pair);
+    pair.layoutSizingHorizontal = "FILL";
+    const buildNeutrals = (title, entries, isLight) => {
+      const c = guideCard(pair, title, null, isLight ? { bg: "#FFFFFF", light: true } : {});
+      for (const [nm, h] of entries) {
+        const row = gFrame("HORIZONTAL", { gap: 13 });
+        const chip = figma.createRectangle();
+        chip.resize(30, 30);
+        chip.cornerRadius = 8;
+        chip.fills = [solid(h)];
+        chip.strokes = [solid(isLight ? "#0E121B" : "#FFFFFF", 0.1)];
+        chip.strokeWeight = 1;
+        row.appendChild(chip);
+        const label = gTxt(nm, F.bodyMed, 13, isLight ? "#2A3340" : "#C8CFDA");
+        row.appendChild(label);
+        label.layoutSizingHorizontal = "FILL";
+        row.appendChild(gTxt(h.toUpperCase(), F.mono, 11.5, isLight ? "#9099A6" : "#5E6776"));
+        c.appendChild(row);
+        row.layoutSizingHorizontal = "FILL";
+      }
+    };
+    buildNeutrals("Neutrals · Dark", Object.entries(dark), false);
+    buildNeutrals("Neutrals · Light", Object.entries(light), true);
+  }
+
+  // 3 · Semantic — tiles with glow swatches
+  {
+    const c = guideCard(frame, "Semantic", "status · feedback");
+    const grid = gFrame("HORIZONTAL", { gap: 14, cross: "MIN" });
+    const tiles = [
+      ["Success", "#10B981", "Up · confirmed"],
+      ["Danger", "#F43F5E", "Down · error"],
+      ["Warning", "#F59E0B", "Pending"],
+      ["Info", "#0EA5E9", "Neutral info"],
+      ["Violet", "#8B5CF6", "Accent 2"],
+    ];
+    for (const [nm, h, role] of tiles) {
+      const tile = gFrame("VERTICAL", { p: 16, gap: 3, bg: solid("#FFFFFF", 0.03), bd: solid("#FFFFFF", 0.06), r: 14 });
+      const sw = figma.createRectangle();
+      sw.resize(38, 38);
+      sw.cornerRadius = 11;
+      sw.fills = [solid(h)];
+      sw.effects = [{ type: "DROP_SHADOW", color: { ...hex(h), a: 0.45 }, offset: { x: 0, y: 4 }, radius: 14, spread: -4, visible: true, blendMode: "NORMAL" }];
+      tile.appendChild(sw);
+      const gap = figma.createFrame(); gap.resize(10, 11); gap.fills = [];
+      tile.appendChild(gap);
+      tile.appendChild(gTxt(nm, F.bodySemi, 13.5, "#F2F4F8"));
+      tile.appendChild(gTxt(role, F.body, 11.5, "#5E6776"));
+      const gap2 = figma.createFrame(); gap2.resize(10, 6); gap2.fills = [];
+      tile.appendChild(gap2);
+      tile.appendChild(gTxt(h.toUpperCase(), F.mono, 11, "#9AA4B2"));
+      grid.appendChild(tile);
+      tile.layoutSizingHorizontal = "FILL";
+    }
+    c.appendChild(grid);
+    grid.layoutSizingHorizontal = "FILL";
+  }
+
+  // 4 · Typography — specimen table (meta column + live sample)
+  {
+    const c = guideCard(frame, "Typography", "Space Grotesk · Plus Jakarta Sans · JetBrains Mono");
+    const rows = [
+      ["Display", "Space Grotesk · 56 · 600", F.disp, 54, "Trade smarter.", "#F2F4F8", -3.5],
+      ["Heading", "Space Grotesk · 32 · 600", F.disp, 32, "Portfolio overview", "#F2F4F8", -2],
+      ["Body", "Plus Jakarta · 16 · 400", F.body, 16, "Track assets across every chain in real time, with portfolio analytics that update the moment the market moves.", "#C8CFDA", 0],
+      ["Label", "Plus Jakarta · 11 · 600", F.bodySemi, 11, "MARKET CAPITALIZATION", "#9AA4B2", 14],
+      ["Numeric", "JetBrains Mono · 22 · 500", F.monoMed, 22, "$94,210.50   +2.41%   0x7f3a…b29c", "#F2F4F8", 0],
+    ];
+    rows.forEach(([nm, meta, font, size, sample, color, ls], i) => {
+      const row = gFrame("HORIZONTAL", { gap: 24, py: 22 });
+      if (i < rows.length - 1) {
+        row.strokes = [solid("#FFFFFF", 0.06)];
+        row.strokeAlign = "INSIDE";
+        row.strokeTopWeight = 0; row.strokeLeftWeight = 0; row.strokeRightWeight = 0; row.strokeBottomWeight = 1;
+      }
+      const metaCol = gFrame("VERTICAL", { gap: 3 });
+      metaCol.counterAxisSizingMode = "FIXED";
+      metaCol.resize(210, 10);
+      metaCol.primaryAxisSizingMode = "AUTO";
+      metaCol.appendChild(gTxt(nm, F.monoMed, 11.5, "#9AA4B2"));
+      metaCol.appendChild(gTxt(meta, F.mono, 11, "#5E6776"));
+      row.appendChild(metaCol);
+      const sampleT = gTxt(sample, font, size, color, ls);
+      row.appendChild(sampleT);
+      sampleT.layoutSizingHorizontal = "FILL";
+      c.appendChild(row);
+      row.layoutSizingHorizontal = "FILL";
+    });
+  }
+
+  // 5 · Spacing / Radius / Elevation trio
+  {
+    const trio = gFrame("HORIZONTAL", { gap: 22, cross: "MIN" });
+    frame.appendChild(trio);
+    trio.layoutSizingHorizontal = "FILL";
+
+    const spacingCard = guideCard(trio, "Spacing · 4pt", null);
+    for (const v of [4, 8, 16, 24, 32, 48, 64]) {
+      const row = gFrame("HORIZONTAL", { gap: 12 });
+      const bar = figma.createRectangle();
+      bar.resize(v, 11);
+      bar.cornerRadius = 2;
+      bar.fills = [solid("#6366F1")];
+      row.appendChild(bar);
+      row.appendChild(gTxt(String(v), F.mono, 11, "#5E6776"));
+      spacingCard.appendChild(row);
+    }
+
+    const radiusCard = guideCard(trio, "Radius", null);
+    const rrow = gFrame("HORIZONTAL", { gap: 12, cross: "MAX" });
+    for (const [r, label] of [[6, "6"], [10, "10"], [14, "14"], [20, "20"], [999, "full"]]) {
+      const cell = gFrame("VERTICAL", { gap: 7, cross: "CENTER" });
+      const sq = figma.createRectangle();
+      sq.resize(48, 48);
+      sq.cornerRadius = r;
+      sq.fills = [solid("#6366F1", 0.16)];
+      sq.strokes = [solid("#6366F1")];
+      sq.strokeWeight = 1.5;
+      cell.appendChild(sq);
+      cell.appendChild(gTxt(label, F.mono, 10, "#5E6776"));
+      rrow.appendChild(cell);
+    }
+    radiusCard.appendChild(rrow);
+
+    const elevCard = guideCard(trio, "Elevation", null);
+    const erow = gFrame("HORIZONTAL", { gap: 20 });
+    const shadows = [
+      ["sm", [{ type: "DROP_SHADOW", color: { r: 0, g: 0, b: 0, a: 0.4 }, offset: { x: 0, y: 1 }, radius: 2, visible: true, blendMode: "NORMAL" }]],
+      ["md", [{ type: "DROP_SHADOW", color: { r: 0, g: 0, b: 0, a: 0.6 }, offset: { x: 0, y: 8 }, radius: 20, spread: -6, visible: true, blendMode: "NORMAL" }]],
+      ["lg", [{ type: "DROP_SHADOW", color: { r: 0, g: 0, b: 0, a: 0.75 }, offset: { x: 0, y: 20 }, radius: 40, spread: -10, visible: true, blendMode: "NORMAL" }]],
+    ];
+    for (const [label, eff] of shadows) {
+      const cell = gFrame("VERTICAL", { gap: 11, cross: "CENTER" });
+      const tile = figma.createRectangle();
+      tile.resize(54, 54);
+      tile.cornerRadius = 14;
+      tile.fills = [solid("#1E232E")];
+      tile.effects = eff;
+      cell.appendChild(tile);
+      cell.appendChild(gTxt(label, F.mono, 10, "#5E6776"));
+      erow.appendChild(cell);
+    }
+    elevCard.appendChild(erow);
   }
 
   const coverFrame = coverPage.children.find((n) => n.name === "Cover / UI8 Thumbnail");

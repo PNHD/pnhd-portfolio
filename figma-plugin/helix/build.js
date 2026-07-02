@@ -52,8 +52,8 @@ out += `(async () => {
       catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
     }
     figma.closePlugin(fails.length
-      ? "⚠️ Helix v7 generated with errors — " + fails.join(" · ")
-      : "✅ Helix Crypto UI Kit v7 — 8-page kit, 20 screens, real coin logos, variables bound");
+      ? "⚠️ Helix v8 generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit v8 — foundations cards, text styles linked, tints fixed");
   } else {
     try {
       await registry[figma.command]();
