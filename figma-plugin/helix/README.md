@@ -7,18 +7,18 @@ Works on **Figma Free**: scripts detect plan limits (1 variable mode, 3 pages) a
 ## How to Use
 
 ### Method 1: One-click plugin (Recommended)
-`code.js` is a pre-built bundle of the icon + coin packs + all 7 scripts with a menu — no pasting needed.
+`code.js` is a pre-built bundle of the icon + coin packs + all 8 scripts with a menu — no pasting needed.
 1. Open **Figma Desktop**, create a new design file
 2. **Plugins → Development → Import plugin from manifest…** → pick `manifest.json` in this folder
-3. **Plugins → Development → Helix Crypto UI Kit Generator → 🚀 Run ALL (00 → 04)**
-4. Or run each part separately from the same submenu (00 → 04, in order)
-5. The success toast says **“Helix Crypto UI Kit v8”** — if you don't see “v8”, the plugin is running an old `code.js`; replace the folder and re-run
+3. **Plugins → Development → Helix Crypto UI Kit Generator → 🚀 Run ALL (00 → 05)**
+4. Or run each part separately from the same submenu (00 → 05, in order)
+5. The success toast says **“Helix Crypto UI Kit v9”** — if you don't see “v9”, the plugin is running an old `code.js`; replace the folder and re-run
 
-If you edit the `00-…04-…` source scripts, regenerate the bundle with `node build.js`.
+If you edit the `00-…05-…` source scripts, regenerate the bundle with `node build.js`.
 
 ### Method 2: Figma Console (no import)
 1. **Menu → Plugins → Development → Show/Hide Console** (`Ctrl+Alt+I` / `Cmd+Option+I`)
-2. Paste `icons-svg.js`, then `coins-svg.js`, then each script (`00 → 04`) in order and press Enter
+2. Paste `icons-svg.js`, then `coins-svg.js`, then each script (`00 → 05`) in order and press Enter
 3. Wait for the ✅ message before running the next one
 
 ## Script Order (IMPORTANT — run sequentially)
@@ -34,6 +34,7 @@ If you edit the `00-…04-…` source scripts, regenerate the bundle with `node 
 | 4 | `03-screens.js` | **Screens 1–7** — Trading Terminal (candles + order book), Portfolio Dashboard (light), NFT Marketplace + mobile Onboarding, Portfolio, Coin Detail, Swap. Screens are assembled from **component instances** (Buttons, Pills, Badges, Avatars…) |
 | 5 | `03b-screens-extra.js` | **Screens 8–20** — Markets Overview, Asset Detail, Wallet & Balances, Send & Receive (QR), Staking & Earn, Transactions, Settings & Security, Sign in & 2FA, NFT Detail + mobile Wallet, Receive QR, NFT Gallery, Profile & Settings — **20 screens total** |
 | 6 | `04-bind-variables.js` | **Binding pass** — rebinds full-opacity fills/strokes to Helix Variables (translucent tints preserved), links **every text node to a Text Style**, and on paid plans flips light screens to the Light mode |
+| 7 | `05-showcase.js` | **Showcase boards** (PrimeOne-style, on the Cover page): What's inside overview, Component wall built from live instances, 20-screens index, Icon & coin library wall, Changelog + License + Support |
 
 ## Design Tokens
 
