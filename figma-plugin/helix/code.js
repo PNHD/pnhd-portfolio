@@ -388,8 +388,34 @@ async function part01() {
     try { const p = figma.createPage(); p.name = name; return p; }
     catch (e) { return figma.currentPage; }
   }
+  // figma.currentPage assignment is unreliable on newer Figma builds —
+  // use setCurrentPageAsync and always parent nodes explicitly.
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
+  // Named canvas Section (falls back to nothing on very old Figma)
+  const wrapSection = (pageNode, title, nodes) => {
+    if (!figma.createSection || !nodes.length) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of nodes) {
+      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
+    }
+    const s = figma.createSection();
+    s.name = title;
+    pageNode.appendChild(s);
+    s.x = minX - 64; s.y = minY - 64;
+    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
+    for (const n of nodes) {
+      const ax = n.x, ay = n.y;
+      s.appendChild(n);
+      n.x = ax - s.x; n.y = ay - s.y;
+    }
+    return s;
+  };
   const guide = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
-  figma.currentPage = guide;
+  await gotoPage(guide);
 
   // ── COVER (1600×1200 — UI8 thumbnail ratio) ──
   {
@@ -463,7 +489,7 @@ async function part01() {
     chips.counterAxisSizingMode = "AUTO";
     chips.itemSpacing = 14;
     chips.fills = [];
-    for (const label of ["320+ COMPONENTS", "7 SCREENS", "LIGHT & DARK", "AUTO LAYOUT", "VARIABLES"]) {
+    for (const label of ["320+ COMPONENTS", "20 SCREENS", "LIGHT & DARK", "AUTO LAYOUT", "VARIABLES"]) {
       const chip = figma.createFrame();
       chip.layoutMode = "HORIZONTAL";
       chip.primaryAxisSizingMode = "AUTO";
@@ -503,6 +529,7 @@ async function part01() {
     gs.primaryAxisSizingMode = "AUTO";
     gs.counterAxisSizingMode = "FIXED";
     gs.resize(900, 100);
+    gs.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     gs.paddingLeft = 56; gs.paddingRight = 56;
     gs.paddingTop = 56; gs.paddingBottom = 56;
     gs.itemSpacing = 22;
@@ -532,7 +559,7 @@ async function part01() {
     block(F.bodySemi, 18, "3 · Components", "#A5ABFC");
     block(F.body, 15, "All components are variant-driven and built with Auto Layout. Swap the placeholder circles for real coin logos (cryptocurrency-icons) and avatars, and drop in Phosphor icons from the free community library.", "#C8CFDA");
     block(F.bodySemi, 18, "4 · Screens", "#A5ABFC");
-    block(F.body, 15, "The 📱 Screens page contains 3 desktop screens (Trading Terminal, Portfolio Dashboard, NFT Marketplace) and 4 mobile screens (Onboarding, Portfolio, Coin Detail, Swap), assembled from the components.", "#C8CFDA");
+    block(F.body, 15, "The 📱 Screens page contains 20 production screens — 12 desktop (Trading Terminal, Portfolio, Markets, Asset & NFT Detail, Wallet, Send & Receive, Staking, Transactions, Settings, Sign in…) and 8 mobile — assembled from component instances and organized in named sections.", "#C8CFDA");
     block(F.bodySemi, 18, "License", "#A5ABFC");
     block(F.body, 15, "Standard license: unlimited personal & client projects. Extended license: use in end products for sale. © Dang Pham (Wonton Design).", "#C8CFDA");
   }
@@ -543,6 +570,7 @@ async function part01() {
   frame.primaryAxisSizingMode = "AUTO";
   frame.counterAxisSizingMode = "FIXED";
   frame.resize(1240, 100);
+  frame.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
   frame.paddingLeft = 64; frame.paddingRight = 64;
   frame.paddingTop = 64; frame.paddingBottom = 64;
   frame.itemSpacing = 48;
@@ -620,8 +648,13 @@ async function part01() {
     t.layoutSizingHorizontal = "FILL";
   }
 
+  const coverFrame = guide.children.find((n) => n.name === "Cover / UI8 Thumbnail");
+  const gsFrame = guide.children.find((n) => n.name === "Getting Started");
+  if (coverFrame) wrapSection(guide, "🖼 Cover", [coverFrame]);
+  if (gsFrame) wrapSection(guide, "📘 Getting Started", [gsFrame]);
+  wrapSection(guide, "🎨 Style Guide", [frame]);
   figma.viewport.scrollAndZoomIntoView([frame]);
-  __done("✅ Helix foundation: Cover, Getting Started, paint/text/effect styles, style guide");
+  __done("✅ Helix foundation: Cover, Getting Started, styles, style guide (sectioned)");
 }
 
 // ─────────── 02-components.js ───────────
@@ -723,12 +756,43 @@ async function part02() {
     return node;
   };
 
+  // figma.currentPage assignment is unreliable on newer Figma builds —
+  // use setCurrentPageAsync and always parent nodes explicitly.
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
+  // Named canvas Section (falls back to nothing on very old Figma)
+  const wrapSection = (pageNode, title, nodes) => {
+    if (!figma.createSection || !nodes.length) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of nodes) {
+      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
+    }
+    const s = figma.createSection();
+    s.name = title;
+    pageNode.appendChild(s);
+    s.x = minX - 64; s.y = minY - 64;
+    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
+    for (const n of nodes) {
+      const ax = n.x, ay = n.y;
+      s.appendChild(n);
+      n.x = ax - s.x; n.y = ay - s.y;
+    }
+    return s;
+  };
   const page = ensurePage("🧩 Components", /Components/);
-  figma.currentPage = page;
+  await gotoPage(page);
+  // createComponent() lands on currentPage, which may NOT be our page on
+  // newer Figma builds — always reparent explicitly before combining.
+  const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
+  const placedSets = [];
   let yOffset = 0;
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    page.appendChild(set); // ensure it lives on the Components page
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;
     page.appendChild(tag);
@@ -736,6 +800,7 @@ async function part02() {
     yOffset += 34;
     set.x = 0; set.y = yOffset;
     yOffset += set.height + 96;
+    placedSets.push({ name, nodes: [tag, set] });
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -802,7 +867,7 @@ async function part02() {
         }
       }
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 9), page), "Button");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 9), page), "Button");
   }
 
   // ═════════════════════════════════════════════
@@ -831,7 +896,7 @@ async function part02() {
         comps.push(c);
       }
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Icon Button");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Icon Button");
   }
 
   // ═════════════════════════════════════════════
@@ -850,6 +915,7 @@ async function part02() {
       autol(c, "VERTICAL", { gap: 8, cross: "MIN" });
       c.counterAxisSizingMode = "FIXED";
       c.resize(320, 10);
+      c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
 
       const label = txt("Label", F.bodySemi, 12.5, "#9AA4B2");
@@ -881,7 +947,7 @@ async function part02() {
       c.appendChild(helper);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Input");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Input");
   }
 
   // ═════════════════════════════════════════════
@@ -891,9 +957,9 @@ async function part02() {
     const c = figma.createComponent();
     c.name = "Amount Input";
     autol(c, "HORIZONTAL", { px: 14, py: 14, main: "SPACE_BETWEEN" });
-    c.counterAxisSizingMode = "AUTO";
     c.primaryAxisSizingMode = "FIXED";
     c.resize(420, 10);
+    c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 13;
     c.fills = [solid("#FFFFFF", 0.04)];
     c.strokes = [solid("#FFFFFF", 0.1)];
@@ -980,7 +1046,7 @@ async function part02() {
       c.appendChild(txt(st === "Checked" ? "Checked" : "Unchecked", F.body, 14, st === "Checked" ? "#C8CFDA" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Checkbox");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Checkbox");
   }
   {
     const comps = [];
@@ -1011,7 +1077,7 @@ async function part02() {
       c.appendChild(txt(st === "Selected" ? "Selected" : "Option", F.body, 14, st === "Selected" ? "#C8CFDA" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Radio");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Radio");
   }
   {
     const comps = [];
@@ -1032,7 +1098,7 @@ async function part02() {
       c.appendChild(knob);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Toggle");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Toggle");
   }
 
   // ═════════════════════════════════════════════
@@ -1091,7 +1157,7 @@ async function part02() {
       c.appendChild(txt(tn, F.bodySemi, 12, tc.text));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 4), page), "Badge / Status");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 4), page), "Badge / Status");
   }
 
   // ═════════════════════════════════════════════
@@ -1113,7 +1179,7 @@ async function part02() {
       c.appendChild(txt(up ? "+2.41%" : "-3.22%", F.monoSemi, 11.5, up ? "#34D399" : "#FB7185"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Badge / Change");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Badge / Change");
   }
 
   // ═════════════════════════════════════════════
@@ -1142,7 +1208,7 @@ async function part02() {
       c.appendChild(txt("Verified", F.bodySemi, 11.5, "#38BDF8"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Badge / Special");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Badge / Special");
   }
 
   // ═════════════════════════════════════════════
@@ -1168,7 +1234,7 @@ async function part02() {
       c.appendChild(txt(cn, F.bodyMed, 12.5, "#C8CFDA"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Chip / Chain");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Chip / Chain");
   }
 
   // ═════════════════════════════════════════════
@@ -1211,7 +1277,7 @@ async function part02() {
         comps.push(c);
       }
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Avatar");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Avatar");
   }
 
   // ═════════════════════════════════════════════
@@ -1268,7 +1334,7 @@ async function part02() {
       line.layoutSizingHorizontal = "FILL";
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Tab");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Tab");
   }
 
   // ═════════════════════════════════════════════
@@ -1285,7 +1351,7 @@ async function part02() {
       c.appendChild(txt("24H", F.monoSemi, 12, st === "Active" ? "#A5ABFC" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Pill / Timeframe");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Pill / Timeframe");
   }
 
   // ═════════════════════════════════════════════
@@ -1322,11 +1388,23 @@ async function part02() {
       else c.appendChild(txt("1", F.bodySemi, 13, type === "Active" ? "#FFFFFF" : "#C8CFDA"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Pagination Item");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Pagination Item");
   }
 
+  const GROUPS = [
+    ["🔘 Actions", ["Button", "Icon Button"]],
+    ["📝 Forms & Inputs", ["Input", "Amount Input", "Select", "Checkbox", "Radio", "Toggle", "Segmented Control"]],
+    ["🏷 Badges & Chips", ["Badge / Status", "Badge / Change", "Badge / Special", "Chip / Chain"]],
+    ["👤 Avatars", ["Avatar", "Avatar Group"]],
+    ["🧭 Navigation", ["Tab", "Pill / Timeframe", "Breadcrumb", "Pagination Item"]],
+  ];
+  for (const [title, names] of GROUPS) {
+    const nodes = [];
+    for (const ps of placedSets) if (names.includes(ps.name)) nodes.push(...ps.nodes);
+    wrapSection(page, title, nodes);
+  }
   figma.viewport.scrollAndZoomIntoView(page.children);
-  __done("✅ Helix core components: Button, Icon Button, Input, Amount, Select, Checkbox, Radio, Toggle, Segmented, Badges ×3, Chip, Avatar, Avatar Group, Tab, Pill, Breadcrumb, Pagination");
+  __done("✅ Helix core components (19 sets, sectioned): Button, Icon Button, Input, Amount, Select, Checkbox, Radio, Toggle, Segmented, Badges ×3, Chip, Avatar, Avatar Group, Tab, Pill, Breadcrumb, Pagination");
 }
 
 // ─────────── 02b-components-extra.js ───────────
@@ -1406,6 +1484,7 @@ async function part02b() {
       // vertical layout: width = counter axis (fixed), height hugs content
       n.counterAxisSizingMode = "FIXED";
       n.resize(w, n.height);
+      n.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     }
     return n;
   };
@@ -1451,12 +1530,41 @@ async function part02b() {
     return node;
   };
 
+  // figma.currentPage assignment is unreliable on newer Figma builds —
+  // use setCurrentPageAsync and always parent nodes explicitly.
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
+  // Named canvas Section (falls back to nothing on very old Figma)
+  const wrapSection = (pageNode, title, nodes) => {
+    if (!figma.createSection || !nodes.length) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of nodes) {
+      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
+    }
+    const s = figma.createSection();
+    s.name = title;
+    pageNode.appendChild(s);
+    s.x = minX - 64; s.y = minY - 64;
+    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
+    for (const n of nodes) {
+      const ax = n.x, ay = n.y;
+      s.appendChild(n);
+      n.x = ax - s.x; n.y = ay - s.y;
+    }
+    return s;
+  };
   const page = ensurePage("🧩 Components", /Components/);
-  figma.currentPage = page;
+  await gotoPage(page);
+  const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
+  const placedSets = [];
   let yOffset = 0; // continue below whatever 02-components.js created
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    page.appendChild(set);
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;
     page.appendChild(tag);
@@ -1464,6 +1572,7 @@ async function part02b() {
     yOffset += 34;
     set.x = 0; set.y = yOffset;
     yOffset += set.height + 96;
+    placedSets.push({ name, nodes: [tag, set] });
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -1553,7 +1662,7 @@ async function part02b() {
       c.appendChild(spark);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Coin Card");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Coin Card");
   }
 
   // ═════════════════════════════════════════════
@@ -1563,9 +1672,9 @@ async function part02b() {
     const c = figma.createComponent();
     c.name = "Wallet Card";
     autol(c, "VERTICAL", { p: 24, gap: 6, cross: "MIN" });
-    c.primaryAxisSizingMode = "AUTO";
     c.counterAxisSizingMode = "FIXED";
     c.resize(340, 10);
+    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 20;
     c.fills = [ACCENT_GRAD];
     c.clipsContent = true;
@@ -1619,9 +1728,9 @@ async function part02b() {
       const c = figma.createComponent();
       c.name = `Tone=${tn}`;
       autol(c, "HORIZONTAL", { p: 14, gap: 11, cross: "MIN", main: "MIN" });
-      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(340, 10);
+      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.cornerRadius = 13;
       c.fills = [tc.bg];
       c.strokes = [tc.bd];
@@ -1635,7 +1744,7 @@ async function part02b() {
       col.layoutSizingHorizontal = "FILL";
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Alert");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Alert");
   }
 
   // ═════════════════════════════════════════════
@@ -1645,9 +1754,9 @@ async function part02b() {
     const c = figma.createComponent();
     c.name = "Toast";
     autol(c, "HORIZONTAL", { px: 16, py: 14, gap: 12, main: "MIN" });
-    c.counterAxisSizingMode = "AUTO";
     c.primaryAxisSizingMode = "FIXED";
     c.resize(340, 10);
+    c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 14;
     c.fills = [solid("#1E232E")];
     c.strokes = [solid("#FFFFFF", 0.1)];
@@ -1711,6 +1820,7 @@ async function part02b() {
     autol(c, "VERTICAL", { gap: 9, cross: "MIN" });
     c.counterAxisSizingMode = "FIXED";
     c.resize(280, 10);
+    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.fills = [];
     const head = autol(figma.createFrame(), "HORIZONTAL", { main: "SPACE_BETWEEN" });
     head.fills = [];
@@ -1861,6 +1971,7 @@ async function part02b() {
     autol(c, "VERTICAL", { gap: 9, cross: "MIN" });
     c.counterAxisSizingMode = "FIXED";
     c.resize(280, 10);
+    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.fills = [];
     for (const wPct of [0.7, 1, 0.45]) {
       const bar = figma.createRectangle();
@@ -1966,9 +2077,9 @@ async function part02b() {
       const c = figma.createComponent();
       c.name = `Trend=${dir}`;
       autol(c, "HORIZONTAL", { px: 8, py: 14, gap: 12, main: "MIN" });
-      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(1080, 10);
+      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
       c.strokes = [solid("#FFFFFF", 0.04)];
       c.strokeWeight = 1;
@@ -2021,7 +2132,7 @@ async function part02b() {
       c.appendChild(trade);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 1), page), "Markets Table Row");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 1), page), "Markets Table Row");
   }
 
   // ═════════════════════════════════════════════
@@ -2035,9 +2146,9 @@ async function part02b() {
       const c = figma.createComponent();
       c.name = `Side=${side}`;
       autol(c, "HORIZONTAL", { px: 0, py: 3.5, gap: 6, main: "MIN" });
-      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(260, 10);
+      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
       c.clipsContent = false;
 
@@ -2064,11 +2175,22 @@ async function part02b() {
       c.appendChild(tot);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 1), page), "Order Book Row");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 1), page), "Order Book Row");
   }
 
+  const GROUPS = [
+    ["🃏 Cards", ["Stat Card", "Coin Card", "Wallet Card"]],
+    ["💬 Feedback", ["Alert", "Toast", "Tooltip"]],
+    ["⏳ Progress & Loaders", ["Progress Bar", "Progress Circle", "Slider", "Stepper", "Skeleton"]],
+    ["📊 Charts & Data", ["Donut Chart", "Bar Chart", "Markets Table Row", "Order Book Row"]],
+  ];
+  for (const [title, names] of GROUPS) {
+    const nodes = [];
+    for (const ps of placedSets) if (names.includes(ps.name)) nodes.push(...ps.nodes);
+    wrapSection(page, title, nodes);
+  }
   figma.viewport.scrollAndZoomIntoView(page.children);
-  __done("✅ Helix extra components: Stat Card, Coin Card, Wallet Card, Alert, Toast, Tooltip, Progress ×2, Slider, Stepper, Skeleton, Donut, Bar Chart, Table Row, Order Book Row");
+  __done("✅ Helix extra components (15 sets, sectioned): Stat Card, Coin Card, Wallet Card, Alert, Toast, Tooltip, Progress ×2, Slider, Stepper, Skeleton, Donut, Bar Chart, Table Row, Order Book Row");
 }
 
 // ─────────── 03-screens.js ───────────
@@ -2186,10 +2308,23 @@ async function part03() {
   };
   // Instance of a component built by 02/02b — screens consume the library
   const compPage = figma.root.children.find((p) => /Components/.test(p.name));
+  const findSet = (setName) => {
+    if (!compPage) return null;
+    const direct = compPage.children.find((n) => n.name === setName);
+    if (direct) return direct;
+    // component sets live inside named Sections on the Components page
+    for (const sec of compPage.children) {
+      if (sec.children) {
+        const hit = sec.children.find((n) => n.name === setName);
+        if (hit) return hit;
+      }
+    }
+    return null;
+  };
   const setCache = {};
   const inst = (setName, variantName, textOverride) => {
     if (!compPage) return null;
-    if (!(setName in setCache)) setCache[setName] = compPage.children.find((n) => n.name === setName) || null;
+    if (!(setName in setCache)) setCache[setName] = findSet(setName);
     const set = setCache[setName];
     if (!set) return null;
     const comp = set.type === "COMPONENT" ? set
@@ -2250,21 +2385,39 @@ async function part03() {
     try { const p = figma.createPage(); p.name = name; return p; }
     catch (e) { return figma.currentPage; }
   }
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
   const scrPage = ensurePage("📱 Screens", /Screens/);
-  figma.currentPage = scrPage;
+  await gotoPage(scrPage);
 
-  // sequential vertical layout — never overlaps, even on re-runs / shared pages
+  // Each screen lives in a named Section — organized, titled, never overlapping
   let yCursor = 0;
   for (const ch of scrPage.children) yCursor = Math.max(yCursor, ch.y + ch.height + 160);
-  const sectionLabel = (label) => {
-    const t = txt(label, F.disp, 26, "#F2F4F8");
-    scrPage.appendChild(t);
-    t.x = 0; t.y = yCursor;
-    yCursor += 60;
-  };
+  let pendingTitle = null;
+  const sectionLabel = (label) => { pendingTitle = label; };
   const placeScreen = (node, hgt) => {
-    node.x = 0; node.y = yCursor;
-    yCursor += hgt + 120;
+    if (figma.createSection && pendingTitle) {
+      const s = figma.createSection();
+      s.name = pendingTitle;
+      scrPage.appendChild(s);
+      s.x = 0; s.y = yCursor;
+      s.resizeWithoutConstraints(node.width + 120, hgt + 120);
+      s.appendChild(node);
+      node.x = 60; node.y = 60;
+      yCursor += hgt + 220;
+    } else {
+      if (pendingTitle) {
+        const t = txt(pendingTitle, F.disp, 26, "#F2F4F8");
+        scrPage.appendChild(t);
+        t.x = 0; t.y = yCursor;
+        yCursor += 60;
+      }
+      node.x = 0; node.y = yCursor;
+      yCursor += hgt + 120;
+    }
+    pendingTitle = null;
   };
 
   // ════════════════════════════════════════════════════════
@@ -2633,9 +2786,9 @@ async function part03() {
     fill(chartCard);
 
     const rightCol = V({ gap: 18 });
-    rightCol.primaryAxisSizingMode = "AUTO";
     rightCol.counterAxisSizingMode = "FIXED";
     rightCol.resize(400, 100);
+    rightCol.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     split.appendChild(rightCol);
 
     const alloc = V({ p: 20, gap: 16, bg: solid("#FFFFFF"), bd: solid("#E6E8EC"), r: 16 });
@@ -2806,9 +2959,25 @@ async function part03() {
   // ════════════════════════════════════════════════════════
   // MOBILE SCREENS — 390×844
   // ════════════════════════════════════════════════════════
-  sectionLabel("📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap");
-  const yMobile = yCursor;
-  yCursor += 844 + 120;
+  let mobileSection = null;
+  {
+    const mobileTitle = "📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap";
+    if (figma.createSection) {
+      mobileSection = figma.createSection();
+      mobileSection.name = mobileTitle;
+      scrPage.appendChild(mobileSection);
+      mobileSection.x = 0; mobileSection.y = yCursor;
+      mobileSection.resizeWithoutConstraints(1410 + 390 + 120, 844 + 120);
+      yCursor += 844 + 220;
+    } else {
+      const t = txt(mobileTitle, F.disp, 26, "#F2F4F8");
+      scrPage.appendChild(t);
+      t.x = 0; t.y = yCursor;
+      yCursor += 60;
+    }
+  }
+  const yMobile = mobileSection ? 60 : yCursor;
+  if (!mobileSection) yCursor += 844 + 120;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -2825,8 +2994,9 @@ async function part03() {
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    scrPage.appendChild(p);
-    p.x = x; p.y = yMobile;
+    (mobileSection || scrPage).appendChild(p);
+    p.x = mobileSection ? x + 60 : x;
+    p.y = yMobile;
     statusBar(p);
     return p;
   };
@@ -3227,10 +3397,23 @@ async function part03b() {
     return node;
   };
   const compPage = figma.root.children.find((p) => /Components/.test(p.name));
+  const findSet = (setName) => {
+    if (!compPage) return null;
+    const direct = compPage.children.find((n) => n.name === setName);
+    if (direct) return direct;
+    // component sets live inside named Sections on the Components page
+    for (const sec of compPage.children) {
+      if (sec.children) {
+        const hit = sec.children.find((n) => n.name === setName);
+        if (hit) return hit;
+      }
+    }
+    return null;
+  };
   const setCache = {};
   const inst = (setName, variantName, textOverride) => {
     if (!compPage) return null;
-    if (!(setName in setCache)) setCache[setName] = compPage.children.find((n) => n.name === setName) || null;
+    if (!(setName in setCache)) setCache[setName] = findSet(setName);
     const set = setCache[setName];
     if (!set) return null;
     const comp = set.type === "COMPONENT" ? set
@@ -3297,20 +3480,39 @@ async function part03b() {
     try { const p = figma.createPage(); p.name = name; return p; }
     catch (e) { return figma.currentPage; }
   }
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
   const scrPage = ensurePage("📱 Screens", /Screens/);
-  figma.currentPage = scrPage;
+  await gotoPage(scrPage);
 
+  // Each screen lives in a named Section — organized, titled, never overlapping
   let yCursor = 0;
   for (const ch of scrPage.children) yCursor = Math.max(yCursor, ch.y + ch.height + 160);
-  const sectionLabel = (label) => {
-    const t = txt(label, F.disp, 26, "#F2F4F8");
-    scrPage.appendChild(t);
-    t.x = 0; t.y = yCursor;
-    yCursor += 60;
-  };
+  let pendingTitle = null;
+  const sectionLabel = (label) => { pendingTitle = label; };
   const placeScreen = (node, hgt) => {
-    node.x = 0; node.y = yCursor;
-    yCursor += hgt + 120;
+    if (figma.createSection && pendingTitle) {
+      const s = figma.createSection();
+      s.name = pendingTitle;
+      scrPage.appendChild(s);
+      s.x = 0; s.y = yCursor;
+      s.resizeWithoutConstraints(node.width + 120, hgt + 120);
+      s.appendChild(node);
+      node.x = 60; node.y = 60;
+      yCursor += hgt + 220;
+    } else {
+      if (pendingTitle) {
+        const t = txt(pendingTitle, F.disp, 26, "#F2F4F8");
+        scrPage.appendChild(t);
+        t.x = 0; t.y = yCursor;
+        yCursor += 60;
+      }
+      node.x = 0; node.y = yCursor;
+      yCursor += hgt + 120;
+    }
+    pendingTitle = null;
   };
 
   // ── Web shell: dark sidebar + topbar, returns content column ──
@@ -3749,9 +3951,9 @@ async function part03b() {
     const split = H({ gap: 18, cross: "MIN" });
 
     const left = V({ gap: 18 });
-    left.primaryAxisSizingMode = "AUTO";
     left.counterAxisSizingMode = "FIXED";
     left.resize(360, 100);
+    left.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     const profile = darkCard({ p: 24, gap: 12, cross: "CENTER" });
     profile.name = "Profile";
     profile.appendChild(avatarInst("XL"));
@@ -3832,6 +4034,7 @@ async function part03b() {
     card.name = "Sign in";
     card.counterAxisSizingMode = "FIXED";
     card.resize(420, 100);
+    card.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     const logo = H({ main: "CENTER", bg: ACCENT_GRAD, r: 14 });
     logo.resize(52, 52);
     logo.primaryAxisSizingMode = "FIXED";
@@ -3858,6 +4061,7 @@ async function part03b() {
     tfa.name = "2FA Code";
     tfa.counterAxisSizingMode = "FIXED";
     tfa.resize(420, 100);
+    tfa.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     tfa.appendChild(iconTile("shield-check", 52, "#34D399", solid("#34D399", 0.14)));
     tfa.appendChild(txt("Enter your code", F.disp, 22, "#F2F4F8"));
     const tfaSub = txt("We sent a 6-digit code to your authenticator app.", F.body, 12.5, "#9AA4B2");
@@ -3970,9 +4174,25 @@ async function part03b() {
   // ════════════════════════════════════════════════════════
   // MOBILE — Wallet · Receive QR · NFT Gallery · Profile
   // ════════════════════════════════════════════════════════
-  sectionLabel("📱  Mobile · Wallet / Receive QR / NFT Gallery / Profile");
-  const yMobile = yCursor;
-  yCursor += 844 + 120;
+  let mobileSection = null;
+  {
+    const mobileTitle = "📱  Mobile · Wallet / Receive QR / NFT Gallery / Profile";
+    if (figma.createSection) {
+      mobileSection = figma.createSection();
+      mobileSection.name = mobileTitle;
+      scrPage.appendChild(mobileSection);
+      mobileSection.x = 0; mobileSection.y = yCursor;
+      mobileSection.resizeWithoutConstraints(1410 + 390 + 120, 844 + 120);
+      yCursor += 844 + 220;
+    } else {
+      const t = txt(mobileTitle, F.disp, 26, "#F2F4F8");
+      scrPage.appendChild(t);
+      t.x = 0; t.y = yCursor;
+      yCursor += 60;
+    }
+  }
+  const yMobile = mobileSection ? 60 : yCursor;
+  if (!mobileSection) yCursor += 844 + 120;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -3988,8 +4208,9 @@ async function part03b() {
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    scrPage.appendChild(p);
-    p.x = x; p.y = yMobile;
+    (mobileSection || scrPage).appendChild(p);
+    p.x = mobileSection ? x + 60 : x;
+    p.y = yMobile;
     statusBar(p);
     return p;
   };
@@ -4279,12 +4500,12 @@ async function part04() {
   let lightModeSet = 0;
   if (lightModeId) {
     const scrPage = figma.root.children.find((p) => /Screens/.test(p.name));
-    if (scrPage) {
-      for (const node of scrPage.children) {
-        if (/Light/.test(node.name) && node.setExplicitVariableModeForCollection) {
-          node.setExplicitVariableModeForCollection(darkCol, lightModeId);
-          lightModeSet++;
-        }
+    if (scrPage && scrPage.findAll) {
+      // screens may sit inside Sections — search frames recursively
+      const lightFrames = scrPage.findAll((n) => n.type === "FRAME" && /Light/.test(n.name) && !!n.setExplicitVariableModeForCollection);
+      for (const node of lightFrames) {
+        node.setExplicitVariableModeForCollection(darkCol, lightModeId);
+        lightModeSet++;
       }
     }
   }
@@ -4303,8 +4524,8 @@ async function part04() {
       catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
     }
     figma.closePlugin(fails.length
-      ? "⚠️ Helix v4 generated with errors — " + fails.join(" · ")
-      : "✅ Helix Crypto UI Kit v4 — 20 screens, icons & variables bound");
+      ? "⚠️ Helix v5 generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit v5 — 20 screens in sections, components live, variables bound");
   } else {
     try {
       await registry[figma.command]();

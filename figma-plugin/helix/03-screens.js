@@ -119,10 +119,23 @@
   };
   // Instance of a component built by 02/02b — screens consume the library
   const compPage = figma.root.children.find((p) => /Components/.test(p.name));
+  const findSet = (setName) => {
+    if (!compPage) return null;
+    const direct = compPage.children.find((n) => n.name === setName);
+    if (direct) return direct;
+    // component sets live inside named Sections on the Components page
+    for (const sec of compPage.children) {
+      if (sec.children) {
+        const hit = sec.children.find((n) => n.name === setName);
+        if (hit) return hit;
+      }
+    }
+    return null;
+  };
   const setCache = {};
   const inst = (setName, variantName, textOverride) => {
     if (!compPage) return null;
-    if (!(setName in setCache)) setCache[setName] = compPage.children.find((n) => n.name === setName) || null;
+    if (!(setName in setCache)) setCache[setName] = findSet(setName);
     const set = setCache[setName];
     if (!set) return null;
     const comp = set.type === "COMPONENT" ? set
@@ -183,21 +196,39 @@
     try { const p = figma.createPage(); p.name = name; return p; }
     catch (e) { return figma.currentPage; }
   }
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
   const scrPage = ensurePage("📱 Screens", /Screens/);
-  figma.currentPage = scrPage;
+  await gotoPage(scrPage);
 
-  // sequential vertical layout — never overlaps, even on re-runs / shared pages
+  // Each screen lives in a named Section — organized, titled, never overlapping
   let yCursor = 0;
   for (const ch of scrPage.children) yCursor = Math.max(yCursor, ch.y + ch.height + 160);
-  const sectionLabel = (label) => {
-    const t = txt(label, F.disp, 26, "#F2F4F8");
-    scrPage.appendChild(t);
-    t.x = 0; t.y = yCursor;
-    yCursor += 60;
-  };
+  let pendingTitle = null;
+  const sectionLabel = (label) => { pendingTitle = label; };
   const placeScreen = (node, hgt) => {
-    node.x = 0; node.y = yCursor;
-    yCursor += hgt + 120;
+    if (figma.createSection && pendingTitle) {
+      const s = figma.createSection();
+      s.name = pendingTitle;
+      scrPage.appendChild(s);
+      s.x = 0; s.y = yCursor;
+      s.resizeWithoutConstraints(node.width + 120, hgt + 120);
+      s.appendChild(node);
+      node.x = 60; node.y = 60;
+      yCursor += hgt + 220;
+    } else {
+      if (pendingTitle) {
+        const t = txt(pendingTitle, F.disp, 26, "#F2F4F8");
+        scrPage.appendChild(t);
+        t.x = 0; t.y = yCursor;
+        yCursor += 60;
+      }
+      node.x = 0; node.y = yCursor;
+      yCursor += hgt + 120;
+    }
+    pendingTitle = null;
   };
 
   // ════════════════════════════════════════════════════════
@@ -566,9 +597,9 @@
     fill(chartCard);
 
     const rightCol = V({ gap: 18 });
-    rightCol.primaryAxisSizingMode = "AUTO";
     rightCol.counterAxisSizingMode = "FIXED";
     rightCol.resize(400, 100);
+    rightCol.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     split.appendChild(rightCol);
 
     const alloc = V({ p: 20, gap: 16, bg: solid("#FFFFFF"), bd: solid("#E6E8EC"), r: 16 });
@@ -739,9 +770,25 @@
   // ════════════════════════════════════════════════════════
   // MOBILE SCREENS — 390×844
   // ════════════════════════════════════════════════════════
-  sectionLabel("📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap");
-  const yMobile = yCursor;
-  yCursor += 844 + 120;
+  let mobileSection = null;
+  {
+    const mobileTitle = "📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap";
+    if (figma.createSection) {
+      mobileSection = figma.createSection();
+      mobileSection.name = mobileTitle;
+      scrPage.appendChild(mobileSection);
+      mobileSection.x = 0; mobileSection.y = yCursor;
+      mobileSection.resizeWithoutConstraints(1410 + 390 + 120, 844 + 120);
+      yCursor += 844 + 220;
+    } else {
+      const t = txt(mobileTitle, F.disp, 26, "#F2F4F8");
+      scrPage.appendChild(t);
+      t.x = 0; t.y = yCursor;
+      yCursor += 60;
+    }
+  }
+  const yMobile = mobileSection ? 60 : yCursor;
+  if (!mobileSection) yCursor += 844 + 120;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
@@ -758,8 +805,9 @@
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    scrPage.appendChild(p);
-    p.x = x; p.y = yMobile;
+    (mobileSection || scrPage).appendChild(p);
+    p.x = mobileSection ? x + 60 : x;
+    p.y = yMobile;
     statusBar(p);
     return p;
   };

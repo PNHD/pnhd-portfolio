@@ -12,7 +12,7 @@ Works on **Figma Free**: scripts detect plan limits (1 variable mode, 3 pages) a
 2. **Plugins → Development → Import plugin from manifest…** → pick `manifest.json` in this folder
 3. **Plugins → Development → Helix Crypto UI Kit Generator → 🚀 Run ALL (00 → 04)**
 4. Or run each part separately from the same submenu (00 → 04, in order)
-5. The success toast says **“Helix Crypto UI Kit v4”** — if you don't see “v4”, the plugin is running an old `code.js`; replace the folder and re-run
+5. The success toast says **“Helix Crypto UI Kit v5”** — if you don't see “v5”, the plugin is running an old `code.js`; replace the folder and re-run
 
 If you edit the `00-…04-…` source scripts, regenerate the bundle with `node build.js`.
 

@@ -80,6 +80,7 @@
       // vertical layout: width = counter axis (fixed), height hugs content
       n.counterAxisSizingMode = "FIXED";
       n.resize(w, n.height);
+      n.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     }
     return n;
   };
@@ -125,12 +126,41 @@
     return node;
   };
 
+  // figma.currentPage assignment is unreliable on newer Figma builds —
+  // use setCurrentPageAsync and always parent nodes explicitly.
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
+  // Named canvas Section (falls back to nothing on very old Figma)
+  const wrapSection = (pageNode, title, nodes) => {
+    if (!figma.createSection || !nodes.length) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of nodes) {
+      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
+    }
+    const s = figma.createSection();
+    s.name = title;
+    pageNode.appendChild(s);
+    s.x = minX - 64; s.y = minY - 64;
+    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
+    for (const n of nodes) {
+      const ax = n.x, ay = n.y;
+      s.appendChild(n);
+      n.x = ax - s.x; n.y = ay - s.y;
+    }
+    return s;
+  };
   const page = ensurePage("🧩 Components", /Components/);
-  figma.currentPage = page;
+  await gotoPage(page);
+  const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
+  const placedSets = [];
   let yOffset = 0; // continue below whatever 02-components.js created
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    page.appendChild(set);
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;
     page.appendChild(tag);
@@ -138,6 +168,7 @@
     yOffset += 34;
     set.x = 0; set.y = yOffset;
     yOffset += set.height + 96;
+    placedSets.push({ name, nodes: [tag, set] });
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -227,7 +258,7 @@
       c.appendChild(spark);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Coin Card");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Coin Card");
   }
 
   // ═════════════════════════════════════════════
@@ -237,9 +268,9 @@
     const c = figma.createComponent();
     c.name = "Wallet Card";
     autol(c, "VERTICAL", { p: 24, gap: 6, cross: "MIN" });
-    c.primaryAxisSizingMode = "AUTO";
     c.counterAxisSizingMode = "FIXED";
     c.resize(340, 10);
+    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 20;
     c.fills = [ACCENT_GRAD];
     c.clipsContent = true;
@@ -293,9 +324,9 @@
       const c = figma.createComponent();
       c.name = `Tone=${tn}`;
       autol(c, "HORIZONTAL", { p: 14, gap: 11, cross: "MIN", main: "MIN" });
-      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(340, 10);
+      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.cornerRadius = 13;
       c.fills = [tc.bg];
       c.strokes = [tc.bd];
@@ -309,7 +340,7 @@
       col.layoutSizingHorizontal = "FILL";
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Alert");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Alert");
   }
 
   // ═════════════════════════════════════════════
@@ -319,9 +350,9 @@
     const c = figma.createComponent();
     c.name = "Toast";
     autol(c, "HORIZONTAL", { px: 16, py: 14, gap: 12, main: "MIN" });
-    c.counterAxisSizingMode = "AUTO";
     c.primaryAxisSizingMode = "FIXED";
     c.resize(340, 10);
+    c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 14;
     c.fills = [solid("#1E232E")];
     c.strokes = [solid("#FFFFFF", 0.1)];
@@ -385,6 +416,7 @@
     autol(c, "VERTICAL", { gap: 9, cross: "MIN" });
     c.counterAxisSizingMode = "FIXED";
     c.resize(280, 10);
+    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.fills = [];
     const head = autol(figma.createFrame(), "HORIZONTAL", { main: "SPACE_BETWEEN" });
     head.fills = [];
@@ -535,6 +567,7 @@
     autol(c, "VERTICAL", { gap: 9, cross: "MIN" });
     c.counterAxisSizingMode = "FIXED";
     c.resize(280, 10);
+    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.fills = [];
     for (const wPct of [0.7, 1, 0.45]) {
       const bar = figma.createRectangle();
@@ -640,9 +673,9 @@
       const c = figma.createComponent();
       c.name = `Trend=${dir}`;
       autol(c, "HORIZONTAL", { px: 8, py: 14, gap: 12, main: "MIN" });
-      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(1080, 10);
+      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
       c.strokes = [solid("#FFFFFF", 0.04)];
       c.strokeWeight = 1;
@@ -695,7 +728,7 @@
       c.appendChild(trade);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 1), page), "Markets Table Row");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 1), page), "Markets Table Row");
   }
 
   // ═════════════════════════════════════════════
@@ -709,9 +742,9 @@
       const c = figma.createComponent();
       c.name = `Side=${side}`;
       autol(c, "HORIZONTAL", { px: 0, py: 3.5, gap: 6, main: "MIN" });
-      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(260, 10);
+      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
       c.clipsContent = false;
 
@@ -738,9 +771,20 @@
       c.appendChild(tot);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 1), page), "Order Book Row");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 1), page), "Order Book Row");
   }
 
+  const GROUPS = [
+    ["🃏 Cards", ["Stat Card", "Coin Card", "Wallet Card"]],
+    ["💬 Feedback", ["Alert", "Toast", "Tooltip"]],
+    ["⏳ Progress & Loaders", ["Progress Bar", "Progress Circle", "Slider", "Stepper", "Skeleton"]],
+    ["📊 Charts & Data", ["Donut Chart", "Bar Chart", "Markets Table Row", "Order Book Row"]],
+  ];
+  for (const [title, names] of GROUPS) {
+    const nodes = [];
+    for (const ps of placedSets) if (names.includes(ps.name)) nodes.push(...ps.nodes);
+    wrapSection(page, title, nodes);
+  }
   figma.viewport.scrollAndZoomIntoView(page.children);
-  figma.closePlugin("✅ Helix extra components: Stat Card, Coin Card, Wallet Card, Alert, Toast, Tooltip, Progress ×2, Slider, Stepper, Skeleton, Donut, Bar Chart, Table Row, Order Book Row");
+  figma.closePlugin("✅ Helix extra components (15 sets, sectioned): Stat Card, Coin Card, Wallet Card, Alert, Toast, Tooltip, Progress ×2, Slider, Stepper, Skeleton, Donut, Bar Chart, Table Row, Order Book Row");
 })();

@@ -92,12 +92,12 @@
   let lightModeSet = 0;
   if (lightModeId) {
     const scrPage = figma.root.children.find((p) => /Screens/.test(p.name));
-    if (scrPage) {
-      for (const node of scrPage.children) {
-        if (/Light/.test(node.name) && node.setExplicitVariableModeForCollection) {
-          node.setExplicitVariableModeForCollection(darkCol, lightModeId);
-          lightModeSet++;
-        }
+    if (scrPage && scrPage.findAll) {
+      // screens may sit inside Sections — search frames recursively
+      const lightFrames = scrPage.findAll((n) => n.type === "FRAME" && /Light/.test(n.name) && !!n.setExplicitVariableModeForCollection);
+      for (const node of lightFrames) {
+        node.setExplicitVariableModeForCollection(darkCol, lightModeId);
+        lightModeSet++;
       }
     }
   }

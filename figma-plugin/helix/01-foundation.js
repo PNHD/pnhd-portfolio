@@ -182,8 +182,34 @@
     try { const p = figma.createPage(); p.name = name; return p; }
     catch (e) { return figma.currentPage; }
   }
+  // figma.currentPage assignment is unreliable on newer Figma builds —
+  // use setCurrentPageAsync and always parent nodes explicitly.
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
+  // Named canvas Section (falls back to nothing on very old Figma)
+  const wrapSection = (pageNode, title, nodes) => {
+    if (!figma.createSection || !nodes.length) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of nodes) {
+      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
+    }
+    const s = figma.createSection();
+    s.name = title;
+    pageNode.appendChild(s);
+    s.x = minX - 64; s.y = minY - 64;
+    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
+    for (const n of nodes) {
+      const ax = n.x, ay = n.y;
+      s.appendChild(n);
+      n.x = ax - s.x; n.y = ay - s.y;
+    }
+    return s;
+  };
   const guide = ensurePage("🏠 Cover · Foundations", /Cover|Foundations/);
-  figma.currentPage = guide;
+  await gotoPage(guide);
 
   // ── COVER (1600×1200 — UI8 thumbnail ratio) ──
   {
@@ -257,7 +283,7 @@
     chips.counterAxisSizingMode = "AUTO";
     chips.itemSpacing = 14;
     chips.fills = [];
-    for (const label of ["320+ COMPONENTS", "7 SCREENS", "LIGHT & DARK", "AUTO LAYOUT", "VARIABLES"]) {
+    for (const label of ["320+ COMPONENTS", "20 SCREENS", "LIGHT & DARK", "AUTO LAYOUT", "VARIABLES"]) {
       const chip = figma.createFrame();
       chip.layoutMode = "HORIZONTAL";
       chip.primaryAxisSizingMode = "AUTO";
@@ -297,6 +323,7 @@
     gs.primaryAxisSizingMode = "AUTO";
     gs.counterAxisSizingMode = "FIXED";
     gs.resize(900, 100);
+    gs.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     gs.paddingLeft = 56; gs.paddingRight = 56;
     gs.paddingTop = 56; gs.paddingBottom = 56;
     gs.itemSpacing = 22;
@@ -326,7 +353,7 @@
     block(F.bodySemi, 18, "3 · Components", "#A5ABFC");
     block(F.body, 15, "All components are variant-driven and built with Auto Layout. Swap the placeholder circles for real coin logos (cryptocurrency-icons) and avatars, and drop in Phosphor icons from the free community library.", "#C8CFDA");
     block(F.bodySemi, 18, "4 · Screens", "#A5ABFC");
-    block(F.body, 15, "The 📱 Screens page contains 3 desktop screens (Trading Terminal, Portfolio Dashboard, NFT Marketplace) and 4 mobile screens (Onboarding, Portfolio, Coin Detail, Swap), assembled from the components.", "#C8CFDA");
+    block(F.body, 15, "The 📱 Screens page contains 20 production screens — 12 desktop (Trading Terminal, Portfolio, Markets, Asset & NFT Detail, Wallet, Send & Receive, Staking, Transactions, Settings, Sign in…) and 8 mobile — assembled from component instances and organized in named sections.", "#C8CFDA");
     block(F.bodySemi, 18, "License", "#A5ABFC");
     block(F.body, 15, "Standard license: unlimited personal & client projects. Extended license: use in end products for sale. © Dang Pham (Wonton Design).", "#C8CFDA");
   }
@@ -337,6 +364,7 @@
   frame.primaryAxisSizingMode = "AUTO";
   frame.counterAxisSizingMode = "FIXED";
   frame.resize(1240, 100);
+  frame.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
   frame.paddingLeft = 64; frame.paddingRight = 64;
   frame.paddingTop = 64; frame.paddingBottom = 64;
   frame.itemSpacing = 48;
@@ -414,6 +442,11 @@
     t.layoutSizingHorizontal = "FILL";
   }
 
+  const coverFrame = guide.children.find((n) => n.name === "Cover / UI8 Thumbnail");
+  const gsFrame = guide.children.find((n) => n.name === "Getting Started");
+  if (coverFrame) wrapSection(guide, "🖼 Cover", [coverFrame]);
+  if (gsFrame) wrapSection(guide, "📘 Getting Started", [gsFrame]);
+  wrapSection(guide, "🎨 Style Guide", [frame]);
   figma.viewport.scrollAndZoomIntoView([frame]);
-  figma.closePlugin("✅ Helix foundation: Cover, Getting Started, paint/text/effect styles, style guide");
+  figma.closePlugin("✅ Helix foundation: Cover, Getting Started, styles, style guide (sectioned)");
 })();

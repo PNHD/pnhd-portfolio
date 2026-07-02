@@ -51,8 +51,8 @@ out += `(async () => {
       catch (e) { fails.push(key + ": " + (e && e.message ? e.message : e)); }
     }
     figma.closePlugin(fails.length
-      ? "⚠️ Helix v4 generated with errors — " + fails.join(" · ")
-      : "✅ Helix Crypto UI Kit v4 — 20 screens, icons & variables bound");
+      ? "⚠️ Helix v5 generated with errors — " + fails.join(" · ")
+      : "✅ Helix Crypto UI Kit v5 — 20 screens in sections, components live, variables bound");
   } else {
     try {
       await registry[figma.command]();

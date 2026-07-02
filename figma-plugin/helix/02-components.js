@@ -103,12 +103,43 @@
     return node;
   };
 
+  // figma.currentPage assignment is unreliable on newer Figma builds —
+  // use setCurrentPageAsync and always parent nodes explicitly.
+  async function gotoPage(p) {
+    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
+    try { figma.currentPage = p; } catch (e) {}
+  }
+  // Named canvas Section (falls back to nothing on very old Figma)
+  const wrapSection = (pageNode, title, nodes) => {
+    if (!figma.createSection || !nodes.length) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of nodes) {
+      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
+    }
+    const s = figma.createSection();
+    s.name = title;
+    pageNode.appendChild(s);
+    s.x = minX - 64; s.y = minY - 64;
+    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
+    for (const n of nodes) {
+      const ax = n.x, ay = n.y;
+      s.appendChild(n);
+      n.x = ax - s.x; n.y = ay - s.y;
+    }
+    return s;
+  };
   const page = ensurePage("🧩 Components", /Components/);
-  figma.currentPage = page;
+  await gotoPage(page);
+  // createComponent() lands on currentPage, which may NOT be our page on
+  // newer Figma builds — always reparent explicitly before combining.
+  const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
+  const placedSets = [];
   let yOffset = 0;
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
+    page.appendChild(set); // ensure it lives on the Components page
     const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
     tag.name = "label/" + name;
     page.appendChild(tag);
@@ -116,6 +147,7 @@
     yOffset += 34;
     set.x = 0; set.y = yOffset;
     yOffset += set.height + 96;
+    placedSets.push({ name, nodes: [tag, set] });
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -182,7 +214,7 @@
         }
       }
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 9), page), "Button");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 9), page), "Button");
   }
 
   // ═════════════════════════════════════════════
@@ -211,7 +243,7 @@
         comps.push(c);
       }
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Icon Button");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Icon Button");
   }
 
   // ═════════════════════════════════════════════
@@ -230,6 +262,7 @@
       autol(c, "VERTICAL", { gap: 8, cross: "MIN" });
       c.counterAxisSizingMode = "FIXED";
       c.resize(320, 10);
+      c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
 
       const label = txt("Label", F.bodySemi, 12.5, "#9AA4B2");
@@ -261,7 +294,7 @@
       c.appendChild(helper);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Input");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Input");
   }
 
   // ═════════════════════════════════════════════
@@ -271,9 +304,9 @@
     const c = figma.createComponent();
     c.name = "Amount Input";
     autol(c, "HORIZONTAL", { px: 14, py: 14, main: "SPACE_BETWEEN" });
-    c.counterAxisSizingMode = "AUTO";
     c.primaryAxisSizingMode = "FIXED";
     c.resize(420, 10);
+    c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 13;
     c.fills = [solid("#FFFFFF", 0.04)];
     c.strokes = [solid("#FFFFFF", 0.1)];
@@ -360,7 +393,7 @@
       c.appendChild(txt(st === "Checked" ? "Checked" : "Unchecked", F.body, 14, st === "Checked" ? "#C8CFDA" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Checkbox");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Checkbox");
   }
   {
     const comps = [];
@@ -391,7 +424,7 @@
       c.appendChild(txt(st === "Selected" ? "Selected" : "Option", F.body, 14, st === "Selected" ? "#C8CFDA" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Radio");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Radio");
   }
   {
     const comps = [];
@@ -412,7 +445,7 @@
       c.appendChild(knob);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Toggle");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Toggle");
   }
 
   // ═════════════════════════════════════════════
@@ -471,7 +504,7 @@
       c.appendChild(txt(tn, F.bodySemi, 12, tc.text));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 4), page), "Badge / Status");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 4), page), "Badge / Status");
   }
 
   // ═════════════════════════════════════════════
@@ -493,7 +526,7 @@
       c.appendChild(txt(up ? "+2.41%" : "-3.22%", F.monoSemi, 11.5, up ? "#34D399" : "#FB7185"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Badge / Change");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Badge / Change");
   }
 
   // ═════════════════════════════════════════════
@@ -522,7 +555,7 @@
       c.appendChild(txt("Verified", F.bodySemi, 11.5, "#38BDF8"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Badge / Special");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Badge / Special");
   }
 
   // ═════════════════════════════════════════════
@@ -548,7 +581,7 @@
       c.appendChild(txt(cn, F.bodyMed, 12.5, "#C8CFDA"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Chip / Chain");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Chip / Chain");
   }
 
   // ═════════════════════════════════════════════
@@ -591,7 +624,7 @@
         comps.push(c);
       }
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Avatar");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Avatar");
   }
 
   // ═════════════════════════════════════════════
@@ -648,7 +681,7 @@
       line.layoutSizingHorizontal = "FILL";
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Tab");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Tab");
   }
 
   // ═════════════════════════════════════════════
@@ -665,7 +698,7 @@
       c.appendChild(txt("24H", F.monoSemi, 12, st === "Active" ? "#A5ABFC" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Pill / Timeframe");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Pill / Timeframe");
   }
 
   // ═════════════════════════════════════════════
@@ -702,9 +735,21 @@
       else c.appendChild(txt("1", F.bodySemi, 13, type === "Active" ? "#FFFFFF" : "#C8CFDA"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Pagination Item");
+    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Pagination Item");
   }
 
+  const GROUPS = [
+    ["🔘 Actions", ["Button", "Icon Button"]],
+    ["📝 Forms & Inputs", ["Input", "Amount Input", "Select", "Checkbox", "Radio", "Toggle", "Segmented Control"]],
+    ["🏷 Badges & Chips", ["Badge / Status", "Badge / Change", "Badge / Special", "Chip / Chain"]],
+    ["👤 Avatars", ["Avatar", "Avatar Group"]],
+    ["🧭 Navigation", ["Tab", "Pill / Timeframe", "Breadcrumb", "Pagination Item"]],
+  ];
+  for (const [title, names] of GROUPS) {
+    const nodes = [];
+    for (const ps of placedSets) if (names.includes(ps.name)) nodes.push(...ps.nodes);
+    wrapSection(page, title, nodes);
+  }
   figma.viewport.scrollAndZoomIntoView(page.children);
-  figma.closePlugin("✅ Helix core components: Button, Icon Button, Input, Amount, Select, Checkbox, Radio, Toggle, Segmented, Badges ×3, Chip, Avatar, Avatar Group, Tab, Pill, Breadcrumb, Pagination");
+  figma.closePlugin("✅ Helix core components (19 sets, sectioned): Button, Icon Button, Input, Amount, Select, Checkbox, Radio, Toggle, Segmented, Badges ×3, Chip, Avatar, Avatar Group, Tab, Pill, Breadcrumb, Pagination");
 })();
