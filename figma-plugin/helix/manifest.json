@@ -11,6 +11,7 @@
     { "name": "01 · Styles + Style Guide", "command": "s01" },
     { "name": "02 · Core Components", "command": "s02" },
     { "name": "02b · Extra Components", "command": "s02b" },
+    { "name": "02c · Interactive + Properties", "command": "s02c" },
     { "name": "03 · Screens 1-7", "command": "s03" },
     { "name": "03b · Screens 8-20", "command": "s03b" },
     { "name": "04 · Bind Variables + Text Styles", "command": "s04" },
