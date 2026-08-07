@@ -2,10 +2,11 @@ export const verifiedCapabilityGroups = [
   {
     h: "Visual & Graphic",
     items: [
+      "Adobe Photoshop",
+      "Adobe Illustrator",
       "Digital & web visual design",
-      "Graphic design",
+      "E-commerce & promotional assets",
       "Typography & layout",
-      "Cross-format adaptation",
     ],
   },
   {
