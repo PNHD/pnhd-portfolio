@@ -10,12 +10,13 @@ import { dribbbleImage } from "@/lib/dribbble-image";
 
 const MARQUEE = [
   "Visual Design",
-  "Marketing Creative",
+  "Graphic Design",
   "Digital Design",
   "Product UI",
   "Motion",
+  "AI Video",
   "3D",
-  "Independent Products",
+  "Independent Projects",
 ];
 
 const FEATURED_HREFS = [
@@ -55,19 +56,19 @@ export default function Home() {
             Visual / Digital Designer · Ho Chi Minh City
           </div>
           <h1 className="h1 dsp rise r2">
-            Visual design for products, campaigns and{" "}
+            Visual design for products, interfaces and{" "}
             <span className="em">digital experiences</span>.
           </h1>
           <p className="hero-sub rise r3">
             I&apos;m Dang — a multidisciplinary designer with professional experience
-            across product UI, marketing creative, motion and 3D. I turn briefs and
-            messy systems into clear, polished digital work.
+            across graphic design, product UI, motion and 3D, plus independent work
+            in AI-assisted image and video production.
           </p>
           <div className="hero-role-line rise r3" aria-label="Role fit">
-            <span>Visual / Marketing</span>
+            <span>Visual / Graphic</span>
             <span>Digital / Web</span>
             <span>Product UI</span>
-            <span>Motion / 3D</span>
+            <span>Motion / AI Video</span>
           </div>
           <div className="hero-cta rise r4">
             <Link className="btn btn-accent" href="/#work">
@@ -78,7 +79,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="hero-foot rise r5">
-            <span>Available for selected roles &amp; freelance</span>
+            <span>Open to Visual · Digital · Graphic · UI design roles</span>
             <span className="ln" />
             <span>2026</span>
           </div>
@@ -184,7 +185,7 @@ export default function Home() {
           <div>
             <div className="kicker">Experience</div>
             <h2 className="stitle dsp">
-              Professional design work across product, marketing and digital teams.
+              Professional design work across product, visual and digital teams.
             </h2>
           </div>
           <p className="section-note">
@@ -209,14 +210,14 @@ export default function Home() {
       <section className="section wrap" id="projects">
         <div className="reveal section-intro-row">
           <div>
-            <div className="kicker">Independent Products</div>
+            <div className="kicker">Independent Projects</div>
             <h2 className="stitle dsp">
-              Independent products built around real use cases.
+              Products and AI workflows built around real use cases.
             </h2>
           </div>
           <p className="section-note">
-            Self-directed tools and UI systems where I shaped the product, interface
-            and implementation workflow instead of stopping at a static mockup.
+            Self-directed projects where I shaped the problem, interface, visual
+            direction and implementation or production workflow.
           </p>
         </div>
 
@@ -250,14 +251,17 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="project-links">
+                  {project.caseHref ? <Link href={project.caseHref}>View case study →</Link> : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
-                      Open live product ↗
+                      {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
                     </a>
                   ) : null}
-                  <a href={project.repoHref} target="_blank" rel="noopener noreferrer">
-                    GitHub ↗
-                  </a>
+                  {project.repoHref ? (
+                    <a href={project.repoHref} target="_blank" rel="noopener noreferrer">
+                      GitHub ↗
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </article>
@@ -275,13 +279,14 @@ export default function Home() {
             <p>
               My background spans <strong>visual, graphic and digital design</strong>,
               with UI as a strong part of the toolkit rather than the whole story.
-              I&apos;ve worked across marketing communication, product interfaces,
+              I&apos;ve worked across visual communication, product interfaces,
               landing pages, motion and visual systems.
             </p>
             <p>
-              I also build independent tools and prototypes when a problem benefits
-              from something more functional than a static design. The goal is the
-              same: make complex information <strong>clear, usable and visually coherent</strong>.
+              I also build independent tools, prototypes and AI content workflows
+              when a problem benefits from something more functional than a static
+              design. The goal is the same: make complex information and production
+              systems <strong>clear, usable and visually coherent</strong>.
             </p>
           </div>
           <div className="stats reveal">
@@ -289,7 +294,7 @@ export default function Home() {
               { num: "2016–25", lab: "Professional design experience" },
               { num: "Product", lab: "+ visual communication" },
               { num: "Figma", lab: "+ Adobe workflow" },
-              { num: "Motion", lab: "+ 3D capability" },
+              { num: "AI Video", lab: "+ motion & 3D" },
             ].map((s) => (
               <div className="stat" key={s.lab}>
                 <div className="num dsp">{s.num}</div>
@@ -303,7 +308,7 @@ export default function Home() {
       <section className="section wrap" id="skills">
         <div className="reveal">
           <div className="kicker">Capabilities &amp; Tools</div>
-          <h2 className="stitle dsp">Built for cross-channel creative work.</h2>
+          <h2 className="stitle dsp">Visual craft across interfaces, motion and AI workflows.</h2>
         </div>
         <div className="skills-grid">
           {verifiedCapabilityGroups.map((group) => (
@@ -330,9 +335,9 @@ export default function Home() {
               Need design that can move across <span className="em">formats</span>?
             </h2>
             <p>
-              Open to Visual, Marketing, Digital and Graphic Designer roles, plus
-              selected freelance work. Product UI, motion and 3D are part of the
-              toolkit when the brief needs them.
+              Open to Visual, Digital, Graphic and UI Designer roles, plus selected
+              freelance work. Motion, 3D and AI-assisted video are part of the
+              toolkit when the project needs them.
             </p>
             <div className="contact-actions">
               <a className="btn btn-light" href={`mailto:${siteConfig.email}`}>
@@ -343,6 +348,14 @@ export default function Home() {
               </Link>
             </div>
             <div className="socials">
+              <a
+                className="social"
+                href="https://www.tiktok.com/@tieu.thienkim"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                TikTok / Thiên Kim ↗
+              </a>
               <a
                 className="social"
                 href={siteConfig.links.dribbble}
