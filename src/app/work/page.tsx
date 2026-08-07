@@ -7,6 +7,7 @@ import {
   workItems,
 } from "@/data/portfolio-refresh";
 import { pageOneExtraWorkItems } from "@/data/portfolio-page1-extra";
+import { legacyExtraWorkItems } from "@/data/portfolio-legacy-extra";
 
 export const metadata: Metadata = {
   title: "Work Archive",
@@ -15,7 +16,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/work" },
 };
 
-const onSiteWorkCount = workItems.length + pageOneExtraWorkItems.length;
+const onSiteWorkCount =
+  workItems.length + pageOneExtraWorkItems.length + legacyExtraWorkItems.length;
 
 export default function Archive() {
   return (
@@ -37,8 +39,8 @@ export default function Archive() {
           The on-site selection prioritizes work most useful for Visual, Marketing,
           Digital, Graphic and UI design roles: web creative, interface systems,
           motion, 3D and icon work. Every card links to its original Dribbble shot;
-          tutorial and credited-source studies are labeled instead of being presented
-          as original client work.
+          tutorial, copywork and credited-source studies are labeled instead of being
+          presented as original client work.
         </p>
         <div className="archive-proof mono">
           <span>{onSiteWorkCount} source-linked pieces verified on-site</span>
