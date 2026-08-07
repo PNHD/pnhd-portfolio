@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "WWM Build Lab — Case Study",
   description:
-    "Mini case study for WWM Build Lab: product design, evidence-checked game data, calculation systems and production implementation.",
+    "Case study for WWM Build Lab: product design, evidence-checked game data, calculation systems and production implementation.",
   alternates: { canonical: "/projects/wwm-build-lab" },
 };
 
@@ -37,16 +37,11 @@ export default function WwmBuildLabCaseStudy() {
             </a>
           </div>
         </div>
-        <div className="case-system-preview case-system-wwm" aria-label="WWM Build Lab system overview">
-          <span className="mono">GLOBAL 2.0 · TIER 96</span>
-          <strong className="dsp">Build → compare → verify</strong>
-          <div className="case-metric-grid">
-            <i>Gear inputs</i>
-            <i>Combat rules</i>
-            <i>Evidence state</i>
-            <i>Build output</i>
-          </div>
-        </div>
+
+        <figure className="case-hero-media">
+          <img src="/projects/wwm-build-lab.png" alt="WWM Build Lab calculator interface" />
+          <figcaption className="case-caption mono">Live product · browser capture</figcaption>
+        </figure>
       </header>
 
       <section className="case-story-grid">
@@ -68,6 +63,19 @@ export default function WwmBuildLabCaseStudy() {
             comparison tasks rather than a static dashboard mockup.
           </p>
         </div>
+      </section>
+
+      <section className="case-detail-section case-product-evidence">
+        <div className="case-detail-head">
+          <div className="work-cat mono">Product in use</div>
+          <h2 className="dsp">The interface is organized around configuring, comparing and checking a build.</h2>
+        </div>
+        <figure className="case-wide-media">
+          <img src="/projects/wwm-build-lab.png" alt="WWM Build Lab live interface showing build calculator controls and output" />
+          <figcaption className="case-caption">
+            The screenshot is captured from the deployed product, not a presentation mockup. The live version remains the best way to inspect current interaction and responsive behavior.
+          </figcaption>
+        </figure>
       </section>
 
       <section className="case-detail-section">
