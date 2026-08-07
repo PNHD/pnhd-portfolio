@@ -1,0 +1,68 @@
+name: Full Portfolio Visual Audit
+
+on:
+  push:
+    branches: [feature/full-portfolio-case-study-audit]
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build static export
+        run: |
+          npm ci
+          npm run build
+      - name: Serve export
+        shell: bash
+        run: |
+          python3 -m http.server 3000 --directory out >/tmp/http.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:3000/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/http.log
+          exit 1
+      - name: Render desktop and mobile audit screenshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p visual
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME"
+
+          shot() {
+            local width="$1"; local height="$2"; local name="$3"; local url="$4"
+            "$CHROME" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+              --virtual-time-budget=4000 --window-size="${width},${height}" \
+              --screenshot="visual/${name}.png" "http://127.0.0.1:3000/${url}"
+          }
+
+          # Homepage / archive
+          shot 1440 6500 home-desktop ''
+          shot 390 9000 home-mobile ''
+          shot 1440 6500 work-desktop 'work.html'
+          shot 390 9000 work-mobile 'work.html'
+
+          # All independent-project case studies
+          shot 1440 6200 wwm-build-desktop 'projects/wwm-build-lab.html'
+          shot 390 8500 wwm-build-mobile 'projects/wwm-build-lab.html'
+          shot 1440 7600 thien-kim-desktop 'projects/thien-kim.html'
+          shot 390 10500 thien-kim-mobile 'projects/thien-kim.html'
+          shot 1440 6800 co-giao-ai-desktop 'projects/co-giao-ai.html'
+          shot 390 9500 co-giao-ai-mobile 'projects/co-giao-ai.html'
+          shot 1440 6800 claude-ui-desktop 'projects/claude-ui-lab.html'
+          shot 390 9500 claude-ui-mobile 'projects/claude-ui-lab.html'
+          shot 1440 6800 homestead-desktop 'projects/wwm-homestead.html'
+          shot 390 9500 homestead-mobile 'projects/wwm-homestead.html'
+      - name: Upload visual audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-portfolio-visual-audit
+          path: visual/
+          retention-days: 1
