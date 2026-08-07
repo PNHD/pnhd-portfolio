@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Cô Giáo AI workflow system map">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111827"/><stop offset="1" stop-color="#1f2937"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="14" flood-opacity=".24"/></filter>
+  </defs>
+  <rect width="1200" height="760" rx="36" fill="url(#bg)"/>
+  <circle cx="1010" cy="85" r="210" fill="#7c3aed" opacity=".12"/>
+  <circle cx="180" cy="720" r="260" fill="#38bdf8" opacity=".08"/>
+  <text x="64" y="78" fill="#e5e7eb" font-family="Arial,sans-serif" font-weight="700" font-size="28">CÔ GIÁO AI · SYSTEM MAP</text>
+  <text x="64" y="112" fill="#94a3b8" font-family="monospace" font-size="15">Discord · n8n · AI agents · Postgres memory · ledger</text>
+  <g filter="url(#shadow)" font-family="Arial,sans-serif">
+    <rect x="64" y="170" width="210" height="126" rx="22" fill="#f8fafc"/>
+    <text x="92" y="214" fill="#111827" font-weight="700" font-size="22">Discord intake</text>
+    <text x="92" y="246" fill="#64748b" font-size="15">text · reply context</text>
+    <text x="92" y="270" fill="#64748b" font-size="15">screenshots · images</text>
+
+    <rect x="352" y="154" width="250" height="158" rx="22" fill="#f8fafc"/>
+    <text x="380" y="198" fill="#111827" font-weight="700" font-size="22">Context guard</text>
+    <text x="380" y="230" fill="#64748b" font-size="15">student / intent lock</text>
+    <text x="380" y="254" fill="#64748b" font-size="15">exam source lock</text>
+    <text x="380" y="278" fill="#64748b" font-size="15">image decode + validation</text>
+
+    <rect x="682" y="154" width="218" height="158" rx="22" fill="#f8fafc"/>
+    <text x="710" y="198" fill="#111827" font-weight="700" font-size="22">AI routing</text>
+    <text x="710" y="230" fill="#64748b" font-size="15">grade-aware agents</text>
+    <text x="710" y="254" fill="#64748b" font-size="15">structured output</text>
+    <text x="710" y="278" fill="#64748b" font-size="15">answer-quality gates</text>
+
+    <rect x="964" y="170" width="172" height="126" rx="22" fill="url(#accent)"/>
+    <text x="990" y="214" fill="white" font-weight="700" font-size="22">Reply</text>
+    <text x="990" y="246" fill="#e0f2fe" font-size="15">Discord output</text>
+    <text x="990" y="270" fill="#e0f2fe" font-size="15">safe score update</text>
+
+    <rect x="352" y="402" width="250" height="162" rx="22" fill="#0f172a" stroke="#334155"/>
+    <text x="380" y="448" fill="#e2e8f0" font-weight="700" font-size="21">Postgres memory</text>
+    <text x="380" y="480" fill="#94a3b8" font-size="15">per-agent conversation</text>
+    <text x="380" y="504" fill="#94a3b8" font-size="15">context continuity</text>
+    <text x="380" y="528" fill="#94a3b8" font-size="15">revision-safe state</text>
+
+    <rect x="682" y="402" width="218" height="162" rx="22" fill="#0f172a" stroke="#334155"/>
+    <text x="710" y="448" fill="#e2e8f0" font-weight="700" font-size="21">Ledger</text>
+    <text x="710" y="480" fill="#94a3b8" font-size="15">points / minutes</text>
+    <text x="710" y="504" fill="#94a3b8" font-size="15">deterministic update</text>
+    <text x="710" y="528" fill="#94a3b8" font-size="15">award gating</text>
+  </g>
+  <g stroke="#60a5fa" stroke-width="4" fill="none" opacity=".85">
+    <path d="M274 233H352"/><path d="M602 233H682"/><path d="M900 233H964"/>
+    <path d="M477 312V402"/><path d="M791 312V402"/><path d="M602 483H682"/>
+  </g>
+  <g fill="#60a5fa"><circle cx="313" cy="233" r="7"/><circle cx="642" cy="233" r="7"/><circle cx="932" cy="233" r="7"/><circle cx="477" cy="357" r="7"/><circle cx="791" cy="357" r="7"/></g>
+  <text x="64" y="690" fill="#cbd5e1" font-family="monospace" font-size="15">Reliability work: context locking · image grading safeguards · score-award safety · screen-time checks</text>
+</svg>
