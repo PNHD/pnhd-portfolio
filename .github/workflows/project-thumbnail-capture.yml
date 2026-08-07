@@ -1,0 +1,47 @@
+name: Project Thumbnail Capture
+
+on:
+  push:
+    branches: [feature/project-thumbnails-video-proof]
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feature/project-thumbnails-video-proof
+          fetch-depth: 0
+      - name: Capture live product screenshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/projects
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME"
+
+          capture() {
+            local url="$1"; local out="$2"
+            code=$(curl -L -sS --max-time 30 -o /tmp/page.html -w '%{http_code}' "$url" || true)
+            echo "$url -> $code"
+            test "$code" = "200"
+            "$CHROME" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+              --virtual-time-budget=5000 --window-size=1440,900 \
+              --screenshot="public/projects/$out" "$url"
+          }
+
+          capture "https://wonton-wwm.pages.dev" "wwm-build-lab.png"
+          capture "https://wwm-homestead.pages.dev" "wwm-homestead.png"
+      - name: Commit thumbnails
+        shell: bash
+        run: |
+          git add public/projects/wwm-build-lab.png public/projects/wwm-homestead.png
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat: add live project screenshots"
+          git push origin HEAD:feature/project-thumbnails-video-proof
