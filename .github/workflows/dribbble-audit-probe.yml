@@ -1,0 +1,31 @@
+name: Dribbble Audit Probe
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fetch public profile pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p probe
+          for page in 1 2 3 4; do
+            url="https://dribbble.com/pnhd?page=${page}"
+            status=$(curl -L -sS --retry 2 --max-time 30 \
+              -A 'Mozilla/5.0 (compatible; PortfolioAudit/1.0)' \
+              -o "probe/page-${page}.html" -w '%{http_code}' "$url" || true)
+            bytes=$(wc -c < "probe/page-${page}.html" 2>/dev/null || echo 0)
+            printf 'page=%s status=%s bytes=%s\n' "$page" "$status" "$bytes" | tee -a probe/status.txt
+          done
+      - name: Upload public HTML inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dribbble-public-pages
+          path: probe/
+          retention-days: 1
