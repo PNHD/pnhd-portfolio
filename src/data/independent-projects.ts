@@ -34,7 +34,7 @@ export const independentProjects: IndependentProject[] = [
     liveHref: "https://www.tiktok.com/@tieu.thienkim",
     caseHref: "/projects/thien-kim",
     accent: "AI content system",
-    thumbnail: "/projects/thien-kim-collage.webp",
+    thumbnail: "/projects/thien-kim-thumbnail.jpg",
     thumbnailAlt: "Editorial collage showing Thiên Kim across multiple OOTD looks",
   },
   {
