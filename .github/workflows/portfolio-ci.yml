@@ -19,6 +19,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Portfolio truth audit
+        run: npm run audit:portfolio
       - name: Lint
         run: npm run lint
       - name: Build
