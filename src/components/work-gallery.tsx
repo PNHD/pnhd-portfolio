@@ -7,10 +7,15 @@ import {
   type WorkCategory,
 } from "@/data/portfolio-refresh";
 import { pageOneExtraWorkItems } from "@/data/portfolio-page1-extra";
+import { legacyExtraWorkItems } from "@/data/portfolio-legacy-extra";
 
 type Filter = "All" | WorkCategory;
 
-const archiveItems = [...workItems, ...pageOneExtraWorkItems];
+const archiveItems = [
+  ...workItems,
+  ...pageOneExtraWorkItems,
+  ...legacyExtraWorkItems,
+];
 
 export function WorkGallery() {
   const [filter, setFilter] = useState<Filter>("All");
