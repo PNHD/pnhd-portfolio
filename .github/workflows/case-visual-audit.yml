@@ -1,0 +1,55 @@
+name: Case Study Visual Audit
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build static export
+        run: |
+          npm ci
+          npm run build
+      - name: Serve static export
+        shell: bash
+        run: |
+          python3 -m http.server 3000 --directory out >/tmp/portfolio-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:3000/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/portfolio-http.log
+          exit 1
+      - name: Capture case studies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p visual
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME"
+          shot() {
+            local size="$1"; local file="$2"; local url="$3"
+            "$CHROME" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+              --virtual-time-budget=3000 --window-size="$size" \
+              --screenshot="visual/$file" "$url"
+          }
+          shot 1440,4600 thien-kim-desktop.png http://127.0.0.1:3000/projects/thien-kim.html
+          shot 390,6200 thien-kim-mobile.png http://127.0.0.1:3000/projects/thien-kim.html
+          shot 1440,4200 wwm-desktop.png http://127.0.0.1:3000/projects/wwm-build-lab.html
+          shot 390,5600 wwm-mobile.png http://127.0.0.1:3000/projects/wwm-build-lab.html
+          shot 1440,1300 home-top-desktop.png http://127.0.0.1:3000/
+          shot 390,1700 home-top-mobile.png http://127.0.0.1:3000/
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: case-study-visual-audit
+          path: visual/
+          retention-days: 1
