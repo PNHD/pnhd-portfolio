@@ -1,0 +1,45 @@
+name: Capture External Projects
+
+on:
+  push:
+    branches: [feature/full-portfolio-case-study-audit]
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feature/full-portfolio-case-study-audit
+          fetch-depth: 0
+      - name: Capture live sites
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/projects
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME"
+          capture() {
+            local url="$1"; local out="$2"
+            code=$(curl -L -sS --max-time 30 -o /tmp/page.html -w '%{http_code}' "$url" || true)
+            echo "$url -> $code"
+            test "$code" = "200"
+            "$CHROME" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+              --virtual-time-budget=5000 --window-size=1440,1000 \
+              --screenshot="public/projects/$out" "$url"
+          }
+          capture "https://nexus-react.pages.dev/" "nexus-react.png"
+          capture "https://helixkit.pages.dev/" "helix-kit.png"
+      - name: Commit screenshots
+        shell: bash
+        run: |
+          git add public/projects/nexus-react.png public/projects/helix-kit.png
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat: add live Nexus and Helix screenshots"
+          git push origin HEAD:feature/full-portfolio-case-study-audit
