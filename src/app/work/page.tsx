@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Work Archive",
   description:
     "Selected real work across digital design, UI, motion, 3D and icon systems, sourced from Dang Pham's Dribbble archive.",
+  alternates: { canonical: "/work" },
 };
 
 export default function Archive() {
@@ -25,18 +26,18 @@ export default function Archive() {
         <h1 className="case-title dsp">
           Real work, grouped by discipline.
           <small>
-            {portfolioEvidence.dribbbleShotCount} Dribbble shots · curated here for
-            hiring relevance
+            {portfolioEvidence.dribbbleShotCount} shots in the source archive · a
+            hiring-focused selection shown here
           </small>
         </h1>
         <p className="case-blurb">
-          This page prioritizes the work most useful for Visual, Marketing,
+          The on-site selection prioritizes work most useful for Visual, Marketing,
           Digital, Graphic and UI design roles: web creative, interface systems,
-          motion, 3D and icon work. Every card below links to the original
-          Dribbble shot; no invented campaign metrics or client outcomes.
+          motion, 3D and icon work. Every card links to its original Dribbble shot;
+          the full source archive remains available on Dribbble.
         </p>
         <div className="archive-proof mono">
-          <span>{workItems.length} curated pieces on-site</span>
+          <span>{workItems.length} source-linked pieces selected on-site</span>
           <span aria-hidden="true">•</span>
           <a
             href={refreshedSiteConfig.links.dribbble}
