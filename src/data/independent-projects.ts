@@ -3,9 +3,10 @@ export type IndependentProject = {
   eyebrow: string;
   description: string;
   tags: string[];
-  repoHref: string;
-  liveHref?: string;
   accent: string;
+  caseHref?: string;
+  repoHref?: string;
+  liveHref?: string;
 };
 
 export const independentProjects: IndependentProject[] = [
@@ -17,7 +18,18 @@ export const independentProjects: IndependentProject[] = [
     tags: ["Product design", "TypeScript", "Data systems"],
     repoHref: "https://github.com/PNHD/wwm-calc",
     liveHref: "https://wonton-wwm.pages.dev",
+    caseHref: "/projects/wwm-build-lab",
     accent: "Build calculator",
+  },
+  {
+    title: "Thiên Kim",
+    eyebrow: "Independent project · AI visual + video workflow",
+    description:
+      "A virtual-character content system for short-form image and video production, with identity rules, shot planning, trend-mimic routing and repeatable AI-assisted workflows.",
+    tags: ["AI video", "Art direction", "n8n workflow"],
+    liveHref: "https://www.tiktok.com/@tieu.thienkim",
+    caseHref: "/projects/thien-kim",
+    accent: "AI content system",
   },
   {
     title: "WWM Homestead Planner",
@@ -27,14 +39,5 @@ export const independentProjects: IndependentProject[] = [
     tags: ["Product UI", "React", "Systems thinking"],
     repoHref: "https://github.com/PNHD/homestead",
     accent: "Planner + optimizer",
-  },
-  {
-    title: "Nexus UI Kit",
-    eyebrow: "Independent experiment · UI system",
-    description:
-      "An AI-SaaS interface system explored across landing, admin dashboard, component gallery, mobile views, documentation and theme variants.",
-    tags: ["UI system", "Responsive", "Visual direction"],
-    repoHref: "https://github.com/PNHD/nexus-ui-kit",
-    accent: "Interface system",
   },
 ];
