@@ -11,6 +11,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/work" },
 };
 
+function projectLiveLabel(title: string) {
+  if (title === "Thiên Kim") return "View TikTok ↗";
+  if (title === "Claude UI Lab") return "Open live study ↗";
+  return "Open live product ↗";
+}
+
 export default function Work() {
   return (
     <div className="archive wrap case">
@@ -76,7 +82,7 @@ export default function Work() {
                   {project.caseHref ? <Link href={project.caseHref}>View case study →</Link> : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
-                      {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
+                      {projectLiveLabel(project.title)}
                     </a>
                   ) : null}
                   {project.repoHref ? (
