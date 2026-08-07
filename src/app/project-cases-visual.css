@@ -1,0 +1,258 @@
+/* Visual evidence layer for project case studies and expanded independent projects. */
+
+/* Five projects: keep cards regular instead of letting the final item span two columns. */
+.project-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.project-card:last-child {
+  grid-column: auto;
+}
+
+.project-card:last-child .project-visual,
+.project-card:last-child .project-visual-thumb {
+  min-height: 220px;
+}
+
+.case-hero-media,
+.case-wide-media,
+.case-media-card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--glass-brd);
+  background: var(--glass);
+  box-shadow: inset 0 1px 0 var(--glass-hi), 0 28px 70px -48px rgba(0,0,0,.6);
+}
+
+.case-hero-media {
+  position: relative;
+  min-height: 390px;
+  border-radius: 28px;
+}
+
+.case-hero-media > img {
+  width: 100%;
+  height: 100%;
+  min-height: 390px;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.case-hero-portrait {
+  max-height: 620px;
+  background: color-mix(in srgb, var(--panel) 88%, var(--accent) 12%);
+}
+
+.case-hero-portrait > img {
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+.case-system-map > img {
+  object-fit: contain;
+  padding: 14px;
+  background: #111827;
+}
+
+.case-caption {
+  display: block;
+  padding: 11px 14px;
+  color: var(--ink-2);
+  font-size: .68rem;
+  line-height: 1.45;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+}
+
+.case-media-intro {
+  padding: clamp(20px, 3vh, 36px) 0 clamp(58px, 8vh, 92px);
+}
+
+.case-long-copy {
+  margin-top: 15px;
+  max-width: 64ch;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+.tk-output-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr .8fr;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.case-media-card {
+  border-radius: 20px;
+}
+
+.case-media-card > img {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.tk-output-main > img { object-position: center 32%; }
+.tk-output-crop > img {
+  object-position: center 24%;
+  transform: scale(1.28);
+}
+
+.case-media-card > figcaption {
+  padding: 15px 16px 17px;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+}
+
+.case-media-card figcaption b {
+  display: block;
+  font-size: 1rem;
+}
+
+.case-media-card figcaption span,
+.case-media-card figcaption p {
+  display: block;
+  margin-top: 5px;
+  color: var(--ink-2);
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.case-media-card figcaption a {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--ink);
+  font-family: 'Space Mono';
+  font-size: .67rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.case-wide-media {
+  margin-top: 30px;
+  border-radius: 24px;
+}
+
+.case-wide-media > img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.case-evidence-split {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(420px, 1.1fr);
+  gap: clamp(30px, 6vw, 76px);
+  align-items: start;
+}
+
+.case-proof-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.case-proof-stack > div {
+  padding: 18px;
+  border: 1px solid var(--glass-brd);
+  border-radius: 18px;
+  background: var(--glass);
+  box-shadow: inset 0 1px 0 var(--glass-hi);
+}
+
+.case-proof-stack b {
+  display: block;
+  font-size: .96rem;
+}
+
+.case-proof-stack p {
+  margin-top: 7px;
+  color: var(--ink-2);
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+.case-live-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 32px;
+}
+
+.case-live-pair .case-media-card > img {
+  aspect-ratio: 16 / 10;
+  min-height: 0;
+  object-position: center top;
+}
+
+.case-live-pair figcaption > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.case-live-pair figcaption > div span {
+  margin-top: 0;
+  text-align: right;
+  font-size: .58rem;
+}
+
+/* Keep real independent-project thumbnails prominent when five cards are present. */
+.project-visual-thumb {
+  aspect-ratio: 16 / 10;
+  min-height: 0;
+}
+
+.project-thumb-img {
+  object-position: center top;
+}
+
+@media (max-width: 1080px) {
+  .project-grid { grid-template-columns: 1fr 1fr; }
+  .project-card:last-child { grid-column: auto; }
+  .case-evidence-split { grid-template-columns: 1fr; }
+  .tk-output-grid { grid-template-columns: 1fr 1fr; }
+  .tk-output-main { grid-row: span 2; }
+}
+
+@media (max-width: 760px) {
+  .case-hero-media,
+  .case-hero-media > img { min-height: 300px; }
+
+  .case-hero-portrait,
+  .case-hero-portrait > img { min-height: 430px; }
+
+  .case-system-map,
+  .case-system-map > img { min-height: 260px; }
+
+  .tk-output-grid,
+  .case-live-pair,
+  .case-proof-stack { grid-template-columns: 1fr; }
+
+  .tk-output-main { grid-row: auto; }
+
+  .case-media-card > img { min-height: 420px; }
+  .case-live-pair .case-media-card > img { min-height: 0; }
+  .tk-output-crop > img { transform: none; object-position: center 28%; }
+}
+
+@media (max-width: 680px) {
+  .project-grid { grid-template-columns: 1fr; }
+  .project-visual-thumb { aspect-ratio: 16 / 9; }
+  .case-evidence-split { gap: 24px; }
+  .case-wide-media { border-radius: 18px; }
+  .case-live-pair { gap: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover .project-thumb-img,
+  .tk-output-crop > img { transform: none; }
+}
