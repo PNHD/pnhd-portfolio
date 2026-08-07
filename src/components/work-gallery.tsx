@@ -6,16 +6,19 @@ import {
   workItems,
   type WorkCategory,
 } from "@/data/portfolio-refresh";
+import { pageOneExtraWorkItems } from "@/data/portfolio-page1-extra";
 
 type Filter = "All" | WorkCategory;
+
+const archiveItems = [...workItems, ...pageOneExtraWorkItems];
 
 export function WorkGallery() {
   const [filter, setFilter] = useState<Filter>("All");
   const items = useMemo(
     () =>
       filter === "All"
-        ? workItems
-        : workItems.filter((item) => item.category === filter),
+        ? archiveItems
+        : archiveItems.filter((item) => item.category === filter),
     [filter]
   );
 
