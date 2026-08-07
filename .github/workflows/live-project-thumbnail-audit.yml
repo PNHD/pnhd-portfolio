@@ -1,0 +1,47 @@
+name: Live Project Thumbnail Audit
+
+on:
+  push:
+    branches: [feature/project-thumbnails-video-proof]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wait for production and verify thumbnails
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://dangpham.pages.dev"
+          ready=0
+          for attempt in $(seq 1 30); do
+            echo "Attempt ${attempt}/30"
+            home_code=$(curl -L -sS --max-time 25 -o home.html -w '%{http_code}' "$base/" || true)
+            work_code=$(curl -L -sS --max-time 25 -o work.html -w '%{http_code}' "$base/work" || true)
+            if [ "$home_code" = "200" ] && [ "$work_code" = "200" ] \
+              && grep -Fq '/projects/wwm-build-lab.png' home.html \
+              && grep -Fq '/projects/thien-kim-cover.svg' home.html \
+              && grep -Fq '/projects/wwm-homestead.png' home.html \
+              && grep -Fq '/projects/wwm-build-lab.png' work.html \
+              && grep -Fq '/projects/thien-kim-cover.svg' work.html \
+              && grep -Fq '/projects/wwm-homestead.png' work.html; then
+              ready=1
+              break
+            fi
+            sleep 15
+          done
+          test "$ready" = "1"
+
+          for asset in \
+            /projects/wwm-build-lab.png \
+            /projects/thien-kim-cover.svg \
+            /projects/wwm-homestead.png; do
+            code=$(curl -L -sS --max-time 25 -o /dev/null -w '%{http_code}' "$base$asset")
+            echo "$asset -> $code"
+            test "$code" = "200"
+          done
+
+          grep -Fq 'WWM Homestead Planner' home.html
+          grep -Fq 'https://wwm-homestead.pages.dev' home.html
+          echo 'Live project thumbnail audit PASS'
