@@ -7,7 +7,7 @@ import { refreshedSiteConfig } from "@/data/portfolio-refresh";
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Selected independent products plus a broader archive across digital design, product UI, motion, 3D, illustration and icon systems.",
+    "Independent projects plus a broader archive across digital design, product UI, AI video, motion, 3D, illustration and icon systems.",
   alternates: { canonical: "/work" },
 };
 
@@ -24,23 +24,24 @@ export default function Work() {
           Products, interfaces and visual experiments.
         </h1>
         <p className="case-blurb">
-          A broader view of my work beyond the homepage selection: shipped personal
-          products, web and product UI, motion, 3D, illustration and icon systems.
-          Practice, copywork and tutorial-based studies stay labeled where relevant.
+          A broader view of my work beyond the homepage selection: independent tools,
+          AI image/video workflows, web and product UI, motion, 3D, illustration and
+          icon systems. Practice, copywork and tutorial-based studies stay labeled
+          where relevant.
         </p>
       </div>
 
       <section className="archive-projects" aria-labelledby="archive-products-title">
         <div className="archive-section-head reveal">
           <div>
-            <div className="work-cat mono">Independent Products</div>
+            <div className="work-cat mono">Independent Projects</div>
             <h2 id="archive-products-title" className="dsp">
-              Self-directed work with real product depth.
+              Self-directed work with more than presentation depth.
             </h2>
           </div>
           <p>
-            These projects show product thinking, systems design and implementation
-            alongside the visual portfolio.
+            These projects show product thinking, visual direction, AI production
+            workflows and implementation alongside the visual archive.
           </p>
         </div>
         <div className="project-grid compact-project-grid">
@@ -66,14 +67,17 @@ export default function Work() {
                 <h3 className="dsp">{project.title}</h3>
                 <p>{project.description}</p>
                 <div className="project-links">
+                  {project.caseHref ? <Link href={project.caseHref}>View case study →</Link> : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
-                      Open live product ↗
+                      {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
                     </a>
                   ) : null}
-                  <a href={project.repoHref} target="_blank" rel="noopener noreferrer">
-                    GitHub ↗
-                  </a>
+                  {project.repoHref ? (
+                    <a href={project.repoHref} target="_blank" rel="noopener noreferrer">
+                      GitHub ↗
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </article>
@@ -90,8 +94,8 @@ export default function Work() {
             </h2>
           </div>
           <p>
-            A larger archive of earlier visual work and studies. Cards open their
-            original source posts for context.
+            A larger archive of earlier visual work and studies. Every work card keeps
+            its own thumbnail and opens the original source post for context.
           </p>
         </div>
         <WorkGallery />

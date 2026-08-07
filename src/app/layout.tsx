@@ -4,6 +4,7 @@ import { AppShell } from "@/components/app-shell";
 import { refreshedSiteConfig as siteConfig } from "@/data/portfolio-refresh";
 import "./globals.css";
 import "./portfolio-refresh.css";
+import "./project-cases.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -15,10 +16,11 @@ export const metadata: Metadata = {
   keywords: [
     "Visual Designer",
     "Digital Designer",
-    "Marketing Designer",
     "Graphic Designer",
     "UI Designer",
     "Motion Designer",
+    "AI Video",
+    "AI Image",
     "Figma",
     "Adobe Creative Cloud",
     "Blender",
@@ -62,6 +64,7 @@ export default function RootLayout({
       addressCountry: "VN",
     },
     sameAs: [
+      "https://www.tiktok.com/@tieu.thienkim",
       siteConfig.links.dribbble,
       siteConfig.links.behance,
       siteConfig.links.github,

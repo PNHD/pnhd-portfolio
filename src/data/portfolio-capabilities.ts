@@ -1,9 +1,9 @@
 export const verifiedCapabilityGroups = [
   {
-    h: "Visual & Marketing",
+    h: "Visual & Graphic",
     items: [
-      "Digital & web creative",
-      "Marketing-oriented visuals",
+      "Digital & web visual design",
+      "Graphic design",
       "Typography & layout",
       "Cross-format adaptation",
     ],
@@ -17,12 +17,12 @@ export const verifiedCapabilityGroups = [
     items: ["After Effects", "Premiere Pro", "Blender", "UI motion & 3D animation"],
   },
   {
-    h: "Adobe & AI",
+    h: "AI Image & Video",
     items: [
-      "Photoshop",
-      "Illustrator",
-      "AI-assisted image/video workflows",
-      "Creative production",
+      "Character consistency workflows",
+      "Image-to-video direction",
+      "Short-form shot planning",
+      "AI-assisted creative production",
     ],
   },
 ] as const;
