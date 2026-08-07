@@ -59,7 +59,7 @@ if (existsSync(join(root, "src/app/work/[slug]/page.tsx"))) {
 
 const requiredCases = [
   ["src/app/projects/wwm-build-lab/page.tsx", "/projects/wwm-build-lab", "/projects/wwm-build-lab.png"],
-  ["src/app/projects/thien-kim/page.tsx", "/projects/thien-kim", "/projects/thien-kim-cover.svg"],
+  ["src/app/projects/thien-kim/page.tsx", "/projects/thien-kim", "/projects/thien-kim-collage.webp"],
   ["src/app/projects/wwm-homestead/page.tsx", "/projects/wwm-homestead", "/projects/wwm-homestead.png"],
 ];
 
