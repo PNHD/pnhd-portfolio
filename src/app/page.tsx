@@ -211,7 +211,7 @@ export default function Home() {
           <div>
             <div className="kicker">Independent Products</div>
             <h2 className="stitle dsp">
-              Personal projects that go beyond presentation screens.
+              Independent products built around real use cases.
             </h2>
           </div>
           <p className="section-note">
