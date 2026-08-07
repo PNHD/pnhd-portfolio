@@ -16,13 +16,15 @@ const NAV = [
 
 function ThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
+  const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
+
   return (
     <button
       className="theme-sw"
-      aria-label="Toggle theme"
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      aria-label={`Switch to ${nextTheme} theme`}
+      onClick={() => setTheme(nextTheme)}
     >
-      <span className="knob" />
+      <span className="knob" aria-hidden="true" />
     </button>
   );
 }
@@ -81,6 +83,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [menuOpen]);
 
   useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [menuOpen]);
+
+  useEffect(() => {
     const closeFrame = requestAnimationFrame(() => setMenuOpen(false));
     const io = new IntersectionObserver(
       (entries) => {
@@ -114,13 +125,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className={cls}>
-      <div className="grain" />
-      <div className="aurora">
+      <div className="grain" aria-hidden="true" />
+      <div className="aurora" aria-hidden="true">
         <div className="blob b1" />
         <div className="blob b2" />
         <div className="blob b3" />
       </div>
-      <div className="scroll-prog">
+      <div className="scroll-prog" aria-hidden="true">
         <span className="sp-num">0%</span>
         <span className="pbar">
           <i />
@@ -129,10 +140,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <header className="nav">
         <Link className="brand" href="/">
-          <span className="dot" />
+          <span className="dot" aria-hidden="true" />
           Dang Pham
         </Link>
-        <nav className="nav-links">
+        <nav className="nav-links" aria-label="Primary navigation">
           {NAV.map((n) => (
             <Link key={n.href} href={n.href}>
               {n.label}
@@ -146,8 +157,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
           <button
             className="menu-btn"
-            aria-label="Menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setMenuOpen((v) => !v)}
           >
             <span />
@@ -157,7 +169,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="mobile-menu">
+      <nav id="mobile-navigation" className="mobile-menu" aria-label="Mobile navigation">
         {NAV.map((n) => (
           <Link key={n.href} href={n.href} onClick={() => setMenuOpen(false)}>
             {n.label}
@@ -169,7 +181,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </span>
           <ThemeSwitch />
         </div>
-      </div>
+      </nav>
 
       <main className="layer1">{children}</main>
 
