@@ -7,7 +7,7 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 7
+    timeout-minutes: 8
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -20,8 +20,10 @@ jobs:
         run: npm ci
       - name: Capture audit before fix
         run: npm audit --json > npm-audit-before.json || true
-      - name: Apply safe lockfile-only audit fix
-        run: npm audit fix --package-lock-only
+      - name: Apply safe transitive fixes
+        run: npm audit fix --package-lock-only || true
+      - name: Probe patched Next.js toolchain
+        run: npm install --package-lock-only --save-exact next@16.3.0 eslint-config-next@16.3.0
       - name: Capture audit after fix
         shell: bash
         run: |
