@@ -13,7 +13,14 @@ export const metadata: Metadata = {
 
 const TIKTOK = "https://www.tiktok.com/@tieu.thienkim";
 
-const looks = [
+type Look = {
+  src: string;
+  alt: string;
+  label: string;
+  featured?: boolean;
+};
+
+const looks: readonly Look[] = [
   {
     src: "/projects/thien-kim/look-floral.webp",
     alt: "Thiên Kim in a floral dress in a sunlit stone alley, framed as a close portrait",
@@ -55,7 +62,7 @@ const looks = [
     alt: "Thiên Kim in a white top and pale blue shorts in a softly lit interior",
     label: "Interior variation",
   },
-] as const;
+];
 
 const videos = [
   {
