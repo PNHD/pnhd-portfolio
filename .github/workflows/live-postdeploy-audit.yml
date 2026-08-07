@@ -1,0 +1,65 @@
+name: Live Post-Deploy Audit
+
+on:
+  push:
+    branches: [feature/dribbble-legacy-archive]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Wait for Cloudflare production and verify live HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://dangpham.pages.dev"
+          ready=0
+          for attempt in $(seq 1 20); do
+            echo "Attempt ${attempt}/20"
+            home_code=$(curl -L -sS --max-time 20 -o home.html -w '%{http_code}' "$base/" || true)
+            work_code=$(curl -L -sS --max-time 20 -o work.html -w '%{http_code}' "$base/work" || true)
+            if [ "$home_code" = "200" ] && [ "$work_code" = "200" ] \
+              && grep -Fq "Visual systems, digital experiences" home.html \
+              && grep -Fq "89 of 89 public" work.html; then
+              ready=1
+              break
+            fi
+            echo "Production not updated yet: home=$home_code work=$work_code"
+            sleep 15
+          done
+          if [ "$ready" != "1" ]; then
+            echo "Production did not expose the merged portfolio within the wait window"
+            exit 1
+          fi
+
+          grep -Fq "Visual / Digital Designer" home.html
+          grep -Fq "View full Dribbble archive" home.html
+          ! grep -Fqi "UI kits on UI8" home.html
+          ! grep -Fq "Nova —" home.html
+          ! grep -Fq "Serenity" home.html
+          ! grep -Fq "Pulse —" home.html
+          ! grep -Fq "Elevate —" home.html
+
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          work = Path('work.html').read_text(errors='ignore')
+          links = re.findall(r'https://dribbble\.com/shots/[^"<>& ]+', work)
+          unique = set(links)
+          print(f'Live Dribbble shot links: total={len(links)} unique={len(unique)}')
+          if len(unique) != 89:
+              raise SystemExit(f'Expected 89 unique live Dribbble shot URLs, got {len(unique)}')
+          PY
+
+          old_code=$(curl -L -sS --max-time 20 -o old-route.html -w '%{http_code}' "$base/work/nova-ui-kit" || true)
+          if [ "$old_code" != "404" ]; then
+            echo "Expected removed placeholder route to return 404, got $old_code"
+            exit 1
+          fi
+
+          echo "Live post-deploy audit PASS"
+          echo "- homepage: 200 and refreshed positioning present"
+          echo "- /work: 200 and 89/89 archive present"
+          echo "- UI8 / fabricated placeholder copy absent"
+          echo "- removed placeholder case-study route: 404"
