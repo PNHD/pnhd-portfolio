@@ -4,6 +4,8 @@ export type IndependentProject = {
   description: string;
   tags: string[];
   accent: string;
+  thumbnail: string;
+  thumbnailAlt: string;
   caseHref?: string;
   repoHref?: string;
   liveHref?: string;
@@ -20,6 +22,8 @@ export const independentProjects: IndependentProject[] = [
     liveHref: "https://wonton-wwm.pages.dev",
     caseHref: "/projects/wwm-build-lab",
     accent: "Build calculator",
+    thumbnail: "/projects/wwm-build-lab.png",
+    thumbnailAlt: "WWM Build Lab calculator interface",
   },
   {
     title: "Thiên Kim",
@@ -30,6 +34,8 @@ export const independentProjects: IndependentProject[] = [
     liveHref: "https://www.tiktok.com/@tieu.thienkim",
     caseHref: "/projects/thien-kim",
     accent: "AI content system",
+    thumbnail: "/projects/thien-kim-cover.svg",
+    thumbnailAlt: "Frame from a Thiên Kim AI-generated short-form video",
   },
   {
     title: "WWM Homestead Planner",
@@ -38,6 +44,9 @@ export const independentProjects: IndependentProject[] = [
       "A web app for planning production, profit, material runway and retainer labor across a complex game economy, with dashboards, recommendations and optimization flows.",
     tags: ["Product UI", "React", "Systems thinking"],
     repoHref: "https://github.com/PNHD/homestead",
+    liveHref: "https://wwm-homestead.pages.dev",
     accent: "Planner + optimizer",
+    thumbnail: "/projects/wwm-homestead.png",
+    thumbnailAlt: "WWM Homestead Planner dashboard interface",
   },
 ];

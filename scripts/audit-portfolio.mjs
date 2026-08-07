@@ -72,6 +72,22 @@ if (!projects.includes('/projects/wwm-build-lab') || !projects.includes('/projec
   errors.push("Mini case-study links missing from independent project data");
 }
 
+const projectThumbs = [...projects.matchAll(/thumbnail:\s*"([^"]+)"/g)].map((m) => m[1]);
+if (projectThumbs.length !== 3) {
+  errors.push(`Expected 3 independent-project thumbnails, found ${projectThumbs.length}`);
+}
+if (new Set(projectThumbs).size !== projectThumbs.length) {
+  errors.push("Independent-project thumbnails must be unique");
+}
+for (const thumb of projectThumbs) {
+  if (!thumb.startsWith("/")) {
+    errors.push(`Independent-project thumbnail must be a local public asset: ${thumb}`);
+    continue;
+  }
+  const file = join(root, "public", thumb.slice(1));
+  if (!existsSync(file)) errors.push(`Independent-project thumbnail file missing: ${thumb}`);
+}
+
 if (errors.length) {
   console.error("Portfolio audit FAILED");
   for (const error of errors) console.error(`- ${error}`);
@@ -82,6 +98,7 @@ console.log("Portfolio audit PASS");
 console.log(`- ${hrefs.length}/${expected} Dribbble shots mapped`);
 console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
+console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
 console.log("- user-facing marketing positioning absent from src");
 console.log("- WWM Build Lab and Thiên Kim case-study routes present");
 console.log("- Thiên Kim TikTok output link present");

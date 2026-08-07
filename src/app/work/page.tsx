@@ -47,7 +47,13 @@ export default function Work() {
         <div className="project-grid compact-project-grid">
           {independentProjects.map((project, index) => (
             <article className="project-card" key={project.title}>
-              <div className={`project-visual project-visual-${index + 1}`}>
+              <div className={`project-visual project-visual-${index + 1} project-visual-thumb`}>
+                <img
+                  className="project-thumb-img"
+                  src={project.thumbnail}
+                  alt={project.thumbnailAlt}
+                  loading="lazy"
+                />
                 <div className="project-visual-top mono">
                   <span>Independent / 0{index + 1}</span>
                   <span>2026</span>
