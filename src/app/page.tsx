@@ -47,6 +47,12 @@ const showcase = SHOWCASE_HREFS.flatMap((href) => {
   return item ? [item] : [];
 });
 
+function projectLiveLabel(title: string) {
+  if (title === "Thiên Kim") return "View TikTok ↗";
+  if (title === "Claude UI Lab") return "Open live study ↗";
+  return "Open live product ↗";
+}
+
 export default function Home() {
   return (
     <>
@@ -260,7 +266,7 @@ export default function Home() {
                   {project.caseHref ? <Link href={project.caseHref}>View case study →</Link> : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
-                      {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
+                      {projectLiveLabel(project.title)}
                     </a>
                   ) : null}
                   {project.repoHref ? (
