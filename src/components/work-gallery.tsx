@@ -39,7 +39,7 @@ export function WorkGallery() {
         {items.map((item) => (
           <a
             key={item.href}
-            className="wcard reveal work-real-card"
+            className="wcard work-real-card"
             href={item.href}
             target="_blank"
             rel="noopener noreferrer"
