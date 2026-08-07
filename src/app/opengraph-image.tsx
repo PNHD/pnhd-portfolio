@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { siteConfig } from "@/data/portfolio";
+import { refreshedSiteConfig as siteConfig } from "@/data/portfolio-refresh";
 
 // Branded text OG card (no photo needed). Generated at build time — works with output: "export".
 export const dynamic = "force-static";
