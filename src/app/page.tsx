@@ -11,12 +11,12 @@ import { dribbbleImage } from "@/lib/dribbble-image";
 const MARQUEE = [
   "Visual Design",
   "Graphic Design",
-  "Digital Design",
+  "Digital Campaigns",
+  "E-commerce",
   "Product UI",
   "Motion",
   "AI Video",
   "3D",
-  "Independent Projects",
 ];
 
 const FEATURED_HREFS = [
@@ -56,18 +56,18 @@ export default function Home() {
             Visual / Digital Designer · Ho Chi Minh City
           </div>
           <h1 className="h1 dsp rise r2">
-            Visual design for products, interfaces and{" "}
-            <span className="em">digital experiences</span>.
+            Visual design across campaigns, web and{" "}
+            <span className="em">product experiences</span>.
           </h1>
           <p className="hero-sub rise r3">
             I&apos;m Dang — a multidisciplinary designer with professional experience
-            across graphic design, product UI, motion and 3D, plus independent work
-            in AI-assisted image and video production.
+            across graphic design, e-commerce visuals, web and product UI, motion and
+            3D, plus independent work in AI-assisted image and video production.
           </p>
           <div className="hero-role-line rise r3" aria-label="Role fit">
             <span>Visual / Graphic</span>
-            <span>Digital / Web</span>
-            <span>Product UI</span>
+            <span>Digital / Campaign</span>
+            <span>Web / Product UI</span>
             <span>Motion / AI Video</span>
           </div>
           <div className="hero-cta rise r4">
@@ -127,7 +127,7 @@ export default function Home() {
           <div>
             <div className="kicker">Selected Work</div>
             <h2 className="stitle dsp">
-              A focused mix of web, interface, motion and visual craft.
+              A focused mix of web, interface, motion and visual systems.
             </h2>
           </div>
           <Link className="view-all" href="/work">
@@ -284,9 +284,10 @@ export default function Home() {
           <div className="about-body reveal">
             <p>
               My background spans <strong>visual, graphic and digital design</strong>,
-              with UI as a strong part of the toolkit rather than the whole story.
-              I&apos;ve worked across visual communication, product interfaces,
-              landing pages, motion and visual systems.
+              including e-commerce and promotional work, with UI as a strong part of
+              the toolkit rather than the whole story. I&apos;ve worked across visual
+              communication, product interfaces, landing pages, motion and visual
+              systems.
             </p>
             <p>
               I also build independent tools, prototypes and AI content workflows
@@ -354,14 +355,6 @@ export default function Home() {
               </Link>
             </div>
             <div className="socials">
-              <a
-                className="social"
-                href="https://www.tiktok.com/@tieu.thienkim"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                TikTok / Thiên Kim ↗
-              </a>
               <a
                 className="social"
                 href={siteConfig.links.dribbble}
