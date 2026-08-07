@@ -43,6 +43,25 @@
   margin-bottom: 7px;
 }
 
+.sc-thumb-real::before,
+.sc-thumb-real::after {
+  display: none;
+}
+
+.sc-thumb-real img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.sc-name {
+  max-width: 13ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .archive-filters {
   display: flex;
   flex-wrap: wrap;
