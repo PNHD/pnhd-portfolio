@@ -22,9 +22,13 @@ export const metadata: Metadata = {
     "Graphic Designer",
     "UI Designer",
     "Motion Designer",
+    "E-commerce Design",
+    "Digital Campaign Design",
     "AI Video",
     "AI Image",
     "Figma",
+    "Adobe Photoshop",
+    "Adobe Illustrator",
     "Adobe Creative Cloud",
     "Blender",
     "Dang Pham",
@@ -66,12 +70,7 @@ export default function RootLayout({
       addressLocality: "Ho Chi Minh City",
       addressCountry: "VN",
     },
-    sameAs: [
-      "https://www.tiktok.com/@tieu.thienkim",
-      siteConfig.links.dribbble,
-      siteConfig.links.behance,
-      siteConfig.links.github,
-    ],
+    sameAs: [siteConfig.links.dribbble, siteConfig.links.behance, siteConfig.links.github],
   };
 
   return (
