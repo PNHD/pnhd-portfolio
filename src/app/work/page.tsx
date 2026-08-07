@@ -2,12 +2,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { WorkGallery } from "@/components/work-gallery";
 import { independentProjects } from "@/data/independent-projects";
-import { refreshedSiteConfig } from "@/data/portfolio-refresh";
+import { portfolioEvidence, refreshedSiteConfig } from "@/data/portfolio-refresh";
 
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Independent projects plus a broader archive across digital design, product UI, AI video, motion, 3D, illustration and icon systems.",
+    "Independent projects plus 89 source-linked visual works across digital design, product UI, motion, 3D, illustration and icon systems.",
   alternates: { canonical: "/work" },
 };
 
@@ -19,15 +19,21 @@ export default function Work() {
       </Link>
 
       <div className="arch-head reveal">
-        <div className="kicker">Full Work</div>
+        <div className="kicker">Full Work Archive</div>
         <h1 className="case-title dsp">
-          Products, interfaces and visual experiments.
+          Products, interfaces and visual craft across formats.
         </h1>
         <p className="case-blurb">
-          A broader view of my work beyond the homepage selection: independent tools,
-          AI image/video workflows, web and product UI, motion, 3D, illustration and
-          icon systems. Earlier visual studies remain clearly labeled where relevant.
+          Start with the independent projects for deeper product and production context,
+          then browse {portfolioEvidence.dribbbleShotCount} source-linked visual works
+          across digital/web design, product UI, motion, 3D, illustration and icon systems.
+          Earlier studies remain labeled as studies rather than client work.
         </p>
+        <div className="hero-role-line archive-proof-line" aria-label="Archive coverage">
+          <span>{portfolioEvidence.dribbbleShotCount} source-linked works</span>
+          <span>3 independent case studies</span>
+          <span>No invented client outcomes</span>
+        </div>
       </div>
 
       <section className="archive-projects" aria-labelledby="archive-products-title">
@@ -35,12 +41,12 @@ export default function Work() {
           <div>
             <div className="work-cat mono">Independent Projects</div>
             <h2 id="archive-products-title" className="dsp">
-              Self-directed work with more than presentation depth.
+              Deeper work: problem framing, systems and execution.
             </h2>
           </div>
           <p>
             These projects show product thinking, visual direction, AI production
-            workflows and implementation alongside the visual archive.
+            workflows and implementation alongside the broader visual archive.
           </p>
         </div>
         <div className="project-grid compact-project-grid">
@@ -95,12 +101,12 @@ export default function Work() {
           <div>
             <div className="work-cat mono">Visual Archive</div>
             <h2 id="visual-archive-title" className="dsp">
-              Browse by discipline.
+              Browse the full visual range by discipline.
             </h2>
           </div>
           <p>
-            A larger archive of earlier visual work and studies. Every work card keeps
-            its own thumbnail and opens the original source post for context.
+            Every card keeps its own thumbnail, category and source link. Use the filters
+            to move between digital/web, product UI, motion, 3D/illustration and icon-system work.
           </p>
         </div>
         <WorkGallery />
@@ -110,7 +116,7 @@ export default function Work() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Dribbble profile ↗
+            Original Dribbble archive ↗
           </a>
         </div>
       </section>
