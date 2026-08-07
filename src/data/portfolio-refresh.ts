@@ -1,9 +1,9 @@
 export const refreshedSiteConfig = {
   name: "Dang Pham",
   title: "Visual / Digital Designer",
-  tagline: "Visual design across digital, UI, motion and 3D.",
+  tagline: "Visual design across campaigns, web, product UI, motion and 3D.",
   description:
-    "Visual and Digital Designer in Ho Chi Minh City working across digital visual design, web and product UI, motion, icon systems and 3D illustration.",
+    "Visual and Digital Designer in Ho Chi Minh City working across graphic and digital design, e-commerce and promotional visuals, web and product UI, motion, icon systems and 3D illustration.",
   url: "https://dangpham.pages.dev",
   email: "phamnhathaidang@gmail.com",
   links: {
@@ -298,7 +298,16 @@ export const workItems: WorkItem[] = [
     tags: ["Figma", "App UI", "Daily UI"],
     href: "https://dribbble.com/shots/11196214-Daily-UI-Challenge-019-Leaderboard",
     image:
-      "https://cdn.dribbble.com/userupload/26991898/file/original-c38564c199e7bcaa98697d1e83c05803.png?resize=400x0",
+      "https://cdn.dribbble.com/userupload/26996226/file/original-a8f19af57ebdd9e09a67d18ed4fcfa4d.jpg?resize=400x0",
     note: "Daily UI challenge",
+  },
+  {
+    title: "Daily UI #018 — Analytics Chart",
+    category: "Motion",
+    tags: ["After Effects", "Figma", "Daily UI"],
+    href: "https://dribbble.com/shots/11064135-Daily-UI-Challenge-018-Analytics-Chart",
+    image:
+      "https://cdn.dribbble.com/userupload/26817774/file/still-1e668470e7819ecba1b6a73211f79500.png?resize=400x0",
+    note: "Daily UI motion challenge",
   },
 ];
