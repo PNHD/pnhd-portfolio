@@ -1,0 +1,68 @@
+name: Live Hierarchy Audit
+
+on:
+  push:
+    branches: [feature/portfolio-hierarchy-projects]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wait for production deploy and verify live content
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://dangpham.pages.dev"
+          ready=0
+          for attempt in $(seq 1 30); do
+            echo "Attempt ${attempt}/30"
+            home_code=$(curl -L -sS --max-time 25 -o home.html -w '%{http_code}' "$base/" || true)
+            work_code=$(curl -L -sS --max-time 25 -o work.html -w '%{http_code}' "$base/work" || true)
+            if [ "$home_code" = "200" ] && [ "$work_code" = "200" ] \
+              && grep -Fq "Visual design for products" home.html \
+              && grep -Fq "Independent products built around real use cases" home.html \
+              && grep -Fq "Products, interfaces and visual experiments" work.html; then
+              ready=1
+              break
+            fi
+            echo "Production not updated yet: home=$home_code work=$work_code"
+            sleep 15
+          done
+
+          if [ "$ready" != "1" ]; then
+            echo "Merged hierarchy did not appear within the deploy wait window"
+            exit 1
+          fi
+
+          grep -Fq "View full work" home.html
+          grep -Fq "WWM Build Lab" home.html
+          grep -Fq "WWM Homestead Planner" home.html
+          grep -Fq "Nexus UI Kit" home.html
+          grep -Fq "Projects" home.html
+          grep -Fq "resize=1400x0" home.html
+          grep -Fq "WWM Build Lab" work.html
+          grep -Fq "Browse by discipline" work.html
+
+          if grep -Fq "89 Dribbble shots" home.html || grep -Fq "shots visible in the Dribbble archive" home.html; then
+            echo "Dribbble-count marketing copy is still visible on homepage"
+            exit 1
+          fi
+
+          if grep -Fq "89 of 89" work.html; then
+            echo "Archive count copy is still visible on /work"
+            exit 1
+          fi
+
+          old_code=$(curl -L -sS --max-time 25 -o old.html -w '%{http_code}' "$base/work/nova-ui-kit" || true)
+          if [ "$old_code" != "404" ]; then
+            echo "Removed placeholder route expected 404, got $old_code"
+            exit 1
+          fi
+
+          echo "Live hierarchy audit PASS"
+          echo "- homepage and /work return 200"
+          echo "- professional + independent product hierarchy is live"
+          echo "- responsive high-resolution Dribbble sources are live"
+          echo "- visible Dribbble-count marketing copy is absent"
+          echo "- removed placeholder case-study route returns 404"
