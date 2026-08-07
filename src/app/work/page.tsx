@@ -1,58 +1,54 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { projects } from "@/data/portfolio";
+import { WorkGallery } from "@/components/work-gallery";
+import {
+  portfolioEvidence,
+  refreshedSiteConfig,
+  workItems,
+} from "@/data/portfolio-refresh";
 
 export const metadata: Metadata = {
-  title: "All Work",
-  description: "The full archive — shipped products, design systems, and concepts.",
+  title: "Work Archive",
+  description:
+    "Selected real work across digital design, UI, motion, 3D and icon systems, sourced from Dang Pham's Dribbble archive.",
 };
 
 export default function Archive() {
   return (
     <div className="archive wrap case">
       <Link className="case-back" href="/#work">
-        ← Back to work
+        ← Back to selected work
       </Link>
+
       <div className="arch-head reveal">
-        <div className="kicker">The archive</div>
+        <div className="kicker">Work archive</div>
         <h1 className="case-title dsp">
-          All work
-          <small>{projects.length} projects · 2016 — 2026</small>
+          Real work, grouped by discipline.
+          <small>
+            {portfolioEvidence.dribbbleShotCount} Dribbble shots · curated here for
+            hiring relevance
+          </small>
         </h1>
         <p className="case-blurb">
-          Everything worth showing — shipped products, design systems, and
-          self-initiated concepts. The highlights live on the home page; here&apos;s
-          the full shelf.
+          This page prioritizes the work most useful for Visual, Marketing,
+          Digital, Graphic and UI design roles: web creative, interface systems,
+          motion, 3D and icon work. Every card below links to the original
+          Dribbble shot; no invented campaign metrics or client outcomes.
         </p>
+        <div className="archive-proof mono">
+          <span>{workItems.length} curated pieces on-site</span>
+          <span aria-hidden="true">•</span>
+          <a
+            href={refreshedSiteConfig.links.dribbble}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View all {portfolioEvidence.dribbbleShotCount} on Dribbble ↗
+          </a>
+        </div>
       </div>
-      <div className="work-grid">
-        {projects.map((p) => (
-          <Link key={p.slug} className="wcard reveal" href={`/work/${p.slug}`}>
-            <div className="wthumb">
-              <div className="ph-grid" />
-              <span className="ph-dim mono">{p.heroDim}</span>
-              <span className="ph-lab">{p.heroLab}</span>
-              <span className="warrow">↗</span>
-            </div>
-            <div className="wmeta">
-              <div>
-                <div className="wname dsp">
-                  {p.name} — {p.title}
-                </div>
-                <p className="wblurb">{p.blurb}</p>
-                <div className="wtags">
-                  {p.tags.map((t) => (
-                    <span key={t} className="wtag">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <span className="wyear mono">{p.year}</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+
+      <WorkGallery />
     </div>
   );
 }
