@@ -1,0 +1,52 @@
+name: Temporary live portfolio audit
+
+on:
+  push:
+    branches:
+      - feature/thien-kim-media-20260807
+    paths:
+      - .github/workflows/live-audit-temp.yml
+
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check production HTML and media
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://dangpham.pages.dev'
+          bust='?audit=b099fd2'
+          curl --fail --location --silent --show-error -H 'Cache-Control: no-cache' "$base/$bust" -o /tmp/home.html
+          curl --fail --location --silent --show-error -H 'Cache-Control: no-cache' "$base/projects/thien-kim$bust" -o /tmp/tk.html
+
+          echo 'HOME TITLE:'
+          grep -o '<title>[^<]*' /tmp/home.html | head -1 || true
+          echo 'THIEN KIM TITLE:'
+          grep -o '<title>[^<]*' /tmp/tk.html | head -1 || true
+
+          grep -q 'Visual design for products' /tmp/home.html
+          grep -q 'Independent Projects' /tmp/home.html
+          grep -q 'Thiên Kim' /tmp/home.html
+          grep -q 'Selected video outputs' /tmp/tk.html
+          grep -q '/projects/thien-kim/video-green.mp4' /tmp/tk.html
+          grep -q '/projects/thien-kim/video-country.mp4' /tmp/tk.html
+          grep -q '/projects/thien-kim/video-tuscany.mp4' /tmp/tk.html
+          grep -q '/projects/thien-kim/video-white-lace.mp4' /tmp/tk.html
+          ! grep -q 'Nova — Dashboard' /tmp/home.html
+          ! grep -q 'UI kits on UI8' /tmp/home.html
+
+          for path in \
+            /projects/thien-kim-collage.webp \
+            /projects/thien-kim/look-floral.webp \
+            /projects/thien-kim/video-green-poster.webp \
+            /projects/thien-kim/video-green.mp4 \
+            /projects/thien-kim/video-country.mp4 \
+            /projects/thien-kim/video-tuscany.mp4 \
+            /projects/thien-kim/video-white-lace.mp4; do
+            code=$(curl --location --silent --show-error --output /dev/null --write-out '%{http_code}' -H 'Range: bytes=0-1023' "$base$path")
+            echo "$code $path"
+            test "$code" = '200' || test "$code" = '206'
+          done
+
+          echo 'LIVE_PORTFOLIO_AUDIT_PASS'
