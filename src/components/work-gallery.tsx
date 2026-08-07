@@ -8,6 +8,7 @@ import {
 } from "@/data/portfolio-refresh";
 import { pageOneExtraWorkItems } from "@/data/portfolio-page1-extra";
 import { legacyExtraWorkItems } from "@/data/portfolio-legacy-extra";
+import { dribbbleImage } from "@/lib/dribbble-image";
 
 type Filter = "All" | WorkCategory;
 
@@ -51,15 +52,17 @@ export function WorkGallery() {
             href={item.href}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`${item.title} — open source work`}
           >
             <div className="wthumb work-real-thumb">
               <img
                 className="work-real-img"
-                src={item.image}
+                src={dribbbleImage(item.image, 1000)}
+                srcSet={`${dribbbleImage(item.image, 640)} 640w, ${dribbbleImage(item.image, 1000)} 1000w, ${dribbbleImage(item.image, 1400)} 1400w`}
+                sizes="(max-width: 680px) calc(100vw - 36px), (max-width: 1320px) 46vw, 590px"
                 alt={item.title}
                 loading="lazy"
               />
-              <span className="work-source mono">Dribbble ↗</span>
               <span className="warrow">↗</span>
             </div>
             <div className="wmeta">
