@@ -30,7 +30,7 @@ jobs:
           done
           cat /tmp/portfolio-http.log
           exit 1
-      - name: Capture responsive screenshots
+      - name: Capture full-page responsive screenshots
         shell: bash
         run: |
           set -euo pipefail
@@ -44,18 +44,13 @@ jobs:
           shot() {
             local size="$1"; local file="$2"; local url="$3"
             "$CHROME" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
-              --virtual-time-budget=2500 --window-size="$size" \
+              --virtual-time-budget=3500 --window-size="$size" \
               --screenshot="visual/$file" "$url"
           }
-          shot 1440,1000 home-desktop.png http://127.0.0.1:3000/
-          shot 1440,1000 work-desktop.png http://127.0.0.1:3000/#work
-          shot 1440,1000 experience-desktop.png http://127.0.0.1:3000/#experience
-          shot 1440,1000 projects-desktop.png http://127.0.0.1:3000/#projects
-          shot 1440,1000 full-work-desktop.png http://127.0.0.1:3000/work
-          shot 390,844 home-mobile.png http://127.0.0.1:3000/
-          shot 390,844 work-mobile.png http://127.0.0.1:3000/#work
-          shot 390,844 projects-mobile.png http://127.0.0.1:3000/#projects
-          shot 390,844 full-work-mobile.png http://127.0.0.1:3000/work
+          shot 1440,7800 home-full-desktop.png http://127.0.0.1:3000/
+          shot 1440,3200 full-work-desktop.png http://127.0.0.1:3000/work.html
+          shot 390,14000 home-full-mobile.png http://127.0.0.1:3000/
+          shot 390,5200 full-work-mobile.png http://127.0.0.1:3000/work.html
       - name: Upload visual audit
         uses: actions/upload-artifact@v4
         with:
