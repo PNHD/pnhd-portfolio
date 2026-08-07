@@ -1,6 +1,6 @@
 # Dang Pham — Visual / Digital Designer
 
-> Visual and Digital Designer in Ho Chi Minh City working across digital visual design, web and product UI, motion, icon systems, 3D illustration and independent AI image/video workflows.
+> Visual and Digital Designer in Ho Chi Minh City working across graphic design, e-commerce and promotional visuals, web and product UI, motion, 3D, and independent AI image/video workflows.
 
 ## Portfolio
 - [Selected work and professional experience](/)
@@ -12,7 +12,7 @@
 - [WWM Homestead Planner](/projects/wwm-homestead) — production, profit, material-runway and retainer planning tool with dashboards and constraint-aware recommendations.
 
 ## Capabilities
-- Visual & Graphic: digital/web visual design, graphic design, typography/layout, cross-format adaptation.
+- Visual & Graphic: Adobe Photoshop, Adobe Illustrator, digital/web visual design, e-commerce and promotional assets, typography/layout.
 - Product & Web: Figma, responsive UI, landing pages, design systems.
 - Motion & 3D: After Effects, Premiere Pro, Blender, UI motion and 3D animation.
 - AI Image & Video: character-consistency workflows, image-to-video direction, short-form shot planning, AI-assisted creative production.
