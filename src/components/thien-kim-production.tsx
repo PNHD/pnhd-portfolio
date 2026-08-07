@@ -10,51 +10,51 @@ export function ThienKimProduction() {
             <h2 className="dsp">The workflow follows the media, not the other way around.</h2>
           </div>
           <p className="case-section-lede">
-            A planning target is typically a short pack of 3–5 usable shots. That is a
-            production target, not a claim about published volume. Each stage can send
-            a shot back for replacement before final editing.
+            Planning, generation, review, motion and editing are treated as separate
+            gates. A weak image can be replaced before motion, and an unstable motion
+            result can be rerouted instead of being accepted by default.
           </p>
         </div>
 
         <div className="case-production-rail">
           <div className="case-production-step">
             <span className="mono">01 / PLAN</span>
-            <b>Concept → pack → shot rows</b>
+            <b>Concept → look → shot plan</b>
             <p>
-              n8n and Google Sheets structure the concept, reference strategy, shot
-              purpose, timing and generation fields before media work begins.
+              Structure the concept, reference strategy, styling direction, framing
+              and generation fields before media work begins.
             </p>
           </div>
           <div className="case-production-step">
             <span className="mono">02 / IMAGE</span>
             <b>Reference-led generation</b>
             <p>
-              Generate against the original Thiên Kim references, select the strongest
-              frame and keep Shot 1 as the pack continuity anchor.
+              Generate against the Thiên Kim identity anchors, select a strong master
+              look and use it to support continuity through the sequence.
             </p>
           </div>
           <div className="case-production-step">
             <span className="mono">03 / QC</span>
-            <b>Keep, replace or downgrade</b>
+            <b>Keep, replace or reroute</b>
             <p>
-              Evaluate identity, outfit, environment, variety and motion safety before
-              choosing I2V, mimic or a slideshow route.
+              Review identity, outfit, anatomy, environment, composition and motion
+              safety before committing an image to the next stage.
             </p>
           </div>
           <div className="case-production-step">
             <span className="mono">04 / MOTION</span>
-            <b>Choose the right execution mode</b>
+            <b>Use the suitable route</b>
             <p>
-              Use Kling or Dreamina for suitable image-to-video work, or route
-              reference-led motion through the appropriate RunningHub mimic workflow.
+              Choose direct image-to-video or a reference-led motion workflow based on
+              the shot instead of applying one method to every output.
             </p>
           </div>
           <div className="case-production-step">
             <span className="mono">05 / EDIT</span>
-            <b>Assemble, publish, record</b>
+            <b>Assemble and finish</b>
             <p>
-              CapCut is used for short-form assembly and finishing; published TikTok
-              URLs can be recorded back into the production sheet.
+              Build the short-form edit, review pacing and export the selected output;
+              public links can then be recorded back into the production system.
             </p>
           </div>
         </div>
@@ -67,9 +67,9 @@ export function ThienKimProduction() {
             <h2 className="dsp">A generated asset is not finished when it renders.</h2>
           </div>
           <p className="case-section-lede">
-            QC is treated as a design gate. The same categories appear in the manual
-            review checklist and in structured workflow fields so a weak shot can be
-            replaced instead of quietly entering the final edit.
+            QC is a design gate. The same review categories can be used manually and
+            in structured workflow fields so a weak shot is identified before it
+            enters the final edit.
           </p>
         </div>
 
