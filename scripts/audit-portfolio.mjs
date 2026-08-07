@@ -57,24 +57,54 @@ if (existsSync(join(root, "src/app/work/[slug]/page.tsx"))) {
   errors.push("Placeholder case-study route still exists");
 }
 
-for (const required of [
+const requiredCases = [
   "src/app/projects/wwm-build-lab/page.tsx",
   "src/app/projects/thien-kim/page.tsx",
-]) {
+  "src/app/projects/co-giao-ai/page.tsx",
+  "src/app/projects/claude-ui-lab/page.tsx",
+];
+for (const required of requiredCases) {
   if (!existsSync(join(root, required))) errors.push(`Required project case study missing: ${required}`);
 }
 
 const projects = read("src/data/independent-projects.ts");
-if (!projects.includes("https://www.tiktok.com/@tieu.thienkim")) {
-  errors.push("Thiên Kim TikTok output link missing");
-}
-if (!projects.includes('/projects/wwm-build-lab') || !projects.includes('/projects/thien-kim')) {
-  errors.push("Mini case-study links missing from independent project data");
+for (const requiredUrl of [
+  "https://www.tiktok.com/@tieu.thienkim",
+  "https://nexus-react.pages.dev/",
+  "https://wwm-homestead.pages.dev",
+]) {
+  if (!projects.includes(requiredUrl)) errors.push(`Required independent-project output link missing: ${requiredUrl}`);
 }
 
+for (const requiredCaseHref of [
+  "/projects/wwm-build-lab",
+  "/projects/thien-kim",
+  "/projects/co-giao-ai",
+  "/projects/claude-ui-lab",
+]) {
+  if (!projects.includes(requiredCaseHref)) errors.push(`Case-study link missing from project data: ${requiredCaseHref}`);
+}
+
+const claudeCase = read("src/app/projects/claude-ui-lab/page.tsx");
+if (!claudeCase.includes("https://helixkit.pages.dev/")) errors.push("Helix Kit live link missing from Claude UI Lab case study");
+if (!claudeCase.includes("/projects/nexus-react.png") || !claudeCase.includes("/projects/helix-kit.png")) {
+  errors.push("Claude UI Lab must show both live-site screenshots");
+}
+
+const thienKimCase = read("src/app/projects/thien-kim/page.tsx");
+if (!thienKimCase.includes("/projects/thien-kim-country.jpg") || !thienKimCase.includes("/projects/thien-kim-cover.svg")) {
+  errors.push("Thiên Kim case study must include real AI-video output frames");
+}
+
+const wwmCase = read("src/app/projects/wwm-build-lab/page.tsx");
+if (!wwmCase.includes("/projects/wwm-build-lab.png")) errors.push("WWM Build Lab case study must show the live-product screenshot");
+
+const coGiaoCase = read("src/app/projects/co-giao-ai/page.tsx");
+if (!coGiaoCase.includes("/projects/co-giao-ai.svg")) errors.push("Cô Giáo AI case study must show its system map");
+
 const projectThumbs = [...projects.matchAll(/thumbnail:\s*"([^"]+)"/g)].map((m) => m[1]);
-if (projectThumbs.length !== 3) {
-  errors.push(`Expected 3 independent-project thumbnails, found ${projectThumbs.length}`);
+if (projectThumbs.length !== 5) {
+  errors.push(`Expected 5 independent-project thumbnails, found ${projectThumbs.length}`);
 }
 if (new Set(projectThumbs).size !== projectThumbs.length) {
   errors.push("Independent-project thumbnails must be unique");
@@ -88,6 +118,16 @@ for (const thumb of projectThumbs) {
   if (!existsSync(file)) errors.push(`Independent-project thumbnail file missing: ${thumb}`);
 }
 
+for (const visualAsset of [
+  "/projects/thien-kim-country.jpg",
+  "/projects/nexus-react.png",
+  "/projects/helix-kit.png",
+  "/projects/co-giao-ai.svg",
+]) {
+  const file = join(root, "public", visualAsset.slice(1));
+  if (!existsSync(file)) errors.push(`Case-study visual asset missing: ${visualAsset}`);
+}
+
 if (errors.length) {
   console.error("Portfolio audit FAILED");
   for (const error of errors) console.error(`- ${error}`);
@@ -99,7 +139,7 @@ console.log(`- ${hrefs.length}/${expected} Dribbble shots mapped`);
 console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
 console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
+console.log(`- ${requiredCases.length} detailed project case studies present`);
+console.log("- Thiên Kim / WWM / Cô Giáo AI / Claude UI Lab contain visual evidence");
 console.log("- user-facing marketing positioning absent from src");
-console.log("- WWM Build Lab and Thiên Kim case-study routes present");
-console.log("- Thiên Kim TikTok output link present");
 console.log("- stale UI8 / placeholder case-study tokens absent from src");
