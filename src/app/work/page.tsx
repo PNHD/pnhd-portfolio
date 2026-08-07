@@ -12,7 +12,7 @@ import { legacyExtraWorkItems } from "@/data/portfolio-legacy-extra";
 export const metadata: Metadata = {
   title: "Work Archive",
   description:
-    "Selected real work across digital design, UI, motion, 3D and icon systems, sourced from Dang Pham's Dribbble archive.",
+    "The complete public Dribbble archive: 89 source-linked works across digital design, UI, motion, 3D, illustration and icon systems.",
   alternates: { canonical: "/work" },
 };
 
@@ -27,30 +27,30 @@ export default function Archive() {
       </Link>
 
       <div className="arch-head reveal">
-        <div className="kicker">Work archive</div>
+        <div className="kicker">Full work archive</div>
         <h1 className="case-title dsp">
           Real work, grouped by discipline.
           <small>
-            {portfolioEvidence.dribbbleShotCount} shots in the source archive · a
-            hiring-focused selection shown here
+            {onSiteWorkCount} of {portfolioEvidence.dribbbleShotCount} public
+            Dribbble shots verified and mapped here
           </small>
         </h1>
         <p className="case-blurb">
-          The on-site selection prioritizes work most useful for Visual, Marketing,
-          Digital, Graphic and UI design roles: web creative, interface systems,
-          motion, 3D and icon work. Every card links to its original Dribbble shot;
-          tutorial, copywork and credited-source studies are labeled instead of being
-          presented as original client work.
+          This is the complete public Dribbble archive, organized for easier review
+          across Digital / Web, UI / Product, Motion, 3D / Illustration and Icon /
+          System work. Every card links back to the original Dribbble shot. Tutorial,
+          copywork and credited-source studies are labeled rather than presented as
+          original client work.
         </p>
         <div className="archive-proof mono">
-          <span>{onSiteWorkCount} source-linked pieces verified on-site</span>
+          <span>{onSiteWorkCount} unique source-linked works on-site</span>
           <span aria-hidden="true">•</span>
           <a
             href={refreshedSiteConfig.links.dribbble}
             target="_blank"
             rel="noopener noreferrer"
           >
-            View all {portfolioEvidence.dribbbleShotCount} on Dribbble ↗
+            Open source archive on Dribbble ↗
           </a>
         </div>
       </div>
