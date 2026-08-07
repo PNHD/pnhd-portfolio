@@ -48,24 +48,24 @@ export default function ThienKimCaseStudy() {
           <div className="work-cat mono">Video output</div>
           <h2 className="dsp">The proof is the character surviving changes in scene, styling and motion.</h2>
           <p className="case-long-copy">
-            These are frames taken from generated short-form video outputs used in the
-            project—not photography placeholders. The live TikTok channel contains the
-            moving versions; the portfolio keeps lightweight frames so the case study
-            remains fast to load.
+            These are frames taken from different generated short-form video outputs
+            used in the project—not photography placeholders. The live TikTok channel
+            contains the moving versions; the portfolio keeps lightweight frames so
+            the case study remains fast to load.
           </p>
         </div>
         <div className="tk-output-grid">
           <figure className="case-media-card tk-output-main">
-            <img src="/projects/thien-kim-country.jpg" alt="Thiên Kim AI video frame in an outdoor rural scene" />
-            <figcaption><b>Environment shift</b><span>Identity + outfit + outdoor scene</span></figcaption>
+            <img src="/projects/thien-kim-green.jpg" alt="Thiên Kim AI video frame in a pale green outfit by a window" />
+            <figcaption><b>Scene + styling shift</b><span>Identity held across a new outfit, pose and indoor environment</span></figcaption>
+          </figure>
+          <figure className="case-media-card">
+            <img src="/projects/thien-kim-tuscany.jpg" alt="Close portrait frame from a Thiên Kim AI-generated video" />
+            <figcaption><b>Identity review</b><span>Close framing exposes face drift more clearly than a distant hero shot</span></figcaption>
           </figure>
           <figure className="case-media-card">
             <img src="/projects/thien-kim-cover.svg" alt="Thiên Kim AI video frame used as the project cover" />
-            <figcaption><b>Short-form framing</b><span>Vertical composition designed for social video</span></figcaption>
-          </figure>
-          <figure className="case-media-card tk-output-crop">
-            <img src="/projects/thien-kim-country.jpg" alt="Closer crop of a Thiên Kim AI video frame for identity review" />
-            <figcaption><b>Identity review</b><span>Face consistency checked beyond one hero frame</span></figcaption>
+            <figcaption><b>Short-form framing</b><span>Vertical source composition prepared for social video</span></figcaption>
           </figure>
         </div>
       </section>
