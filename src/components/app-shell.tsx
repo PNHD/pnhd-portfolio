@@ -35,7 +35,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [entered, setEntered] = useState(false);
 
-  // mount + entrance timing
   useEffect(() => {
     setMounted(true);
     setReady(true);
@@ -43,7 +42,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(t);
   }, []);
 
-  // scroll: header state + progress bar + aurora parallax
   useEffect(() => {
     let ticking = false;
     const frame = () => {
@@ -69,7 +67,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // close menu + lock body scroll
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
@@ -77,7 +74,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, [menuOpen]);
 
-  // reveal-on-scroll, re-scanned per route
   useEffect(() => {
     setMenuOpen(false);
     const io = new IntersectionObserver(
@@ -170,7 +166,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <footer className="foot">
         <div className="foot-l">
-          <b>Dang Pham</b> — UI / Product Designer
+          <b>Dang Pham</b> — Visual / Digital Designer
         </div>
         <div className="foot-l">© {new Date().getFullYear()} · Ho Chi Minh City, Vietnam</div>
         <button
