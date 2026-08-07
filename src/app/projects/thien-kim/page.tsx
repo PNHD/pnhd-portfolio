@@ -233,6 +233,7 @@ export default function ThienKimCaseStudy() {
               <div className="tk-video-stage">
                 <video
                   controls
+                  muted
                   playsInline
                   preload="metadata"
                   poster={video.poster}
