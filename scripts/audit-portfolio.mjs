@@ -94,8 +94,12 @@ if (!claudeCase.includes("/projects/nexus-react.png") || !claudeCase.includes("/
 }
 
 const thienKimCase = read("src/app/projects/thien-kim/page.tsx");
-if (!thienKimCase.includes("/projects/thien-kim-country.jpg") || !thienKimCase.includes("/projects/thien-kim-cover.svg")) {
-  errors.push("Thiên Kim case study must include real AI-video output frames");
+for (const frame of [
+  "/projects/thien-kim-green.jpg",
+  "/projects/thien-kim-tuscany.jpg",
+  "/projects/thien-kim-cover.svg",
+]) {
+  if (!thienKimCase.includes(frame)) errors.push(`Thiên Kim case study missing video frame: ${frame}`);
 }
 
 const wwmCase = read("src/app/projects/wwm-build-lab/page.tsx");
@@ -124,7 +128,9 @@ for (const thumb of projectThumbs) {
 }
 
 for (const visualAsset of [
-  "/projects/thien-kim-country.jpg",
+  "/projects/thien-kim-green.jpg",
+  "/projects/thien-kim-tuscany.jpg",
+  "/projects/thien-kim-cover.svg",
   "/projects/nexus-react.png",
   "/projects/helix-kit.png",
   "/projects/co-giao-ai.svg",
@@ -148,5 +154,6 @@ console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
 console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
 console.log(`- ${requiredCases.length} detailed project case studies present`);
 console.log("- all independent project case studies contain visual evidence");
+console.log("- Thiên Kim shows three distinct clean AI-video frames");
 console.log("- user-facing marketing positioning absent from src");
 console.log("- stale UI8 / placeholder case-study tokens absent from src");
