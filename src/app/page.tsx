@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { experiences } from "@/data/portfolio";
+import { verifiedCapabilityGroups } from "@/data/portfolio-capabilities";
 import {
-  capabilityGroups,
   portfolioEvidence,
   refreshedSiteConfig as siteConfig,
   workItems,
@@ -235,7 +235,7 @@ export default function Home() {
           <h2 className="stitle dsp">Built for cross-channel creative work.</h2>
         </div>
         <div className="skills-grid">
-          {capabilityGroups.map((group) => (
+          {verifiedCapabilityGroups.map((group) => (
             <div className="skill-col reveal" key={group.h}>
               <h4>{group.h}</h4>
               <ul>
