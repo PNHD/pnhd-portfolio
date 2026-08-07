@@ -20,15 +20,15 @@ jobs:
         run: |
           npm ci
           npm run build
-      - name: Start production server
+      - name: Start static export server
         shell: bash
         run: |
-          npm run start -- -p 3000 > /tmp/portfolio-next.log 2>&1 &
+          python3 -m http.server 3000 --directory out > /tmp/portfolio-http.log 2>&1 &
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:3000/ >/dev/null; then exit 0; fi
             sleep 1
           done
-          cat /tmp/portfolio-next.log
+          cat /tmp/portfolio-http.log
           exit 1
       - name: Capture responsive screenshots
         shell: bash
