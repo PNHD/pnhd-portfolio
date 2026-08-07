@@ -1,0 +1,59 @@
+name: Capture Project Evidence
+
+on:
+  push:
+    branches: [feature/full-case-study-audit]
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feature/full-case-study-audit
+          fetch-depth: 0
+      - name: Capture live project evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/projects/evidence
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME"
+
+          capture() {
+            local url="$1"; local out="$2"; local width="$3"; local height="$4"
+            code=$(curl -L -sS --max-time 30 -o /tmp/page.html -w '%{http_code}' "$url" || true)
+            echo "$url -> $code"
+            test "$code" = "200"
+            "$CHROME" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+              --virtual-time-budget=7000 --window-size="$width,$height" \
+              --screenshot="public/projects/evidence/$out" "$url"
+          }
+
+          capture "https://nexus-react.pages.dev/" "nexus-react.png" 1440 1000
+          capture "https://helixkit.pages.dev/" "helix-kit.png" 1440 1000
+
+          # TikTok may return a consent/login shell in some regions; capture only if public page resolves.
+          if curl -L -sS --max-time 30 -o /tmp/tiktok.html -w '%{http_code}' "https://www.tiktok.com/@tieu.thienkim" | grep -q '^200$'; then
+            "$CHROME" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+              --virtual-time-budget=9000 --window-size=1280,1200 \
+              --screenshot="public/projects/evidence/thien-kim-tiktok.png" \
+              "https://www.tiktok.com/@tieu.thienkim" || true
+          fi
+      - name: Commit captured evidence
+        shell: bash
+        run: |
+          git add public/projects/evidence
+          if git diff --cached --quiet; then
+            echo "No new evidence assets"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat: add live project evidence screenshots"
+          git push origin HEAD:feature/full-case-study-audit
