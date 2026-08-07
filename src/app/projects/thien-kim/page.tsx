@@ -5,9 +5,9 @@ import { ThienKimProduction } from "@/components/thien-kim-production";
 import { ThienKimSystem } from "@/components/thien-kim-system";
 
 export const metadata: Metadata = {
-  title: "Thiên Kim — AI Image & Video Workflow Case Study",
+  title: "Thiên Kim — AI Character Art Direction & Video Workflow",
   description:
-    "Independent case study for Thiên Kim: a virtual-character image and video workflow focused on identity continuity, outfit variation, shot planning, routing and quality control.",
+    "Independent case study for Thiên Kim: character art direction and a repeatable AI image/video workflow demonstrated through eight selected looks, four local videos, continuity rules, routing and quality control.",
   alternates: { canonical: "/projects/thien-kim" },
 };
 
@@ -100,12 +100,12 @@ export default function ThienKimCaseStudy() {
 
       <header className="project-case-hero project-case-hero-media">
         <div className="case-hero-copy">
-          <div className="kicker">Independent project · AI image + video workflow</div>
+          <div className="kicker">Independent project · Character art direction + AI production</div>
           <h1 className="case-title dsp">Thiên Kim</h1>
           <p className="case-blurb">
-            A virtual-character content system exploring repeatable AI image and
-            short-form video production through identity continuity, outfit variation,
-            shot planning and workflow design.
+            A virtual-character project built as a repeatable visual production system:
+            lock the identity, direct the styling, plan the shot, route image-to-video work
+            and reject outputs that break continuity.
           </p>
 
           <div className="case-facts" aria-label="Project facts">
@@ -114,12 +114,12 @@ export default function ThienKimCaseStudy() {
               <b>Self-directed</b>
             </div>
             <div className="case-fact">
-              <span className="mono">Focus</span>
-              <b>Identity continuity</b>
+              <span className="mono">Evidence</span>
+              <b>8 looks + 4 local videos</b>
             </div>
             <div className="case-fact">
-              <span className="mono">Format</span>
-              <b>Image + short-form video</b>
+              <span className="mono">Focus</span>
+              <b>Identity + art direction</b>
             </div>
             <div className="case-fact">
               <span className="mono">System</span>
@@ -145,13 +145,13 @@ export default function ThienKimCaseStudy() {
               fetchPriority="high"
             />
             <div className="case-media-hud mono" aria-hidden="true">
-              <span>SELECTED LOOKS</span>
-              <span>IMAGE + VIDEO SYSTEM</span>
+              <span>8 SELECTED LOOKS</span>
+              <span>4 VIDEO OUTPUTS</span>
             </div>
           </div>
           <figcaption>
-            Multiple styling directions are shown together so character range is visible
-            before the workflow details.
+            The opening evidence is visual first: multiple styling directions around one
+            recognizable character before the production-system details.
           </figcaption>
         </figure>
       </header>
@@ -170,20 +170,20 @@ export default function ThienKimCaseStudy() {
       <section className="case-story-grid" id="brief">
         <div className="case-story-block">
           <div className="work-cat mono">Problem</div>
-          <h2 className="dsp">A strong generated frame is not enough.</h2>
+          <h2 className="dsp">A good generated frame is not a repeatable character.</h2>
           <p>
-            The project needs one recognizable character to survive changes in outfit,
-            hair, environment, framing and motion. The design problem is deciding what
-            should stay locked, what can vary and when an output should be rejected.
+            One recognizable identity has to survive changes in outfit, hair,
+            environment, framing and motion. The design problem is deciding what stays
+            locked, what can vary and when an output should be rejected.
           </p>
         </div>
         <div className="case-story-block">
           <div className="work-cat mono">My role</div>
-          <h2 className="dsp">Art direction, shot planning and workflow design.</h2>
+          <h2 className="dsp">Art direction, shot planning and production-system design.</h2>
           <p>
-            I define the identity anchors, styling direction, shot logic, prompt and
-            reference strategy, production routing and review criteria, then use those
-            rules to build repeatable image and short-form video outputs.
+            I define identity anchors, styling direction, shot logic, prompt/reference
+            strategy, production routing and review criteria, then apply those rules to
+            repeatable image and short-form video outputs.
           </p>
         </div>
       </section>
@@ -195,7 +195,7 @@ export default function ThienKimCaseStudy() {
             <h2 className="dsp">One identity, deliberately different looks.</h2>
           </div>
           <p className="case-section-lede">
-            Selected outputs span casual streetwear, feminine styling, costume,
+            Eight selected outputs span casual streetwear, feminine styling, costume,
             interior and outdoor scenes while keeping the same character identity
             readable across styling changes.
           </p>
@@ -218,12 +218,12 @@ export default function ThienKimCaseStudy() {
         <div className="case-section-split">
           <div className="case-detail-head">
             <div className="work-cat mono">Selected video outputs</div>
-            <h2 className="dsp">The motion work is shown in the case study itself.</h2>
+            <h2 className="dsp">Four motion outputs are reviewable directly in the case study.</h2>
           </div>
           <p className="case-section-lede">
-            Four project videos are embedded directly here so the work can be reviewed
-            without depending on a social link. Video files use local portfolio assets;
-            TikTok remains available as additional public context.
+            The videos are embedded as local portfolio assets rather than hidden behind
+            a social profile. TikTok remains an additional public-output channel, not the
+            only proof of the work.
           </p>
         </div>
 
@@ -257,7 +257,7 @@ export default function ThienKimCaseStudy() {
       <section className="case-detail-section case-result-section">
         <div>
           <div className="work-cat mono">What this demonstrates</div>
-          <h2 className="dsp">AI media treated as a designed production system.</h2>
+          <h2 className="dsp">AI media treated as art direction plus a production system.</h2>
         </div>
         <div className="case-proof-list">
           <span>Virtual-character direction</span>
@@ -284,9 +284,8 @@ export default function ThienKimCaseStudy() {
           <div className="work-cat mono">Public output</div>
           <h2 className="dsp">See the project in its short-form context.</h2>
           <p>
-            The case study shows the system and selected media directly. The TikTok
-            account is linked as the public short-form channel for additional project
-            context and published outputs.
+            The case study contains the system and selected media itself. The TikTok
+            account is linked for additional published outputs and public context.
           </p>
           <a className="btn btn-accent" href={TIKTOK} target="_blank" rel="noopener noreferrer">
             Open @tieu.thienkim ↗
