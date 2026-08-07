@@ -18,7 +18,7 @@ export const experiences: Experience[] = [
     role: "Senior Graphic Designer",
     period: "Mar 2021 — Mar 2022",
     description:
-      "Created sales and marketing design materials in collaboration with the marketing team.",
+      "Created sales, promotional and digital design materials in collaboration with internal teams.",
   },
   {
     company: "Select Technology",
@@ -46,6 +46,6 @@ export const experiences: Experience[] = [
     role: "Graphic Designer",
     period: "2016 — 2017",
     description:
-      "Produced banners, websites and marketing collateral across brand campaigns.",
+      "Produced banners, websites and promotional collateral across brand projects.",
   },
 ];
