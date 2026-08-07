@@ -1,0 +1,61 @@
+name: Live AI Case Audit
+
+on:
+  push:
+    branches: [feature/ai-video-case-studies]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wait for Cloudflare and audit live portfolio
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://dangpham.pages.dev"
+          ready=0
+          for attempt in $(seq 1 30); do
+            echo "Attempt ${attempt}/30"
+            home_code=$(curl -L -sS --max-time 25 -o home.html -w '%{http_code}' "$base/" || true)
+            work_code=$(curl -L -sS --max-time 25 -o work.html -w '%{http_code}' "$base/work" || true)
+            tk_code=$(curl -L -sS --max-time 25 -o tk.html -w '%{http_code}' "$base/projects/thien-kim" || true)
+            wwm_code=$(curl -L -sS --max-time 25 -o wwm.html -w '%{http_code}' "$base/projects/wwm-build-lab" || true)
+            if [ "$home_code" = "200" ] && [ "$work_code" = "200" ] && [ "$tk_code" = "200" ] && [ "$wwm_code" = "200" ] \
+              && grep -Fq "Motion / AI Video" home.html \
+              && grep -Fq "AI video as a design workflow" tk.html \
+              && grep -Fq "Designing uncertainty into the product" wwm.html; then
+              ready=1
+              break
+            fi
+            echo "Not updated yet: home=$home_code work=$work_code tk=$tk_code wwm=$wwm_code"
+            sleep 15
+          done
+          test "$ready" = "1"
+
+          cat home.html work.html tk.html wwm.html > all.html
+          if grep -Eqi '>[^<]*marketing|marketing[^<]*<' all.html; then
+            echo "Marketing positioning is still visible"
+            exit 1
+          fi
+
+          grep -Fq "Open to Visual · Digital · Graphic · UI design roles" home.html
+          grep -Fq "Thiên Kim" home.html
+          grep -Fq "https://www.tiktok.com/@tieu.thienkim" tk.html
+          grep -Fq "View TikTok output" tk.html
+          grep -Fq "WWM Build Lab" wwm.html
+
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          work = Path('work.html').read_text(errors='ignore')
+          shots = set(re.findall(r'https://dribbble\.com/shots/[^"<>& ]+', work))
+          thumbs = set(re.findall(r'https://cdn\.dribbble\.com/userupload/\d+/file/[^?"<>& ]+', work))
+          print('unique shots=', len(shots), 'unique thumbnail assets=', len(thumbs))
+          if len(shots) != 89:
+              raise SystemExit(f'Expected 89 unique Dribbble shot URLs, got {len(shots)}')
+          if len(thumbs) != 89:
+              raise SystemExit(f'Expected 89 unique Dribbble thumbnail assets, got {len(thumbs)}')
+          PY
+
+          echo "Live AI case audit PASS"
