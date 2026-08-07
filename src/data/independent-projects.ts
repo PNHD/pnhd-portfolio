@@ -45,6 +45,7 @@ export const independentProjects: IndependentProject[] = [
     tags: ["Product UI", "React", "Systems thinking"],
     repoHref: "https://github.com/PNHD/homestead",
     liveHref: "https://wwm-homestead.pages.dev",
+    caseHref: "/projects/wwm-homestead",
     accent: "Planner + optimizer",
     thumbnail: "/projects/wwm-homestead.png",
     thumbnailAlt: "WWM Homestead Planner dashboard interface",

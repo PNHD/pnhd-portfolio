@@ -1,0 +1,15 @@
+:where(a, button):focus-visible {
+  outline: 2px solid var(--accent, #2F6BFF);
+  outline-offset: 3px;
+}
+
+:where(.case-story-grid, .case-detail-section, .case-output-feature) {
+  scroll-margin-top: 110px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ast, .mq-track, .sc-track, .pill .live { animation: none !important; }
+  .aurora { transform: none !important; }
+  .reveal, .rise { transition: none !important; animation: none !important; }
+}

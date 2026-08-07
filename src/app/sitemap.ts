@@ -25,5 +25,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.85,
     },
+    {
+      url: `${siteConfig.url}/projects/wwm-homestead`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
   ];
 }

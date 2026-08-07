@@ -30,7 +30,7 @@ export function WorkGallery() {
 
   return (
     <>
-      <div className="archive-filters" aria-label="Filter portfolio work">
+      <div className="archive-filters" role="group" aria-label="Filter portfolio work">
         {workCategories.map((category) => (
           <button
             key={category}
@@ -44,7 +44,7 @@ export function WorkGallery() {
         ))}
       </div>
 
-      <div className="work-grid archive-grid">
+      <div className="work-grid archive-grid" aria-live="polite">
         {items.map((item) => (
           <a
             key={item.href}
@@ -55,6 +55,8 @@ export function WorkGallery() {
             aria-label={`${item.title} — open source work`}
           >
             <div className="wthumb work-real-thumb">
+              {/* Responsive Dribbble CDN variants are supplied directly for static export. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="work-real-img"
                 src={dribbbleImage(item.image, 1000)}
