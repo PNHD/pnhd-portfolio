@@ -6,6 +6,7 @@ import "./globals.css";
 import "./portfolio-refresh.css";
 import "./project-cases.css";
 import "./project-cases-expanded.css";
+import "./accessibility.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
