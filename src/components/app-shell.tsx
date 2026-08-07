@@ -14,6 +14,13 @@ const NAV = [
   { label: "Contact", href: "/#contact" },
 ];
 
+const HERO_DRIBBBLE_HREFS = [
+  "https://dribbble.com/shots/12877734-Luxrious-Fashion-Web-Design",
+  "https://dribbble.com/shots/11430675-G-A-T-Sneaker-Shop-App-UI-Kit",
+  "https://dribbble.com/shots/14781306-iOS-14-Glossy-icons-Dark-Light-Versions-492-icons",
+  "https://dribbble.com/shots/11912884-3D-Sushi-Illustration",
+] as const;
+
 function ThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
   const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
@@ -90,6 +97,74 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [menuOpen]);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+
+    const showcase = document.querySelector<HTMLElement>(".hero-showcase");
+    if (!showcase) return;
+
+    showcase.removeAttribute("aria-hidden");
+    showcase.setAttribute("aria-label", "Selected Dribbble work");
+
+    const cleanups: Array<() => void> = [];
+
+    showcase.querySelectorAll<HTMLElement>(".sc-col").forEach((column, columnIndex) => {
+      const track = column.querySelector<HTMLElement>(".sc-track");
+      if (!track) return;
+
+      const cards = Array.from(track.querySelectorAll<HTMLElement>(":scope > .sc-card"));
+      const uniqueCount = Math.min(HERO_DRIBBBLE_HREFS.length, Math.floor(cards.length / 2));
+      if (!uniqueCount) return;
+
+      cards.forEach((card, index) => {
+        const href = HERO_DRIBBBLE_HREFS[index % uniqueCount];
+        const name = card.querySelector<HTMLElement>(".sc-name")?.textContent?.trim() || "work";
+        const openShot = () => window.open(href, "_blank", "noopener,noreferrer");
+        const onKeyDown = (event: KeyboardEvent) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openShot();
+          }
+        };
+
+        card.dataset.dribbbleHref = href;
+        card.setAttribute("role", "link");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", `Open ${name} on Dribbble`);
+        card.style.setProperty("--sc-shift", `${(Math.random() * 12 - 6).toFixed(1)}px`);
+        card.style.setProperty("--sc-tilt", `${(Math.random() * 1.4 - 0.7).toFixed(2)}deg`);
+        card.addEventListener("click", openShot);
+        card.addEventListener("keydown", onKeyDown);
+        cleanups.push(() => {
+          card.removeEventListener("click", openShot);
+          card.removeEventListener("keydown", onKeyDown);
+        });
+      });
+
+      const firstCycle = cards.slice(0, uniqueCount);
+      const secondCycle = cards.slice(uniqueCount, uniqueCount * 2);
+      const order = firstCycle.map((_, index) => index);
+
+      for (let i = order.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [order[i], order[j]] = [order[j], order[i]];
+      }
+
+      if (columnIndex === 1 && order.length > 1 && order.every((value, index) => value === index)) {
+        order.push(order.shift() as number);
+      }
+
+      [...order.map((index) => firstCycle[index]), ...order.map((index) => secondCycle[index])].forEach(
+        (card) => track.appendChild(card)
+      );
+
+      track.style.setProperty("--sc-speed", `${(24 + Math.random() * 11).toFixed(1)}s`);
+      track.style.setProperty("--sc-delay", `-${(2 + Math.random() * 13).toFixed(1)}s`);
+    });
+
+    return () => cleanups.forEach((cleanup) => cleanup());
+  }, [pathname]);
 
   useEffect(() => {
     const closeFrame = requestAnimationFrame(() => setMenuOpen(false));
