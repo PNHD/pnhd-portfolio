@@ -37,13 +37,39 @@ function walk(dir) {
 
 const srcFiles = walk(join(root, "src")).filter((path) => /\.(ts|tsx|css)$/.test(path));
 const srcText = srcFiles.map((path) => readFileSync(path, "utf8")).join("\n");
+const srcLower = srcText.toLowerCase();
 
-for (const forbidden of ["ui8", "nova-ui-kit", "meditation-app", "analytics-dashboard", "3d-landing-page"]) {
-  if (srcText.toLowerCase().includes(forbidden)) errors.push(`Forbidden stale portfolio token found: ${forbidden}`);
+for (const forbidden of [
+  "ui8",
+  "nova-ui-kit",
+  "meditation-app",
+  "analytics-dashboard",
+  "3d-landing-page",
+]) {
+  if (srcLower.includes(forbidden)) errors.push(`Forbidden stale portfolio token found: ${forbidden}`);
+}
+
+if (srcLower.includes("marketing")) {
+  errors.push("User-facing src still contains marketing positioning");
 }
 
 if (existsSync(join(root, "src/app/work/[slug]/page.tsx"))) {
   errors.push("Placeholder case-study route still exists");
+}
+
+for (const required of [
+  "src/app/projects/wwm-build-lab/page.tsx",
+  "src/app/projects/thien-kim/page.tsx",
+]) {
+  if (!existsSync(join(root, required))) errors.push(`Required project case study missing: ${required}`);
+}
+
+const projects = read("src/data/independent-projects.ts");
+if (!projects.includes("https://www.tiktok.com/@tieu.thienkim")) {
+  errors.push("Thiên Kim TikTok output link missing");
+}
+if (!projects.includes('/projects/wwm-build-lab') || !projects.includes('/projects/thien-kim')) {
+  errors.push("Mini case-study links missing from independent project data");
 }
 
 if (errors.length) {
@@ -56,4 +82,7 @@ console.log("Portfolio audit PASS");
 console.log(`- ${hrefs.length}/${expected} Dribbble shots mapped`);
 console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
+console.log("- user-facing marketing positioning absent from src");
+console.log("- WWM Build Lab and Thiên Kim case-study routes present");
+console.log("- Thiên Kim TikTok output link present");
 console.log("- stale UI8 / placeholder case-study tokens absent from src");
