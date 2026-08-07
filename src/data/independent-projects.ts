@@ -34,8 +34,8 @@ export const independentProjects: IndependentProject[] = [
     liveHref: "https://www.tiktok.com/@tieu.thienkim",
     caseHref: "/projects/thien-kim",
     accent: "AI content system",
-    thumbnail: "/projects/thien-kim-cover.svg",
-    thumbnailAlt: "Frame from a Thiên Kim AI-generated short-form video",
+    thumbnail: "/projects/thien-kim-collage.webp",
+    thumbnailAlt: "Editorial collage showing Thiên Kim across multiple OOTD looks",
   },
   {
     title: "WWM Homestead Planner",

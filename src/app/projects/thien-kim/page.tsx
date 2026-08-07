@@ -60,20 +60,20 @@ export default function ThienKimCaseStudy() {
           </div>
         </div>
 
-        <figure className="case-hero-media-block case-hero-media-portrait">
+        <figure className="case-hero-media-block">
           <div className="case-hero-frame">
             <img
-              src="/projects/thien-kim-cover.svg"
-              alt="Frame from the Thiên Kim AI-generated short-form project"
+              src="/projects/thien-kim-collage.webp"
+              alt="Editorial collage showing Thiên Kim across multiple OOTD looks"
             />
             <div className="case-media-hud mono" aria-hidden="true">
-              <span>REFERENCE / OUTPUT</span>
-              <span>9:16</span>
+              <span>VISUAL RANGE / OOTD</span>
+              <span>AI CHARACTER</span>
             </div>
           </div>
           <figcaption>
-            Real project frame used in the portfolio. The case study avoids invented
-            reach or performance metrics.
+            A sharper project cover built from multiple Thiên Kim looks to show styling
+            range and character consistency at a glance.
           </figcaption>
         </figure>
       </header>
@@ -133,7 +133,7 @@ export default function ThienKimCaseStudy() {
 
       <section className="case-output-feature" id="output">
         <div className="case-output-image" aria-hidden="true">
-          <img src="/projects/thien-kim-cover.svg" alt="" />
+          <img src="/projects/thien-kim-collage.webp" alt="" />
         </div>
         <div className="case-output-copy">
           <div className="work-cat mono">Published output</div>
