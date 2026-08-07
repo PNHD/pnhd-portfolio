@@ -26,8 +26,7 @@ export default function Work() {
         <p className="case-blurb">
           A broader view of my work beyond the homepage selection: independent tools,
           AI image/video workflows, web and product UI, motion, 3D, illustration and
-          icon systems. Practice, copywork and tutorial-based studies stay labeled
-          where relevant.
+          icon systems. Earlier visual studies remain clearly labeled where relevant.
         </p>
       </div>
 
