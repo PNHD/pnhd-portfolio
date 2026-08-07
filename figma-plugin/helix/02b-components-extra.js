@@ -80,7 +80,6 @@
       // vertical layout: width = counter axis (fixed), height hugs content
       n.counterAxisSizingMode = "FIXED";
       n.resize(w, n.height);
-      n.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     }
     return n;
   };
@@ -97,119 +96,14 @@
     return d;
   };
 
-  function ensurePage(name, matcher) {
-    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
-    if (found) return found;
-    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
-    if (spare) { spare.name = name; return spare; }
-    try { const p = figma.createPage(); p.name = name; return p; }
-    catch (e) { return figma.currentPage; }
-  }
-  // Real Phosphor icon from HELIX_ICONS (icons-svg.js). Falls back to a dot
-  // if the icon pack was not pasted/bundled first.
-  const icon = (key, size, colorHex, opacity) => {
-    const svg = (typeof HELIX_ICONS !== "undefined" && HELIX_ICONS[key]) ? HELIX_ICONS[key] : null;
-    if (!svg) {
-      const e = figma.createEllipse();
-      e.resize(size, size);
-      e.fills = [solid(colorHex, opacity)];
-      return e;
-    }
-    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
-    node.name = "icon/" + key;
-    const paint = [solid(colorHex, opacity)];
-    for (const child of node.findAll(() => true)) {
-      if ("fills" in child && Array.isArray(child.fills) && child.fills.length) child.fills = paint;
-      if ("strokes" in child && Array.isArray(child.strokes) && child.strokes.length) child.strokes = paint;
-    }
-    node.fills = [];
-    return node;
-  };
-
-  // figma.currentPage assignment is unreliable on newer Figma builds —
-  // use setCurrentPageAsync and always parent nodes explicitly.
-  async function gotoPage(p) {
-    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
-    try { figma.currentPage = p; } catch (e) {}
-  }
-  // Named canvas Section (falls back to nothing on very old Figma)
-  const wrapSection = (pageNode, title, nodes) => {
-    if (!figma.createSection || !nodes.length) return null;
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    for (const n of nodes) {
-      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
-      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
-    }
-    const s = figma.createSection();
-    s.name = title;
-    pageNode.appendChild(s);
-    s.x = minX - 64; s.y = minY - 64;
-    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
-    for (const n of nodes) {
-      const ax = n.x, ay = n.y;
-      s.appendChild(n);
-      n.x = ax - s.x; n.y = ay - s.y;
-    }
-    return s;
-  };
-  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
-  function resolvePage(candidates, createName, createMatcher) {
-    for (const t of candidates) {
-      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
-      if (p) return p;
-    }
-    return ensurePage(createName, createMatcher);
-  }
-  // Real coin logos from HELIX_COINS (coins-svg.js, MIT) — falls back to a tinted dot
-  const COIN_HEX = { "#F7931A": "btc", "#627EEA": "eth", "#14F195": "sol", "#F3BA2F": "bnb", "#00AAE4": "xrp", "#0033AD": "ada", "#E84142": "avax", "#2A5ADA": "link", "#2775CA": "usdc", "#8247E5": "matic" };
-  const coinLogo = (slug, size, fallbackHex) => {
-    const svg = (typeof HELIX_COINS !== "undefined" && HELIX_COINS[slug]) ? HELIX_COINS[slug] : null;
-    if (!svg) {
-      const e = figma.createEllipse();
-      e.resize(size, size);
-      e.fills = [solid(fallbackHex || "#3F4656")];
-      return e;
-    }
-    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
-    node.name = "coin/" + slug;
-    node.fills = [];
-    return node;
-  };
-  const page = resolvePage(["🗂 Components · Data", "🧩 Components"], "🧩 Components", /Components/);
-  await gotoPage(page);
-  const DESCRIPTIONS = {
-    "Stat Card": "KPI tile: icon, delta badge, label and headline value.",
-    "Coin Card": "Asset snapshot with logo, price and 7-day sparkline. Trend: Up / Down.",
-    "Wallet Card": "Gradient balance card with wallet address. Hero element for wallet screens.",
-    "Alert": "Inline banner. Tones: Success, Warning, Danger, Info — icon + title + body.",
-    "Toast": "Floating notification with icon tile, message and dismiss.",
-    "Tooltip": "Small contextual hint with pointer arrow.",
-    "Progress Bar": "Linear progress with label and percentage.",
-    "Progress Circle": "Radial progress ring with center value.",
-    "Slider": "Single-thumb range input (slippage, allocation…).",
-    "Stepper": "3-step flow indicator: done / current / upcoming.",
-    "Skeleton": "Loading placeholder bars.",
-    "Donut Chart": "Portfolio allocation donut with legend.",
-    "Bar Chart": "Mini volume/bar chart block.",
-    "Markets Table Row": "Full market row: rank, asset, price, 24h change, sparkline, action. Trend: Up / Down.",
-    "Order Book Row": "Ask/Bid book row with depth bar. Side: Ask / Bid.",
-  };
-  const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
-  const placedSets = [];
+  const page = figma.root.children.find((p) => p.name === "🧩 Components") || figma.currentPage;
+  figma.currentPage = page;
   let yOffset = 0; // continue below whatever 02-components.js created
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
-    if (DESCRIPTIONS[name]) { try { set.description = DESCRIPTIONS[name]; } catch (e) {} }
-    page.appendChild(set);
-    const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
-    tag.name = "label/" + name;
-    page.appendChild(tag);
-    tag.x = 0; tag.y = yOffset;
-    yOffset += 34;
     set.x = 0; set.y = yOffset;
-    yOffset += set.height + 96;
-    placedSets.push({ name, nodes: [tag, set] });
+    yOffset += set.height + 120;
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -241,7 +135,7 @@
     tile.counterAxisSizingMode = "FIXED";
     tile.cornerRadius = 12;
     tile.fills = [solid("#6366F1", 0.14)];
-    tile.appendChild(icon("chart-bar-fill", 22, "#6366F1"));
+    tile.appendChild(vec(18, 14, "M 1 13 L 1 6 M 6 13 L 6 1 M 11 13 L 11 8 M 16 13 L 16 4", "#6366F1", 2.4));
     top.appendChild(tile);
     const delta = autol(figma.createFrame(), "HORIZONTAL", { px: 8, py: 3, gap: 4 });
     delta.name = "Delta";
@@ -277,8 +171,10 @@
 
       const head = autol(figma.createFrame(), "HORIZONTAL", { gap: 11, main: "MIN" });
       head.fills = [];
-      const coin = coinLogo(up ? "btc" : "sol", 38, up ? "#F7931A" : "#14F195");
+      const coin = figma.createEllipse();
       coin.name = "Coin";
+      coin.resize(38, 38);
+      coin.fills = [solid(up ? "#F7931A" : "#14F195")];
       head.appendChild(coin);
       const id = autol(figma.createFrame(), "VERTICAL", { gap: 1, cross: "MIN" });
       id.fills = [];
@@ -297,7 +193,7 @@
       c.appendChild(spark);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Coin Card");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Coin Card");
   }
 
   // ═════════════════════════════════════════════
@@ -307,9 +203,9 @@
     const c = figma.createComponent();
     c.name = "Wallet Card";
     autol(c, "VERTICAL", { p: 24, gap: 6, cross: "MIN" });
+    c.primaryAxisSizingMode = "AUTO";
     c.counterAxisSizingMode = "FIXED";
     c.resize(340, 10);
-    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 20;
     c.fills = [ACCENT_GRAD];
     c.clipsContent = true;
@@ -325,7 +221,11 @@
     const head = autol(figma.createFrame(), "HORIZONTAL", { main: "SPACE_BETWEEN" });
     head.fills = [];
     head.appendChild(txt("Main Wallet", F.bodySemi, 12.5, "#FFFFFF", 0.85));
-    head.appendChild(icon("cube-fill", 20, "#FFFFFF", 0.85));
+    const cube = figma.createRectangle();
+    cube.resize(18, 18);
+    cube.cornerRadius = 4;
+    cube.fills = [solid("#FFFFFF", 0.85)];
+    head.appendChild(cube);
     c.appendChild(head);
     head.layoutSizingHorizontal = "FILL";
 
@@ -342,7 +242,7 @@
     const foot = autol(figma.createFrame(), "HORIZONTAL", { main: "SPACE_BETWEEN" });
     foot.fills = [];
     foot.appendChild(txt("0x7f3a…b29c", F.mono, 12.5, "#FFFFFF", 0.78));
-    foot.appendChild(icon("copy", 15, "#FFFFFF", 0.78));
+    foot.appendChild(txt("⧉", F.body, 14, "#FFFFFF", 0.78));
     c.appendChild(foot);
     foot.layoutSizingHorizontal = "FILL";
     placeSet(c, "Wallet Card");
@@ -353,24 +253,28 @@
   // ═════════════════════════════════════════════
   {
     const tones = {
-      Success: { bg: solid("#10B981", 0.09), bd: solid("#10B981", 0.22), icon: "#34D399", ik: "check-circle-fill", tc: "#D1FAE5", title: "Transaction confirmed", body: "0.5 ETH sent successfully." },
-      Warning: { bg: solid("#F59E0B", 0.09), bd: solid("#F59E0B", 0.22), icon: "#FBBF24", ik: "warning-fill",      tc: "#FEF3C7", title: "Network congestion",     body: "Gas fees are elevated." },
-      Danger:  { bg: solid("#F43F5E", 0.09), bd: solid("#F43F5E", 0.22), icon: "#FB7185", ik: "x-circle-fill",     tc: "#FECDD3", title: "Swap failed",            body: "Slippage tolerance exceeded." },
-      Info:    { bg: solid("#6366F1", 0.09), bd: solid("#6366F1", 0.22), icon: "#A5ABFC", ik: "info-fill",         tc: "#E0E3FF", title: "New staking pool",       body: "Earn up to 6.4% APY." },
+      Success: { bg: solid("#10B981", 0.09), bd: solid("#10B981", 0.22), icon: "#34D399", tc: "#D1FAE5", title: "Transaction confirmed", body: "0.5 ETH sent successfully." },
+      Warning: { bg: solid("#F59E0B", 0.09), bd: solid("#F59E0B", 0.22), icon: "#FBBF24", tc: "#FEF3C7", title: "Network congestion",     body: "Gas fees are elevated." },
+      Danger:  { bg: solid("#F43F5E", 0.09), bd: solid("#F43F5E", 0.22), icon: "#FB7185", tc: "#FECDD3", title: "Swap failed",            body: "Slippage tolerance exceeded." },
+      Info:    { bg: solid("#6366F1", 0.09), bd: solid("#6366F1", 0.22), icon: "#A5ABFC", tc: "#E0E3FF", title: "New staking pool",       body: "Earn up to 6.4% APY." },
     };
     const comps = [];
     for (const [tn, tc] of Object.entries(tones)) {
       const c = figma.createComponent();
       c.name = `Tone=${tn}`;
       autol(c, "HORIZONTAL", { p: 14, gap: 11, cross: "MIN", main: "MIN" });
+      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(340, 10);
-      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.cornerRadius = 13;
       c.fills = [tc.bg];
       c.strokes = [tc.bd];
       c.strokeWeight = 1;
-      c.appendChild(icon(tc.ik, 20, tc.icon));
+      const ic = figma.createEllipse();
+      ic.name = "Icon";
+      ic.resize(20, 20);
+      ic.fills = [solid(tc.icon)];
+      c.appendChild(ic);
       const col = autol(figma.createFrame(), "VERTICAL", { gap: 2, cross: "MIN" });
       col.fills = [];
       col.appendChild(txt(tc.title, F.bodySemi, 13, tc.tc));
@@ -379,7 +283,7 @@
       col.layoutSizingHorizontal = "FILL";
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Alert");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Alert");
   }
 
   // ═════════════════════════════════════════════
@@ -389,9 +293,9 @@
     const c = figma.createComponent();
     c.name = "Toast";
     autol(c, "HORIZONTAL", { px: 16, py: 14, gap: 12, main: "MIN" });
+    c.counterAxisSizingMode = "AUTO";
     c.primaryAxisSizingMode = "FIXED";
     c.resize(340, 10);
-    c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 14;
     c.fills = [solid("#1E232E")];
     c.strokes = [solid("#FFFFFF", 0.1)];
@@ -404,7 +308,7 @@
     tile.counterAxisSizingMode = "FIXED";
     tile.cornerRadius = 10;
     tile.fills = [solid("#34D399", 0.14)];
-    tile.appendChild(icon("arrow-down-left-fill", 18, "#34D399"));
+    tile.appendChild(vec(14, 14, "M 12 2 L 2 12 M 2 6 L 2 12 L 8 12", "#34D399", 2));
     c.appendChild(tile);
     const col = autol(figma.createFrame(), "VERTICAL", { gap: 2, cross: "MIN" });
     col.fills = [];
@@ -412,7 +316,7 @@
     col.appendChild(txt("Just now · from 0x9f…21", F.body, 11.5, "#5E6776"));
     c.appendChild(col);
     col.layoutSizingHorizontal = "FILL";
-    const close = icon("x-bold", 12, "#5E6776");
+    const close = vec(10, 10, "M 0 0 L 10 10 M 10 0 L 0 10", "#5E6776", 1.6);
     close.name = "Close";
     c.appendChild(close);
     placeSet(c, "Toast");
@@ -455,7 +359,6 @@
     autol(c, "VERTICAL", { gap: 9, cross: "MIN" });
     c.counterAxisSizingMode = "FIXED";
     c.resize(280, 10);
-    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.fills = [];
     const head = autol(figma.createFrame(), "HORIZONTAL", { main: "SPACE_BETWEEN" });
     head.fills = [];
@@ -606,7 +509,6 @@
     autol(c, "VERTICAL", { gap: 9, cross: "MIN" });
     c.counterAxisSizingMode = "FIXED";
     c.resize(280, 10);
-    c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.fills = [];
     for (const wPct of [0.7, 1, 0.45]) {
       const bar = figma.createRectangle();
@@ -712,9 +614,9 @@
       const c = figma.createComponent();
       c.name = `Trend=${dir}`;
       autol(c, "HORIZONTAL", { px: 8, py: 14, gap: 12, main: "MIN" });
+      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(1080, 10);
-      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
       c.strokes = [solid("#FFFFFF", 0.04)];
       c.strokeWeight = 1;
@@ -729,7 +631,10 @@
       const id = autol(figma.createFrame(), "HORIZONTAL", { gap: 11, main: "MIN" });
       id.name = "Asset";
       id.fills = [];
-      id.appendChild(coinLogo(dir === "Up" ? "btc" : "sol", 30, d.coin));
+      const coin = figma.createEllipse();
+      coin.resize(30, 30);
+      coin.fills = [solid(d.coin)];
+      id.appendChild(coin);
       const nameCol = autol(figma.createFrame(), "VERTICAL", { gap: 1, cross: "MIN" });
       nameCol.fills = [];
       nameCol.appendChild(txt(d.name, F.bodySemi, 13.5, "#F2F4F8"));
@@ -764,7 +669,7 @@
       c.appendChild(trade);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 1), page), "Markets Table Row");
+    placeSet(figma.combineAsVariants(gridify(comps, 1), page), "Markets Table Row");
   }
 
   // ═════════════════════════════════════════════
@@ -778,9 +683,9 @@
       const c = figma.createComponent();
       c.name = `Side=${side}`;
       autol(c, "HORIZONTAL", { px: 0, py: 3.5, gap: 6, main: "MIN" });
+      c.counterAxisSizingMode = "AUTO";
       c.primaryAxisSizingMode = "FIXED";
       c.resize(260, 10);
-      c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
       c.clipsContent = false;
 
@@ -807,20 +712,9 @@
       c.appendChild(tot);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 1), page), "Order Book Row");
+    placeSet(figma.combineAsVariants(gridify(comps, 1), page), "Order Book Row");
   }
 
-  const GROUPS = [
-    ["🃏 Cards", ["Stat Card", "Coin Card", "Wallet Card"]],
-    ["💬 Feedback", ["Alert", "Toast", "Tooltip"]],
-    ["⏳ Progress & Loaders", ["Progress Bar", "Progress Circle", "Slider", "Stepper", "Skeleton"]],
-    ["📊 Charts & Data", ["Donut Chart", "Bar Chart", "Markets Table Row", "Order Book Row"]],
-  ];
-  for (const [title, names] of GROUPS) {
-    const nodes = [];
-    for (const ps of placedSets) if (names.includes(ps.name)) nodes.push(...ps.nodes);
-    wrapSection(page, title, nodes);
-  }
   figma.viewport.scrollAndZoomIntoView(page.children);
-  figma.closePlugin("✅ Helix extra components (15 sets, sectioned): Stat Card, Coin Card, Wallet Card, Alert, Toast, Tooltip, Progress ×2, Slider, Stepper, Skeleton, Donut, Bar Chart, Table Row, Order Book Row");
+  figma.closePlugin("✅ Helix extra components: Stat Card, Coin Card, Wallet Card, Alert, Toast, Tooltip, Progress ×2, Slider, Stepper, Skeleton, Donut, Bar Chart, Table Row, Order Book Row");
 })();

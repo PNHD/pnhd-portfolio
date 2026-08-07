@@ -81,24 +81,7 @@
   const H = (o) => frame("HORIZONTAL", { cross: "CENTER", ...(o || {}) });
   const V = (o) => frame("VERTICAL", { cross: "MIN", ...(o || {}) });
   const fill = (node) => { node.layoutSizingHorizontal = "FILL"; return node; };
-  // Real coin logos from HELIX_COINS (coins-svg.js, MIT) — falls back to a tinted dot
-  const COIN_HEX = { "#F7931A": "btc", "#627EEA": "eth", "#14F195": "sol", "#F3BA2F": "bnb", "#00AAE4": "xrp", "#0033AD": "ada", "#E84142": "avax", "#2A5ADA": "link", "#2775CA": "usdc", "#8247E5": "matic" };
-  const coinLogo = (slug, size, fallbackHex) => {
-    const svg = (typeof HELIX_COINS !== "undefined" && HELIX_COINS[slug]) ? HELIX_COINS[slug] : null;
-    if (!svg) {
-      const e = figma.createEllipse();
-      e.resize(size, size);
-      e.fills = [solid(fallbackHex || "#3F4656")];
-      return e;
-    }
-    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
-    node.name = "coin/" + slug;
-    node.fills = [];
-    return node;
-  };
   const coinDot = (col, s) => {
-    const slug = COIN_HEX[col];
-    if (slug) return coinLogo(slug, s, col);
     const e = figma.createEllipse();
     e.resize(s, s);
     e.fills = [solid(col)];
@@ -115,89 +98,7 @@
     });
     return d;
   };
-  // Real Phosphor icon from HELIX_ICONS (icons-svg.js). Falls back to a dot.
-  const icon = (key, size, colorHex, opacity) => {
-    const svg = (typeof HELIX_ICONS !== "undefined" && HELIX_ICONS[key]) ? HELIX_ICONS[key] : null;
-    if (!svg) {
-      const e = figma.createEllipse();
-      e.resize(size, size);
-      e.fills = [solid(colorHex, opacity)];
-      return e;
-    }
-    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
-    node.name = "icon/" + key;
-    const paint = [solid(colorHex, opacity)];
-    for (const child of node.findAll(() => true)) {
-      if ("fills" in child && Array.isArray(child.fills) && child.fills.length) child.fills = paint;
-      if ("strokes" in child && Array.isArray(child.strokes) && child.strokes.length) child.strokes = paint;
-    }
-    node.fills = [];
-    return node;
-  };
-  // Instance of a component built by 02/02b — screens consume the library
-  const compPages = figma.root.children.filter((p) => /Components/.test(p.name));
-  const findSet = (setName) => {
-    for (const pg of compPages) {
-      const direct = pg.children.find((n) => n.name === setName);
-      if (direct) return direct;
-      // component sets live inside named Sections on the component pages
-      for (const sec of pg.children) {
-        if (sec.children) {
-          const hit = sec.children.find((n) => n.name === setName);
-          if (hit) return hit;
-        }
-      }
-    }
-    return null;
-  };
-  const setCache = {};
-  const inst = (setName, variantName, textOverride) => {
-    if (!compPages.length) return null;
-    if (!(setName in setCache)) setCache[setName] = findSet(setName);
-    const set = setCache[setName];
-    if (!set) return null;
-    const comp = set.type === "COMPONENT" ? set
-      : (set.children || []).find((k) => k.type === "COMPONENT" && k.name === variantName)
-        || (set.children || []).find((k) => k.type === "COMPONENT");
-    if (!comp || comp.type !== "COMPONENT") return null;
-    const node = comp.createInstance();
-    if (textOverride) {
-      const t = node.findOne((k) => k.type === "TEXT");
-      if (t) t.characters = textOverride;
-    }
-    return node;
-  };
-  const timeframePill = (label, active) => {
-    const i = inst("Pill / Timeframe", active ? "State=Active" : "State=Inactive", label);
-    if (i) return i;
-    const p = H({ px: 11, py: 5, r: 8, bg: active ? solid("#6366F1", 0.14) : undefined });
-    p.appendChild(txt(label, F.monoSemi, 11.5, active ? "#A5ABFC" : "#9AA4B2"));
-    return p;
-  };
-  const changeBadge = (label, up) => {
-    const i = inst("Badge / Change", up === false ? "Direction=Down" : "Direction=Up", label);
-    if (i) return i;
-    const b = H({ px: 9, py: 4, gap: 4, bg: solid(up === false ? "#FB7185" : "#34D399", 0.12), r: 7 });
-    b.appendChild(txt(label, F.monoSemi, 12, up === false ? "#FB7185" : "#34D399"));
-    return b;
-  };
-  const avatarInst = (sizeName) => {
-    const i = inst("Avatar", `Size=${sizeName || "MD"}, Type=Default`);
-    if (i) return i;
-    return coinDot("#3F4656", sizeName === "LG" ? 46 : 36);
-  };
-  const iconCircleBtn = (key, s, colorHex) => {
-    const w = H({ main: "CENTER", bg: solid("#FFFFFF", 0.05), r: 999 });
-    w.resize(s, s);
-    w.primaryAxisSizingMode = "FIXED";
-    w.counterAxisSizingMode = "FIXED";
-    w.appendChild(icon(key, Math.round(s * 0.48), colorHex || "#C8CFDA"));
-    return w;
-  };
   const gradBtn = (label, w, hgt, fs) => {
-    const size = hgt >= 48 ? "LG" : hgt <= 34 ? "SM" : "MD";
-    const i = inst("Button", `Type=Primary, Size=${size}, State=Default`, label);
-    if (i) { i.name = "Button / " + label; return i; }
     const b = H({ main: "CENTER", px: 20, bg: ACCENT_GRAD, r: Math.round(hgt * 0.28) });
     b.name = "Button";
     b.minHeight = hgt;
@@ -206,68 +107,19 @@
     return b;
   };
 
-  function ensurePage(name, matcher) {
-    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
-    if (found) return found;
-    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
-    if (spare) { spare.name = name; return spare; }
-    try { const p = figma.createPage(); p.name = name; return p; }
-    catch (e) { return figma.currentPage; }
-  }
-  async function gotoPage(p) {
-    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
-    try { figma.currentPage = p; } catch (e) {}
-  }
-  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
-  function resolvePage(candidates, createName, createMatcher) {
-    for (const t of candidates) {
-      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
-      if (p) return p;
-    }
-    return ensurePage(createName, createMatcher);
-  }
-  const scrPage = resolvePage(["🖥 Screens · Web", "📱 Screens"], "📱 Screens", /Screens/);
-  const mobPage = resolvePage(["📱 Screens · Mobile", "📱 Screens"], "📱 Screens", /Screens/);
-  await gotoPage(scrPage);
-
-  // Each screen lives in a named Section — organized, titled, never overlapping
-  let yCursor = 0;
-  for (const ch of scrPage.children) yCursor = Math.max(yCursor, ch.y + ch.height + 160);
-  let pendingTitle = null;
-  const sectionLabel = (label) => { pendingTitle = label; };
-  const placeScreen = (node, hgt) => {
-    if (figma.createSection && pendingTitle) {
-      const s = figma.createSection();
-      s.name = pendingTitle;
-      scrPage.appendChild(s);
-      s.x = 0; s.y = yCursor;
-      s.resizeWithoutConstraints(node.width + 120, hgt + 120);
-      s.appendChild(node);
-      node.x = 60; node.y = 60;
-      yCursor += hgt + 220;
-    } else {
-      if (pendingTitle) {
-        const t = txt(pendingTitle, F.disp, 26, "#F2F4F8");
-        scrPage.appendChild(t);
-        t.x = 0; t.y = yCursor;
-        yCursor += 60;
-      }
-      node.x = 0; node.y = yCursor;
-      yCursor += hgt + 120;
-    }
-    pendingTitle = null;
-  };
+  const webPage = figma.root.children.find((p) => p.name === "🖥 Screens · Web") || figma.currentPage;
+  const mobPage = figma.root.children.find((p) => p.name === "📱 Screens · Mobile") || figma.currentPage;
 
   // ════════════════════════════════════════════════════════
   // SCREEN 1 — TRADING TERMINAL (desktop · dark)
   // ════════════════════════════════════════════════════════
+  figma.currentPage = webPage;
   {
-    sectionLabel("🖥  Trading Terminal · Desktop · Dark");
     const root = H({ name: "Trading Terminal · Dark", bg: solid("#0B0E13"), pw: "FIXED", ch: "FIXED", cross: "MIN" });
     root.resize(1440, 720);
     root.clipsContent = true;
-    scrPage.appendChild(root);
-    placeScreen(root, 720);
+    webPage.appendChild(root);
+    root.x = 0; root.y = 0;
 
     // ── Icon rail ──
     const rail = V({ py: 18, gap: 8, cross: "CENTER", bg: solid("#0B0E13"), bd: solid("#FFFFFF", 0.06) });
@@ -283,18 +135,24 @@
     rail.appendChild(logo);
     const railGap = figma.createFrame(); railGap.resize(10, 10); railGap.fills = [];
     rail.appendChild(railGap);
-    ["squares-four", "chart-line-up", "chart-bar-fill", "wallet", "image-square", "percent"].forEach((key, i) => {
+    for (let i = 0; i < 6; i++) {
       const it = H({ main: "CENTER", r: 11, bg: i === 2 ? solid("#6366F1", 0.16) : undefined });
       it.resize(40, 40);
       it.primaryAxisSizingMode = "FIXED";
       it.counterAxisSizingMode = "FIXED";
-      it.appendChild(icon(key, 21, i === 2 ? "#6366F1" : "#5E6776"));
+      const sq = figma.createRectangle();
+      sq.resize(18, 18);
+      sq.cornerRadius = 4;
+      sq.fills = [];
+      sq.strokes = [solid(i === 2 ? "#6366F1" : "#5E6776")];
+      sq.strokeWeight = 2;
+      it.appendChild(sq);
       rail.appendChild(it);
-    });
+    }
     const railSpace = figma.createFrame(); railSpace.fills = [];
     rail.appendChild(railSpace);
     railSpace.layoutSizingVertical = "FILL";
-    rail.appendChild(avatarInst("MD"));
+    rail.appendChild(coinDot("#3F4656", 34));
     root.appendChild(rail);
 
     // ── Main column ──
@@ -315,7 +173,9 @@
     pair.appendChild(pairCol);
     head.appendChild(pair);
     head.appendChild(txt("94,210.50", F.monoSemi, 21, "#34D399"));
-    head.appendChild(changeBadge("+2.41%", true));
+    const chgBadge = H({ px: 9, py: 4, gap: 4, bg: solid("#34D399", 0.12), r: 7 });
+    chgBadge.appendChild(txt("↗ +2.41%", F.monoSemi, 12, "#34D399"));
+    head.appendChild(chgBadge);
     const headSpace = figma.createFrame(); headSpace.fills = [];
     head.appendChild(headSpace);
     fill(headSpace);
@@ -330,7 +190,11 @@
     tf.name = "Timeframes";
     main.appendChild(tf);
     fill(tf);
-    ["1H", "4H", "1D", "1W"].forEach((label, i) => tf.appendChild(timeframePill(label, i === 0)));
+    ["1H", "4H", "1D", "1W"].forEach((label, i) => {
+      const p = H({ px: 11, py: 5, r: 8, bg: i === 0 ? solid("#6366F1", 0.14) : undefined });
+      p.appendChild(txt(label, F.monoSemi, 11.5, i === 0 ? "#A5ABFC" : "#9AA4B2"));
+      tf.appendChild(p);
+    });
 
     // ── Candle chart ──
     const chart = figma.createFrame();
@@ -495,12 +359,11 @@
   // SCREEN 2 — PORTFOLIO DASHBOARD (desktop · light)
   // ════════════════════════════════════════════════════════
   {
-    sectionLabel("🖥  Portfolio Dashboard · Desktop · Light");
     const root = H({ name: "Portfolio Dashboard · Light", bg: solid("#F6F7F9"), pw: "FIXED", ch: "FIXED", cross: "MIN" });
     root.resize(1440, 800);
     root.clipsContent = true;
-    scrPage.appendChild(root);
-    placeScreen(root, 800);
+    webPage.appendChild(root);
+    root.x = 0; root.y = 860;
 
     // ── Sidebar ──
     const side = V({ px: 16, py: 20, gap: 4, bg: solid("#FFFFFF"), bd: solid("#E6E8EC") });
@@ -519,10 +382,15 @@
     side.appendChild(brand);
     const brandGap = figma.createFrame(); brandGap.resize(10, 18); brandGap.fills = [];
     side.appendChild(brandGap);
-    const navItems = [["Dashboard", "squares-four-fill", true], ["Markets", "chart-line-up", false], ["Wallet", "wallet", false], ["Earn", "hand-coins", false], ["NFTs", "image-square", false], ["Settings", "gear-six", false]];
-    for (const [label, key, active] of navItems) {
+    const navItems = [["Dashboard", true], ["Markets", false], ["Wallet", false], ["Earn", false], ["NFTs", false], ["Settings", false]];
+    for (const [label, active] of navItems) {
       const it = H({ px: 12, py: 10, gap: 11, r: 11, bg: active ? solid("#6366F1", 0.1) : undefined });
-      it.appendChild(icon(key, 19, active ? "#6366F1" : "#5A6473"));
+      const ic = figma.createRectangle();
+      ic.resize(17, 17);
+      ic.cornerRadius = 4;
+      ic.fills = active ? [solid("#6366F1")] : [];
+      if (!active) { ic.strokes = [solid("#5A6473")]; ic.strokeWeight = 1.7; }
+      it.appendChild(ic);
       it.appendChild(txt(label, active ? F.bodySemi : F.bodyMed, 13.5, active ? "#6366F1" : "#5A6473"));
       side.appendChild(it);
       fill(it);
@@ -531,7 +399,7 @@
     side.appendChild(sideSpace);
     sideSpace.layoutSizingVertical = "FILL";
     const prof = H({ p: 10, gap: 10, bg: solid("#F6F7F9"), r: 12 });
-    prof.appendChild(avatarInst("MD"));
+    prof.appendChild(coinDot("#C7CCFE", 34));
     const profCol = V({ gap: 1 });
     profCol.appendChild(txt("Alex Rivera", F.bodySemi, 12.5, "#0E121B"));
     profCol.appendChild(txt("Pro account", F.body, 11, "#9099A6"));
@@ -555,15 +423,13 @@
     search.minHeight = 38;
     search.primaryAxisSizingMode = "FIXED";
     search.resize(240, 38);
-    search.itemSpacing = 8;
-    search.appendChild(icon("magnifying-glass", 16, "#9099A6"));
     search.appendChild(txt("Search assets…", F.body, 13, "#9099A6"));
     top.appendChild(search);
     const bell = H({ main: "CENTER", bg: solid("#F1F3F6"), r: 10 });
     bell.resize(38, 38);
     bell.primaryAxisSizingMode = "FIXED";
     bell.counterAxisSizingMode = "FIXED";
-    bell.appendChild(icon("bell", 18, "#5A6473"));
+    bell.appendChild(coinDot("#5A6473", 16));
     top.appendChild(bell);
     top.appendChild(gradBtn("+ Deposit", null, 38, 13));
     main.appendChild(top);
@@ -624,9 +490,9 @@
     fill(chartCard);
 
     const rightCol = V({ gap: 18 });
+    rightCol.primaryAxisSizingMode = "AUTO";
     rightCol.counterAxisSizingMode = "FIXED";
     rightCol.resize(400, 100);
-    rightCol.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     split.appendChild(rightCol);
 
     const alloc = V({ p: 20, gap: 16, bg: solid("#FFFFFF"), bd: solid("#E6E8EC"), r: 16 });
@@ -670,9 +536,9 @@
 
     const actions = H({ p: 16, gap: 10, bg: solid("#FFFFFF"), bd: solid("#E6E8EC"), r: 16 });
     actions.name = "Quick Actions";
-    [["Buy", "arrow-down-bold"], ["Send", "arrow-up-bold"], ["Swap", "arrows-down-up-bold"], ["Receive", "qr-code"]].forEach(([label, key]) => {
+    ["Buy", "Send", "Swap", "Receive"].forEach((label) => {
       const a = V({ py: 12, gap: 6, cross: "CENTER", bd: solid("#E6E8EC"), r: 12 });
-      a.appendChild(icon(key, 19, "#6366F1"));
+      a.appendChild(coinDot("#6366F1", 19));
       a.appendChild(txt(label, F.bodySemi, 12, "#0E121B"));
       actions.appendChild(a);
       fill(a);
@@ -685,12 +551,11 @@
   // SCREEN 3 — NFT MARKETPLACE (desktop · dark)
   // ════════════════════════════════════════════════════════
   {
-    sectionLabel("🖥  NFT Marketplace · Desktop · Dark");
     const root = V({ name: "NFT Marketplace · Dark", bg: solid("#0B0E13"), pw: "FIXED", ch: "FIXED", px: 28, py: 24, gap: 22 });
     root.resize(1440, 1040);
     root.clipsContent = true;
-    scrPage.appendChild(root);
-    placeScreen(root, 1040);
+    webPage.appendChild(root);
+    root.x = 0; root.y = 1740;
 
     const top = H({ gap: 18 });
     top.appendChild(txt("Marketplace", F.dispBold, 19, "#FFFFFF"));
@@ -698,14 +563,12 @@
     search.minHeight = 38;
     search.primaryAxisSizingMode = "FIXED";
     search.resize(280, 38);
-    search.itemSpacing = 8;
-    search.appendChild(icon("magnifying-glass", 16, "#5E6776"));
     search.appendChild(txt("Search collections, items…", F.body, 13, "#5E6776"));
     top.appendChild(search);
     const topSpace = figma.createFrame(); topSpace.fills = [];
     top.appendChild(topSpace); fill(topSpace);
     top.appendChild(gradBtn("Connect", null, 38, 13));
-    top.appendChild(avatarInst("MD"));
+    top.appendChild(coinDot("#3F4656", 38));
     root.appendChild(top);
     fill(top);
 
@@ -741,7 +604,6 @@
     const fSpace = figma.createFrame(); fSpace.fills = [];
     filters.appendChild(fSpace); fill(fSpace);
     const fbtn = H({ px: 13, py: 7, gap: 7, bg: solid("#FFFFFF", 0.04), bd: solid("#FFFFFF", 0.08), r: 9 });
-    fbtn.appendChild(icon("funnel", 15, "#C8CFDA"));
     fbtn.appendChild(txt("Filters", F.bodyMed, 12.5, "#C8CFDA"));
     filters.appendChild(fbtn);
     root.appendChild(filters);
@@ -768,7 +630,7 @@
         const body = V({ p: 14, gap: 7 });
         const colRow = H({ gap: 5 });
         colRow.appendChild(txt(col, F.body, 11.5, "#9AA4B2"));
-        colRow.appendChild(icon("seal-check-fill", 13, "#38BDF8"));
+        colRow.appendChild(coinDot("#38BDF8", 12));
         body.appendChild(colRow);
         body.appendChild(txt(name, F.bodySemi, 14, "#F2F4F8"));
         const priceRow = H({ main: "SPACE_BETWEEN", cross: "MAX" });
@@ -797,31 +659,13 @@
   // ════════════════════════════════════════════════════════
   // MOBILE SCREENS — 390×844
   // ════════════════════════════════════════════════════════
-  let mobileSection = null;
-  let yMob = 0;
-  for (const ch of mobPage.children) yMob = Math.max(yMob, ch.y + ch.height + 160);
-  {
-    const mobileTitle = "📱  Mobile · Onboarding / Portfolio / Coin Detail / Swap";
-    if (figma.createSection) {
-      mobileSection = figma.createSection();
-      mobileSection.name = mobileTitle;
-      mobPage.appendChild(mobileSection);
-      mobileSection.x = 0; mobileSection.y = yMob;
-      mobileSection.resizeWithoutConstraints(1410 + 390 + 120, 844 + 120);
-    } else {
-      const t = txt(mobileTitle, F.disp, 26, "#F2F4F8");
-      mobPage.appendChild(t);
-      t.x = 0; t.y = yMob;
-      yMob += 60;
-    }
-  }
-  const yMobile = mobileSection ? 60 : yMob;
+  figma.currentPage = mobPage;
   const statusBar = (parent) => {
     const sb = H({ px: 22, py: 13, main: "SPACE_BETWEEN" });
     sb.name = "Status Bar";
     sb.appendChild(txt("9:41", F.monoSemi, 12, "#FFFFFF"));
     const right = H({ gap: 5 });
-    ["cell-signal-full-fill", "wifi-high-fill", "battery-full-fill"].forEach((k) => right.appendChild(icon(k, 14, "#FFFFFF")));
+    for (let i = 0; i < 3; i++) right.appendChild(coinDot("#FFFFFF", 12));
     sb.appendChild(right);
     parent.appendChild(sb);
     fill(sb);
@@ -832,9 +676,8 @@
     p.resize(390, 844);
     p.cornerRadius = 40;
     p.clipsContent = true;
-    (mobileSection || mobPage).appendChild(p);
-    p.x = mobileSection ? x + 60 : x;
-    p.y = yMobile;
+    mobPage.appendChild(p);
+    p.x = x; p.y = 0;
     statusBar(p);
     return p;
   };
@@ -854,9 +697,6 @@
     orb.effects = [{ type: "DROP_SHADOW", color: { ...hex("#6366F1"), a: 0.7 }, offset: { x: 0, y: 20 }, radius: 60, spread: -10, visible: true, blendMode: "NORMAL" }];
     hero.appendChild(orb);
     orb.x = 90; orb.y = 100;
-    const cube = icon("cube-fill", 76, "#FFFFFF");
-    hero.appendChild(cube);
-    cube.x = 90 + 105 - 38; cube.y = 100 + 105 - 38;
     [["#F7931A", 56, 46, 96], ["#627EEA", 300, 76, 48], ["#14F195", 306, 268, 42]].forEach(([col, x, y, s]) => {
       const cdot = coinDot(col, s);
       hero.appendChild(cdot);
@@ -900,13 +740,13 @@
     content.layoutSizingVertical = "FILL";
 
     const greet = H({ gap: 11 });
-    greet.appendChild(avatarInst("MD"));
+    greet.appendChild(coinDot("#C7CCFE", 38));
     const gCol = V({ gap: 1 });
     gCol.appendChild(txt("Good morning", F.body, 12, "#9AA4B2"));
     gCol.appendChild(txt("Alex Rivera", F.bodySemi, 14, "#F2F4F8"));
     greet.appendChild(gCol);
     fill(gCol);
-    greet.appendChild(iconCircleBtn("bell", 38));
+    greet.appendChild(coinDot("#3F4656", 38));
     content.appendChild(greet);
     fill(greet);
 
@@ -922,20 +762,19 @@
     bal.appendChild(txt("Total balance", F.body, 12, "#FFFFFF", 0.85));
     bal.appendChild(txt("$128,540", F.disp, 30, "#FFFFFF"));
     const chgChip = H({ px: 8, py: 3, gap: 4, bg: solid("#FFFFFF", 0.18), r: 7 });
-    chgChip.appendChild(icon("trend-up-bold", 12, "#FFFFFF"));
-    chgChip.appendChild(txt("+12.4%", F.monoSemi, 11.5, "#FFFFFF"));
+    chgChip.appendChild(txt("↗ +12.4%", F.monoSemi, 11.5, "#FFFFFF"));
     bal.appendChild(chgChip);
     content.appendChild(bal);
     fill(bal);
 
     const acts = H({ main: "SPACE_BETWEEN" });
-    [["Send", "arrow-up-bold"], ["Receive", "arrow-down-bold"], ["Swap", "arrows-down-up-bold"], ["Buy", "plus-bold"]].forEach(([label, key]) => {
+    ["Send", "Receive", "Swap", "Buy"].forEach((label) => {
       const a = V({ gap: 6, cross: "CENTER" });
       const tile = H({ main: "CENTER", bg: solid("#FFFFFF", 0.05), r: 14 });
       tile.resize(46, 46);
       tile.primaryAxisSizingMode = "FIXED";
       tile.counterAxisSizingMode = "FIXED";
-      tile.appendChild(icon(key, 20, "#6366F1"));
+      tile.appendChild(coinDot("#6366F1", 18));
       a.appendChild(tile);
       a.appendChild(txt(label, F.body, 10.5, "#9AA4B2"));
       acts.appendChild(a);
@@ -973,7 +812,7 @@
 
     const nav = H({ px: 30, py: 16, main: "SPACE_BETWEEN", bg: solid("#12151C"), bd: solid("#FFFFFF", 0.06) });
     nav.name = "Bottom Nav";
-    [["house-fill", "#6366F1"], ["chart-line-up", "#5E6776"], ["arrows-left-right", "#5E6776"], ["wallet", "#5E6776"]].forEach(([k, col]) => nav.appendChild(icon(k, 21, col)));
+    ["#6366F1", "#5E6776", "#5E6776", "#5E6776"].forEach((col) => nav.appendChild(coinDot(col, 21)));
     p.appendChild(nav);
     fill(nav);
   }
@@ -997,19 +836,23 @@
     mid.appendChild(coinDot("#F7931A", 24));
     mid.appendChild(txt("Bitcoin", F.bodySemi, 15, "#F2F4F8"));
     navRow.appendChild(mid);
-    navRow.appendChild(iconCircleBtn("star", 36));
+    navRow.appendChild(coinDot("#3F4656", 36));
     content.appendChild(navRow);
     fill(navRow);
 
     content.appendChild(txt("$94,210.50", F.disp, 34, "#F2F4F8"));
-    content.appendChild(changeBadge("+2.41% · +$2,210", true));
+    content.appendChild(txt("↗ +2.41% · +$2,210", F.monoSemi, 12.5, "#34D399"));
 
     const line = vec(350, 120, sparkPath([2, 3, 2.5, 4, 3.5, 5, 4.5, 6.5, 6, 8], 350, 120), "#34D399", 2.5);
     line.name = "Chart";
     content.appendChild(line);
 
     const tfs = H({ gap: 6 });
-    ["1H", "1D", "1W", "1Y"].forEach((label, i) => tfs.appendChild(timeframePill(label, i === 0)));
+    ["1H", "1D", "1W", "1Y"].forEach((label, i) => {
+      const pill = H({ px: 12, py: 5, r: 8, bg: i === 0 ? solid("#6366F1", 0.14) : undefined });
+      pill.appendChild(txt(label, F.monoSemi, 11, i === 0 ? "#A5ABFC" : "#9AA4B2"));
+      tfs.appendChild(pill);
+    });
     content.appendChild(tfs);
 
     const tiles = H({ gap: 10 });
@@ -1052,7 +895,7 @@
 
     const head = H({ main: "SPACE_BETWEEN" });
     head.appendChild(txt("Swap", F.disp, 19, "#F2F4F8"));
-    head.appendChild(iconCircleBtn("gear-six", 36));
+    head.appendChild(coinDot("#3F4656", 36));
     content.appendChild(head);
     fill(head);
     const headGap = figma.createFrame(); headGap.resize(10, 20); headGap.fills = [];

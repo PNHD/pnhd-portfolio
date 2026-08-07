@@ -15,39 +15,29 @@
   const rgba = (h, a) => ({ ...hex(h), a });
 
   // ═════════════════════════════════════════════
-  // PAGE STRUCTURE — 8 pro pages when the plan allows,
-  // 3-page lite layout on Figma Free (3-page limit).
+  // PAGE STRUCTURE (matches the kit's Figma panel)
   // ═════════════════════════════════════════════
-  const FULL_PAGES = [
-    "📕 Cover", "🚀 Getting Started", "🎨 Foundations",
-    "🧩 Components", "🗂 Components · Data",
-    "🖥 Screens · Web", "📱 Screens · Mobile", "🎯 Prototype",
+  const pageNames = [
+    "Cover",
+    "Getting started",
+    "🎨 Foundations",
+    "🧩 Components",
+    "🖥 Screens · Web",
+    "📱 Screens · Mobile",
+    "🎯 Prototype",
   ];
-  const LITE_PAGES = ["🏠 Cover · Foundations", "🧩 Components", "📱 Screens"];
-  const findP = (n) => figma.root.children.find((p) => p.name === n);
-  let pagePlan;
-  if (FULL_PAGES.every(findP)) {
-    pagePlan = "full";
-  } else if (LITE_PAGES.every(findP)) {
-    pagePlan = "lite";
-  } else {
-    // probe how many pages this plan allows (Figma Free caps at 3 total)
-    const temps = [];
-    for (let i = 0; i < FULL_PAGES.length; i++) {
-      try { const t = figma.createPage(); t.name = "HELIX_TMP_" + i; temps.push(t); }
-      catch (e) { break; }
+  let pagesCreated = true;
+  for (const name of pageNames) {
+    if (!figma.root.children.find((p) => p.name === name)) {
+      try {
+        const page = figma.createPage();
+        page.name = name;
+      } catch (e) {
+        // Figma Free: 3-page limit — later scripts fall back to currentPage
+        pagesCreated = false;
+        break;
+      }
     }
-    const spare = figma.root.children.filter((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
-    const capacity = temps.length + spare.length;
-    const targets = capacity >= FULL_PAGES.length ? FULL_PAGES : LITE_PAGES;
-    pagePlan = targets === FULL_PAGES ? "full" : "lite";
-    let ti = 0;
-    for (const name of targets) {
-      if (findP(name)) continue;
-      const slot = spare.length ? spare.shift() : temps[ti++];
-      if (slot) slot.name = name;
-    }
-    for (; ti < temps.length; ti++) { try { temps[ti].remove(); } catch (e) {} }
   }
 
   // ═════════════════════════════════════════════
@@ -148,6 +138,6 @@
   const modeNote = lightModeId
     ? "Dark + Light modes"
     : "Dark mode + separate (Light) collection — Figma Free";
-  const pageNote = pagePlan === "full" ? "8 pages" : "3 pages (Free lite layout)";
-  figma.closePlugin(`✅ Helix: ${pageNote} + variables created (${modeNote})`);
+  const pageNote = pagesCreated ? "" : " · page limit hit (Free), using current pages";
+  figma.closePlugin(`✅ Helix pages + variables created (${modeNote})${pageNote}`);
 })();

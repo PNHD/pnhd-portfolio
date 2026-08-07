@@ -1,22 +1,29 @@
-# Dang Pham — UI / Product Designer
+# Dang Pham — Visual / Digital Designer
 
-> UI & Product Designer based in Ho Chi Minh City, Vietnam. Specializing in mobile, web, and SaaS interface design.
+> Visual and Digital Designer in Ho Chi Minh City working across digital visual design, web and product UI, motion, icon systems, 3D illustration and independent AI image/video workflows.
 
-## About
-8+ years designing across mobile apps, SaaS dashboards, e-commerce, and branding for 6 companies including S3Corp., Shopline, and Select Technology. Focused on research-driven, clean, intuitive interfaces.
+## Portfolio
+- [Selected work and professional experience](/)
+- [Full work archive](/work)
 
-## Selected Work
-- [Nova — Dashboard & SaaS UI Kit](/work/nova-ui-kit): production-ready SaaS UI kit, token-based design system, light & dark themes.
-- [Serenity — Meditation App Redesign](/work/meditation-app): calming mobile experience, accessibility and micro-interactions.
-- [Pulse — Analytics Dashboard](/work/analytics-dashboard): data-rich SaaS dashboard designed for clarity.
-- [Elevate — 3D Landing Page Concept](/work/3d-landing-page): 3D illustration meets modern UI.
+## Independent Projects
+- [WWM Build Lab](/projects/wwm-build-lab) — gear and combat calculator with evidence-aware data states, reproducible calculation context and production verification.
+- [Thiên Kim](/projects/thien-kim) — virtual-character art direction and repeatable AI image/video workflow covering continuity, shot planning, execution routing and QC.
+- [WWM Homestead Planner](/projects/wwm-homestead) — production, profit, material-runway and retainer planning tool with dashboards and constraint-aware recommendations.
 
-## Skills
-Figma, Adobe XD, Photoshop, Illustrator, Blender, After Effects; AI tools: Claude, ChatGPT, Gemini, ComfyUI.
+## Capabilities
+- Visual & Graphic: digital/web visual design, graphic design, typography/layout, cross-format adaptation.
+- Product & Web: Figma, responsive UI, landing pages, design systems.
+- Motion & 3D: After Effects, Premiere Pro, Blender, UI motion and 3D animation.
+- AI Image & Video: character-consistency workflows, image-to-video direction, short-form shot planning, AI-assisted creative production.
+
+## Source Policy
+Public visual work is linked to the original Dribbble source where available. Independent projects link to live products, repositories or published output. The portfolio avoids invented client names, campaign outcomes, KPIs and unverified performance claims.
 
 ## Contact
 - Email: phamnhathaidang@gmail.com
 - Dribbble: https://dribbble.com/pnhd
 - Behance: https://www.behance.net/five3105
 - GitHub: https://github.com/PNHD
+- TikTok / Thiên Kim: https://www.tiktok.com/@tieu.thienkim
 - Site: https://dangpham.pages.dev

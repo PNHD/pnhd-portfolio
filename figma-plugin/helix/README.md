@@ -6,36 +6,27 @@ Works on **Figma Free**: scripts detect plan limits (1 variable mode, 3 pages) a
 
 ## How to Use
 
-### Method 1: One-click plugin (Recommended)
-`code.js` is a pre-built bundle of the icon + coin packs + all 8 scripts with a menu — no pasting needed.
-1. Open **Figma Desktop**, create a new design file
-2. **Plugins → Development → Import plugin from manifest…** → pick `manifest.json` in this folder
-3. **Plugins → Development → Helix Crypto UI Kit Generator → 🚀 Run ALL (00 → 05)**
-4. Or run each part separately from the same submenu (00 → 05, in order)
-5. The success toast says **“Helix Crypto UI Kit v10”** — if you don't see “v10”, the plugin is running an old `code.js`; replace the folder and re-run
+### Method 1: Figma Console (Recommended)
+1. Open **Figma Desktop**
+2. **Menu → Plugins → Development → Show/Hide Console** (`Ctrl+Alt+I` / `Cmd+Option+I`)
+3. Paste each script in order into the Console and press Enter
+4. Wait for the ✅ message before running the next one
 
-If you edit the `00-…05-…` source scripts, regenerate the bundle with `node build.js`.
-
-### Method 2: Figma Console (no import)
-1. **Menu → Plugins → Development → Show/Hide Console** (`Ctrl+Alt+I` / `Cmd+Option+I`)
-2. Paste `icons-svg.js`, then `coins-svg.js`, then each script (`00 → 05`) in order and press Enter
-3. Wait for the ✅ message before running the next one
+### Method 2: Figma Plugin
+1. **Plugins → Development → New Plugin → Figma Design → "Empty"**
+2. Point the manifest at this folder (or copy `manifest.json` + `code.js`)
+3. Paste each script's content into `code.js`, save, then **Plugins → Development → Helix Crypto UI Kit Generator**
+4. Repeat for each script in order
 
 ## Script Order (IMPORTANT — run sequentially)
 
 | # | File | What it creates |
 |---|------|-----------------|
-| — | `icons-svg.js` | **Icon pack** — 70 real Phosphor icons (MIT) embedded as SVG, used by every later script. Console method: paste this FIRST |
-| — | `coins-svg.js` | **Coin logo pack** — 12 coin logos (BTC, ETH, SOL, BNB, XRP, ADA, AVAX, LINK, DOT, MATIC, USDC, USDT) from cryptocurrency-icons (MIT — safe to resell, unlike scraping brand-logo sites). Console: paste right after the icon pack |
-| 0 | `00-variables.js` | **Pages** — probes your plan: full 8-page layout (📕 Cover / 🚀 Getting Started / 🎨 Foundations / 🧩 Components / 🗂 Components · Data / 🖥 Screens · Web / 📱 Screens · Mobile / 🎯 Prototype) or 3-page lite on Figma Free + **Variables**: Accent ramp 50–950, Bg/Border/Text tokens (Dark + Light), semantic colors, Spacing (4pt), Radius |
-| 1 | `01-foundation.js` | **Cover 1600×1200** (UI8 thumbnail-ready) + **Getting Started** doc frame + **Styles**: 40+ paint styles (incl. accent gradients), 28 text styles (Space Grotesk / Plus Jakarta Sans / JetBrains Mono), elevation + glow + focus-ring effects, Style Guide frame |
-| 2 | `02-components.js` | **Core components** (sectioned, with buyer-facing descriptions): Button (5 types × 3 sizes × 3 states), Icon Button, Input, Amount Input, Select, Checkbox, Radio, Toggle, Segmented, Badge/Status, Badge/Change, Badge/Special, Chip/Chain, Avatar (4×3), Avatar Group, Tab, Pill/Timeframe, Breadcrumb, Pagination |
+| 0 | `00-variables.js` | Pages (Cover → Prototype) + **Variables**: Accent ramp 50–950, Bg/Border/Text tokens (Dark + Light), semantic Success/Danger/Warning/Info, Spacing (4pt), Radius |
+| 1 | `01-foundation.js` | **Styles**: 40+ paint styles (incl. accent gradients), 28 text styles (Space Grotesk / Plus Jakarta Sans / JetBrains Mono), elevation + glow + focus-ring effects, Style Guide frame |
+| 2 | `02-components.js` | **Core components**: Button (5 types × 3 sizes × 3 states), Icon Button, Input, Amount Input, Select, Checkbox, Radio, Toggle, Segmented, Badge/Status, Badge/Change, Badge/Special, Chip/Chain, Avatar (4×3), Avatar Group, Tab, Pill/Timeframe, Breadcrumb, Pagination |
 | 3 | `02b-components-extra.js` | **Extra components**: Stat Card, Coin Card (sparkline), Wallet Card (gradient), Alert ×4, Toast, Tooltip, Progress Bar/Circle, Slider, Stepper, Skeleton, Donut Chart, Bar Chart, Markets Table Row, Order Book Row |
-| 3b | `02c-pro-features.js` | **Interactive Components + Properties** — Button Hover variants wired with ON_HOVER reactions; Toggle/Checkbox/Radio/Pill/Tab get ON_CLICK state swaps; TEXT props (Button/Tab/Pill/Select labels) and BOOLEAN props (Badge dot, Input helper, Avatar status, Toast close) |
-| 4 | `03-screens.js` | **Screens 1–7** — Trading Terminal (candles + order book), Portfolio Dashboard (light), NFT Marketplace + mobile Onboarding, Portfolio, Coin Detail, Swap. Screens are assembled from **component instances** (Buttons, Pills, Badges, Avatars…) |
-| 5 | `03b-screens-extra.js` | **Screens 8–20** — Markets Overview, Asset Detail, Wallet & Balances, Send & Receive (QR), Staking & Earn, Transactions, Settings & Security, Sign in & 2FA, NFT Detail + mobile Wallet, Receive QR, NFT Gallery, Profile & Settings — **20 screens total** |
-| 6 | `04-bind-variables.js` | **Binding pass** — rebinds full-opacity fills/strokes to Helix Variables (translucent tints preserved), links **every text node to a Text Style**, and on paid plans flips light screens to the Light mode |
-| 7 | `05-showcase.js` | **Showcase boards** (PrimeOne-style, on the Cover page): What's inside overview, Component wall built from live instances, 20-screens index, Icon & coin library wall, Changelog + License + Support |
+| 4 | `03-screens.js` | **Screens** — Web: Trading Terminal (dark, candles + order book), Portfolio Dashboard (light), NFT Marketplace (dark). Mobile 390×844: Onboarding, Portfolio, Coin Detail, Swap |
 
 ## Design Tokens
 
@@ -46,19 +37,18 @@ If you edit the `00-…05-…` source scripts, regenerate the bundle with `node 
 - **Type**: Space Grotesk (display) · Plus Jakarta Sans (body) · JetBrains Mono (numeric) — all free Google Fonts
 - **Spacing**: 4pt grid · **Radius**: 4 → full
 
-## Page plans
+## Figma Free notes
 
-- **Run in a FRESH file** (one empty "Page 1"). Re-running in a file that already has content will stack duplicates.
-- **Full (paid/education plans)**: 8 pages — Cover, Getting Started, Foundations, Components, Components · Data, Screens · Web, Screens · Mobile, Prototype.
-- **Lite (Figma Free, 3-page limit)**: 🏠 Cover · Foundations / 🧩 Components / 📱 Screens — same content, shared pages.
-- **Variable modes**: Free allows 1 mode per collection → `Helix Colors` (Dark) + `Helix Colors (Light)` as a second collection. Paid plans get one collection with Dark/Light modes.
+- **Variable modes**: Free allows 1 mode per collection. On Free you get `Helix Colors` (Dark) + `Helix Colors (Light)` as a second collection instead of a mode switch. On Pro you get one collection with Dark/Light modes.
+- **Pages**: Free allows 3 pages per file. If page creation is blocked, scripts build onto the current page — organize into pages after upgrading, or keep everything on fewer pages before exporting.
 
 ## After generating — polish checklist (before UI8)
 
-1. Drop real photos into the Avatar components (coin logos are already real — MIT cryptocurrency-icons)
-2. Export `.fig`, package with the Cover frame (1600×1200) as thumbnail + screen previews for UI8
-
-Icons are already real (Phosphor, MIT license — attribution not required but appreciated). Fills are already bound to Variables by `04-bind-variables.js`.
+1. Swap the placeholder ellipses for real coin logos (cryptocurrency-icons set) and avatar photos
+2. Add Phosphor icons (free Figma community library) into icon slots
+3. Write component descriptions + link variables to component fills
+4. Add a cover (1600×1200) + Getting Started page
+5. Export `.fig`, package with preview shots for UI8
 
 ## License
 Created by Dang Pham (Wonton Design). For commercial sale on UI8.

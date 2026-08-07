@@ -7,8 +7,9 @@ import { useTheme } from "next-themes";
 
 const NAV = [
   { label: "Work", href: "/#work" },
-  { label: "About", href: "/#about" },
   { label: "Experience", href: "/#experience" },
+  { label: "Projects", href: "/#projects" },
+  { label: "About", href: "/#about" },
   { label: "Skills", href: "/#skills" },
   { label: "Contact", href: "/#contact" },
 ];
@@ -35,15 +36,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [entered, setEntered] = useState(false);
 
-  // mount + entrance timing
   useEffect(() => {
-    setMounted(true);
-    setReady(true);
+    const mountFrame = requestAnimationFrame(() => {
+      setMounted(true);
+      setReady(true);
+    });
     const t = setTimeout(() => setEntered(true), 1500);
-    return () => clearTimeout(t);
+    return () => {
+      cancelAnimationFrame(mountFrame);
+      clearTimeout(t);
+    };
   }, []);
 
-  // scroll: header state + progress bar + aurora parallax
   useEffect(() => {
     let ticking = false;
     const frame = () => {
@@ -69,7 +73,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // close menu + lock body scroll
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
@@ -77,9 +80,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, [menuOpen]);
 
-  // reveal-on-scroll, re-scanned per route
   useEffect(() => {
-    setMenuOpen(false);
+    const closeFrame = requestAnimationFrame(() => setMenuOpen(false));
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
@@ -92,7 +94,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
     );
     document.querySelectorAll(".reveal:not(.in)").forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    return () => {
+      cancelAnimationFrame(closeFrame);
+      io.disconnect();
+    };
   }, [pathname]);
 
   const dark = mounted ? resolvedTheme === "dark" : true;
@@ -170,7 +175,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <footer className="foot">
         <div className="foot-l">
-          <b>Dang Pham</b> — UI / Product Designer
+          <b>Dang Pham</b> — Visual / Digital Designer
         </div>
         <div className="foot-l">© {new Date().getFullYear()} · Ho Chi Minh City, Vietnam</div>
         <button

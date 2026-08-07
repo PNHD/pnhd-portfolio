@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppShell } from "@/components/app-shell";
-import { siteConfig } from "@/data/portfolio";
+import { refreshedSiteConfig as siteConfig } from "@/data/portfolio-refresh";
 import "./globals.css";
+import "./portfolio-refresh.css";
+import "./project-cases.css";
+import "./project-cases-expanded.css";
+import "./thien-kim-media.css";
+import "./accessibility.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -12,11 +17,16 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
+    "Visual Designer",
+    "Digital Designer",
+    "Graphic Designer",
     "UI Designer",
-    "Product Designer",
-    "SaaS UI",
-    "Dashboard Design",
+    "Motion Designer",
+    "AI Video",
+    "AI Image",
     "Figma",
+    "Adobe Creative Cloud",
+    "Blender",
     "Dang Pham",
     "Ho Chi Minh City",
   ],
@@ -57,16 +67,19 @@ export default function RootLayout({
       addressCountry: "VN",
     },
     sameAs: [
+      "https://www.tiktok.com/@tieu.thienkim",
       siteConfig.links.dribbble,
       siteConfig.links.behance,
       siteConfig.links.github,
     ],
   };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.dribbble.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap"
           rel="stylesheet"

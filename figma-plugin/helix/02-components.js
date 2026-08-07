@@ -74,126 +74,14 @@
     return n;
   };
 
-  function ensurePage(name, matcher) {
-    const found = figma.root.children.find((p) => p.name === name || (matcher && matcher.test(p.name)));
-    if (found) return found;
-    const spare = figma.root.children.find((p) => /^Page \d+$/.test(p.name) && p.children.length === 0);
-    if (spare) { spare.name = name; return spare; }
-    try { const p = figma.createPage(); p.name = name; return p; }
-    catch (e) { return figma.currentPage; }
-  }
-  // Real Phosphor icon from HELIX_ICONS (icons-svg.js). Falls back to a dot
-  // if the icon pack was not pasted/bundled first.
-  const icon = (key, size, colorHex, opacity) => {
-    const svg = (typeof HELIX_ICONS !== "undefined" && HELIX_ICONS[key]) ? HELIX_ICONS[key] : null;
-    if (!svg) {
-      const e = figma.createEllipse();
-      e.resize(size, size);
-      e.fills = [solid(colorHex, opacity)];
-      return e;
-    }
-    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
-    node.name = "icon/" + key;
-    const paint = [solid(colorHex, opacity)];
-    for (const child of node.findAll(() => true)) {
-      if ("fills" in child && Array.isArray(child.fills) && child.fills.length) child.fills = paint;
-      if ("strokes" in child && Array.isArray(child.strokes) && child.strokes.length) child.strokes = paint;
-    }
-    node.fills = [];
-    return node;
-  };
-
-  // figma.currentPage assignment is unreliable on newer Figma builds —
-  // use setCurrentPageAsync and always parent nodes explicitly.
-  async function gotoPage(p) {
-    if (figma.setCurrentPageAsync) { try { await figma.setCurrentPageAsync(p); return; } catch (e) {} }
-    try { figma.currentPage = p; } catch (e) {}
-  }
-  // Named canvas Section (falls back to nothing on very old Figma)
-  const wrapSection = (pageNode, title, nodes) => {
-    if (!figma.createSection || !nodes.length) return null;
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    for (const n of nodes) {
-      minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
-      maxX = Math.max(maxX, n.x + n.width); maxY = Math.max(maxY, n.y + n.height);
-    }
-    const s = figma.createSection();
-    s.name = title;
-    pageNode.appendChild(s);
-    s.x = minX - 64; s.y = minY - 64;
-    s.resizeWithoutConstraints(maxX - minX + 128, maxY - minY + 128);
-    for (const n of nodes) {
-      const ax = n.x, ay = n.y;
-      s.appendChild(n);
-      n.x = ax - s.x; n.y = ay - s.y;
-    }
-    return s;
-  };
-  // Prefer the dedicated multi-page layout, fall back to shared pages (Free)
-  function resolvePage(candidates, createName, createMatcher) {
-    for (const t of candidates) {
-      const p = figma.root.children.find((pg) => (typeof t === "string" ? pg.name === t : t.test(pg.name)));
-      if (p) return p;
-    }
-    return ensurePage(createName, createMatcher);
-  }
-  // Real coin logos from HELIX_COINS (coins-svg.js, MIT) — falls back to a tinted dot
-  const COIN_HEX = { "#F7931A": "btc", "#627EEA": "eth", "#14F195": "sol", "#F3BA2F": "bnb", "#00AAE4": "xrp", "#0033AD": "ada", "#E84142": "avax", "#2A5ADA": "link", "#2775CA": "usdc", "#8247E5": "matic" };
-  const coinLogo = (slug, size, fallbackHex) => {
-    const svg = (typeof HELIX_COINS !== "undefined" && HELIX_COINS[slug]) ? HELIX_COINS[slug] : null;
-    if (!svg) {
-      const e = figma.createEllipse();
-      e.resize(size, size);
-      e.fills = [solid(fallbackHex || "#3F4656")];
-      return e;
-    }
-    const node = figma.createNodeFromSvg(svg.replace("<svg ", `<svg width="${size}" height="${size}" `));
-    node.name = "coin/" + slug;
-    node.fills = [];
-    return node;
-  };
-  const page = resolvePage(["🧩 Components"], "🧩 Components", /Components/);
-  await gotoPage(page);
-  // Buyer-facing descriptions shown in the inspect panel
-  const DESCRIPTIONS = {
-    "Button": "Primary action. Variants: Type (Primary gradient / Secondary / Outline / Ghost / Danger) × Size (SM 32 / MD 42 / LG 48) × State (Default / Loading / Disabled).",
-    "Icon Button": "Square icon-only action. Style (Subtle / Primary) × Size (SM / MD). Swap the glyph inside.",
-    "Input": "Text field with label + helper. States: Default, Focus (accent ring), Error.",
-    "Amount Input": "Crypto amount entry with fiat equivalent, MAX shortcut and token selector.",
-    "Select": "Dropdown trigger with leading token icon. Used for networks and assets.",
-    "Checkbox": "Binary selection. States: Checked (gradient) / Unchecked.",
-    "Radio": "Single choice from a group. States: Selected / Unselected.",
-    "Toggle": "On/Off switch, gradient when active.",
-    "Segmented Control": "Exclusive tab-style switcher (Spot / Margin / Futures).",
-    "Badge / Status": "Transaction states: Confirmed, Pending, Failed, Draft — dot + tinted pill.",
-    "Badge / Change": "Price delta chip with trend arrow. Direction: Up / Down.",
-    "Badge / Special": "Marketing badges: NEW (gradient) and Verified (seal).",
-    "Chip / Chain": "Network chip: Ethereum, Solana, Polygon. Swap the dot for the chain logo.",
-    "Avatar": "User avatar. Size SM–XL × Type (Default / Status dot / Gradient ring). Drop a photo in the Photo layer.",
-    "Avatar Group": "Stacked avatars with +N overflow counter.",
-    "Tab": "Underline navigation tab. States: Active / Inactive.",
-    "Pill / Timeframe": "Chart range selector (24H · 1W · 1M · 1Y). States: Active / Inactive.",
-    "Breadcrumb": "Hierarchy trail with caret separators.",
-    "Pagination Item": "Page control cell: Active number, Default number, or Arrow.",
-  };
-  // createComponent() lands on currentPage, which may NOT be our page on
-  // newer Figma builds — always reparent explicitly before combining.
-  const onPage = (comps) => { for (const c of comps) page.appendChild(c); return comps; };
-  const placedSets = [];
+  const page = figma.root.children.find((p) => p.name === "🧩 Components") || figma.currentPage;
+  figma.currentPage = page;
   let yOffset = 0;
   for (const ch of page.children) yOffset = Math.max(yOffset, ch.y + ch.height + 120);
   const placeSet = (set, name) => {
     set.name = name;
-    if (DESCRIPTIONS[name]) { try { set.description = DESCRIPTIONS[name]; } catch (e) {} }
-    page.appendChild(set); // ensure it lives on the Components page
-    const tag = txt(name.toUpperCase(), F.monoSemi, 14, "#6366F1");
-    tag.name = "label/" + name;
-    page.appendChild(tag);
-    tag.x = 0; tag.y = yOffset;
-    yOffset += 34;
     set.x = 0; set.y = yOffset;
-    yOffset += set.height + 96;
-    placedSets.push({ name, nodes: [tag, set] });
+    yOffset += set.height + 120;
   };
   // combineAsVariants does NOT auto-arrange — lay variants out in a grid first
   const gridify = (comps, cols, gx, gy) => {
@@ -260,7 +148,7 @@
         }
       }
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 9), page), "Button");
+    placeSet(figma.combineAsVariants(gridify(comps, 9), page), "Button");
   }
 
   // ═════════════════════════════════════════════
@@ -284,12 +172,14 @@
         c.cornerRadius = sc.r;
         c.fills = stc.grad ? [ACCENT_GRAD] : [stc.bg];
         if (stc.bd) { c.strokes = [stc.bd]; c.strokeWeight = 1; }
-        const plus = icon("plus-bold", Math.round(sc.s * 0.45), stc.icon);
+        const half = sc.s * 0.4;
+        const plus = vec(half * 2 - sc.s * 0.4, half * 2 - sc.s * 0.4, `M ${half - sc.s * 0.2} 0 L ${half - sc.s * 0.2} ${half * 2 - sc.s * 0.4} M 0 ${half - sc.s * 0.2} L ${half * 2 - sc.s * 0.4} ${half - sc.s * 0.2}`, stc.icon, 2);
+        plus.name = "Icon";
         c.appendChild(plus);
         comps.push(c);
       }
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Icon Button");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Icon Button");
   }
 
   // ═════════════════════════════════════════════
@@ -308,7 +198,6 @@
       autol(c, "VERTICAL", { gap: 8, cross: "MIN" });
       c.counterAxisSizingMode = "FIXED";
       c.resize(320, 10);
-      c.primaryAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
       c.fills = [];
 
       const label = txt("Label", F.bodySemi, 12.5, "#9AA4B2");
@@ -323,12 +212,11 @@
       field.strokes = [sc.bd];
       field.strokeWeight = sc.bw;
       if (sc.ring) field.effects = [{ type: "DROP_SHADOW", color: { ...hex("#6366F1"), a: 0.18 }, offset: { x: 0, y: 0 }, radius: 0, spread: 4, visible: true, blendMode: "NORMAL" }];
-      const fieldIcon = icon(
-        st === "Error" ? "warning-fill" : st === "Focus" ? "lock-key" : "envelope-simple",
-        17,
-        st === "Error" ? "#FB7185" : st === "Focus" ? "#6366F1" : "#5E6776"
-      );
-      field.appendChild(fieldIcon);
+      const dot = figma.createEllipse();
+      dot.name = "Icon";
+      dot.resize(16, 16);
+      dot.fills = [solid(st === "Error" ? "#FB7185" : st === "Focus" ? "#6366F1" : "#5E6776")];
+      field.appendChild(dot);
       const value = txt(sc.value, F.body, 14, sc.vc);
       value.name = "Value";
       field.appendChild(value);
@@ -340,7 +228,7 @@
       c.appendChild(helper);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Input");
+    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Input");
   }
 
   // ═════════════════════════════════════════════
@@ -350,9 +238,9 @@
     const c = figma.createComponent();
     c.name = "Amount Input";
     autol(c, "HORIZONTAL", { px: 14, py: 14, main: "SPACE_BETWEEN" });
+    c.counterAxisSizingMode = "AUTO";
     c.primaryAxisSizingMode = "FIXED";
     c.resize(420, 10);
-    c.counterAxisSizingMode = "AUTO"; // resize() can freeze the hug axis
     c.cornerRadius = 13;
     c.fills = [solid("#FFFFFF", 0.04)];
     c.strokes = [solid("#FFFFFF", 0.1)];
@@ -374,9 +262,12 @@
     const token = autol(figma.createFrame(), "HORIZONTAL", { px: 11, py: 7, gap: 7 });
     token.cornerRadius = 10;
     token.fills = [solid("#FFFFFF", 0.06)];
-    token.appendChild(coinLogo("usdc", 20, "#2775CA"));
+    const coin = figma.createEllipse();
+    coin.resize(20, 20);
+    coin.fills = [solid("#2775CA")];
+    token.appendChild(coin);
     token.appendChild(txt("USDC", F.bodySemi, 13.5, "#F2F4F8"));
-    token.appendChild(icon("caret-down-bold", 12, "#9AA4B2"));
+    token.appendChild(vec(10, 6, "M 0 0 L 5 5 L 10 0", "#9AA4B2", 1.5));
     right.appendChild(token);
     c.appendChild(right);
 
@@ -397,13 +288,15 @@
     c.fills = [solid("#FFFFFF", 0.04)];
     c.strokes = [solid("#FFFFFF", 0.1)];
     c.strokeWeight = 1;
-    const coin = coinLogo("eth", 20, "#627EEA");
+    const coin = figma.createEllipse();
     coin.name = "Icon";
+    coin.resize(20, 20);
+    coin.fills = [solid("#627EEA")];
     c.appendChild(coin);
     const label = txt("Ethereum", F.bodyMed, 14, "#F2F4F8");
     c.appendChild(label);
     label.layoutSizingHorizontal = "FILL";
-    c.appendChild(icon("caret-down-bold", 13, "#9AA4B2"));
+    c.appendChild(vec(10, 6, "M 0 0 L 5 5 L 10 0", "#9AA4B2", 1.5));
     placeSet(c, "Select");
   }
 
@@ -434,7 +327,7 @@
       c.appendChild(txt(st === "Checked" ? "Checked" : "Unchecked", F.body, 14, st === "Checked" ? "#C8CFDA" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Checkbox");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Checkbox");
   }
   {
     const comps = [];
@@ -465,7 +358,7 @@
       c.appendChild(txt(st === "Selected" ? "Selected" : "Option", F.body, 14, st === "Selected" ? "#C8CFDA" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Radio");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Radio");
   }
   {
     const comps = [];
@@ -486,7 +379,7 @@
       c.appendChild(knob);
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Toggle");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Toggle");
   }
 
   // ═════════════════════════════════════════════
@@ -545,7 +438,7 @@
       c.appendChild(txt(tn, F.bodySemi, 12, tc.text));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 4), page), "Badge / Status");
+    placeSet(figma.combineAsVariants(gridify(comps, 4), page), "Badge / Status");
   }
 
   // ═════════════════════════════════════════════
@@ -567,7 +460,7 @@
       c.appendChild(txt(up ? "+2.41%" : "-3.22%", F.monoSemi, 11.5, up ? "#34D399" : "#FB7185"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Badge / Change");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Badge / Change");
   }
 
   // ═════════════════════════════════════════════
@@ -592,20 +485,24 @@
       c.minHeight = 24;
       c.cornerRadius = 7;
       c.fills = [solid("#0EA5E9", 0.14)];
-      c.appendChild(icon("seal-check-fill", 14, "#38BDF8"));
+      const seal = figma.createEllipse();
+      seal.name = "Seal";
+      seal.resize(13, 13);
+      seal.fills = [solid("#38BDF8")];
+      c.appendChild(seal);
       c.appendChild(txt("Verified", F.bodySemi, 11.5, "#38BDF8"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Badge / Special");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Badge / Special");
   }
 
   // ═════════════════════════════════════════════
   // CHIP / CHAIN — Ethereum / Solana / Polygon
   // ═════════════════════════════════════════════
   {
-    const chains = { Ethereum: ["eth", "#627EEA"], Solana: ["sol", "#14F195"], Polygon: ["matic", "#8247E5"] };
+    const chains = { Ethereum: "#627EEA", Solana: "#14F195", Polygon: "#8247E5" };
     const comps = [];
-    for (const [cn, [slug, col]] of Object.entries(chains)) {
+    for (const [cn, col] of Object.entries(chains)) {
       const c = figma.createComponent();
       c.name = `Chain=${cn}`;
       autol(c, "HORIZONTAL", { px: 11, gap: 7 });
@@ -614,13 +511,15 @@
       c.fills = [solid("#FFFFFF", 0.05)];
       c.strokes = [solid("#FFFFFF", 0.08)];
       c.strokeWeight = 1;
-      const coin = coinLogo(slug, 18, col);
+      const coin = figma.createEllipse();
       coin.name = "Coin";
+      coin.resize(18, 18);
+      coin.fills = [solid(col)];
       c.appendChild(coin);
       c.appendChild(txt(cn, F.bodyMed, 12.5, "#C8CFDA"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Chip / Chain");
+    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Chip / Chain");
   }
 
   // ═════════════════════════════════════════════
@@ -663,7 +562,7 @@
         comps.push(c);
       }
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Avatar");
+    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Avatar");
   }
 
   // ═════════════════════════════════════════════
@@ -720,7 +619,7 @@
       line.layoutSizingHorizontal = "FILL";
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Tab");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Tab");
   }
 
   // ═════════════════════════════════════════════
@@ -737,7 +636,7 @@
       c.appendChild(txt("24H", F.monoSemi, 12, st === "Active" ? "#A5ABFC" : "#9AA4B2"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 2), page), "Pill / Timeframe");
+    placeSet(figma.combineAsVariants(gridify(comps, 2), page), "Pill / Timeframe");
   }
 
   // ═════════════════════════════════════════════
@@ -774,21 +673,9 @@
       else c.appendChild(txt("1", F.bodySemi, 13, type === "Active" ? "#FFFFFF" : "#C8CFDA"));
       comps.push(c);
     }
-    placeSet(figma.combineAsVariants(gridify(onPage(comps), 3), page), "Pagination Item");
+    placeSet(figma.combineAsVariants(gridify(comps, 3), page), "Pagination Item");
   }
 
-  const GROUPS = [
-    ["🔘 Actions", ["Button", "Icon Button"]],
-    ["📝 Forms & Inputs", ["Input", "Amount Input", "Select", "Checkbox", "Radio", "Toggle", "Segmented Control"]],
-    ["🏷 Badges & Chips", ["Badge / Status", "Badge / Change", "Badge / Special", "Chip / Chain"]],
-    ["👤 Avatars", ["Avatar", "Avatar Group"]],
-    ["🧭 Navigation", ["Tab", "Pill / Timeframe", "Breadcrumb", "Pagination Item"]],
-  ];
-  for (const [title, names] of GROUPS) {
-    const nodes = [];
-    for (const ps of placedSets) if (names.includes(ps.name)) nodes.push(...ps.nodes);
-    wrapSection(page, title, nodes);
-  }
   figma.viewport.scrollAndZoomIntoView(page.children);
-  figma.closePlugin("✅ Helix core components (19 sets, sectioned): Button, Icon Button, Input, Amount, Select, Checkbox, Radio, Toggle, Segmented, Badges ×3, Chip, Avatar, Avatar Group, Tab, Pill, Breadcrumb, Pagination");
+  figma.closePlugin("✅ Helix core components: Button, Icon Button, Input, Amount, Select, Checkbox, Radio, Toggle, Segmented, Badges ×3, Chip, Avatar, Avatar Group, Tab, Pill, Breadcrumb, Pagination");
 })();

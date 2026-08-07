@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/data/portfolio";
+import { refreshedSiteConfig as siteConfig } from "@/data/portfolio-refresh";
 
 export const dynamic = "force-static";
 
