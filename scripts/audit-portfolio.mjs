@@ -53,6 +53,10 @@ if (srcLower.includes("marketing")) {
   errors.push("User-facing src still contains marketing positioning");
 }
 
+if (srcText.includes("drive.usercontent.google.com")) {
+  errors.push("Portfolio src must not depend on temporary Google Drive media URLs");
+}
+
 if (existsSync(join(root, "src/app/work/[slug]/page.tsx"))) {
   errors.push("Placeholder case-study route still exists");
 }
@@ -71,6 +75,40 @@ for (const [path, , localMedia] of requiredCases) {
   if (!read(path).includes(localMedia)) {
     errors.push(`Case study does not use its local project media: ${path}`);
   }
+}
+
+const thienKimPage = read("src/app/projects/thien-kim/page.tsx");
+const thienKimMedia = [
+  "/projects/thien-kim/look-floral.webp",
+  "/projects/thien-kim/look-white-denim.webp",
+  "/projects/thien-kim/look-casual-street.webp",
+  "/projects/thien-kim/look-pink.webp",
+  "/projects/thien-kim/look-strawberry.webp",
+  "/projects/thien-kim/look-devil.webp",
+  "/projects/thien-kim/look-blue-street.webp",
+  "/projects/thien-kim/look-blue-home.webp",
+  "/projects/thien-kim/video-green-poster.webp",
+  "/projects/thien-kim/video-country-poster.webp",
+  "/projects/thien-kim/video-tuscany-poster.webp",
+  "/projects/thien-kim/video-white-lace-poster.webp",
+  "/projects/thien-kim/video-green.mp4",
+  "/projects/thien-kim/video-country.mp4",
+  "/projects/thien-kim/video-tuscany.mp4",
+  "/projects/thien-kim/video-white-lace.mp4",
+];
+
+for (const mediaPath of thienKimMedia) {
+  const file = join(root, "public", mediaPath.slice(1));
+  if (!existsSync(file)) errors.push(`Thiên Kim media file missing: ${mediaPath}`);
+  if (!thienKimPage.includes(mediaPath)) errors.push(`Thiên Kim page does not reference media: ${mediaPath}`);
+}
+
+const videoSourceCount = (thienKimPage.match(/<source src=\{video\.src\} type="video\/mp4" \/>/g) || []).length;
+if (videoSourceCount !== 1 || !thienKimPage.includes("const videos = [")) {
+  errors.push("Thiên Kim inline video gallery structure is missing");
+}
+if ((thienKimPage.match(/src: "\/projects\/thien-kim\/video-[^"]+\.mp4"/g) || []).length !== 4) {
+  errors.push("Thiên Kim must expose exactly four local project videos");
 }
 
 const projects = read("src/data/independent-projects.ts");
@@ -133,6 +171,8 @@ console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
 console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
 console.log(`- ${requiredCases.length} full independent-project case-study routes present and media-backed`);
+console.log(`- ${thienKimMedia.length} local Thiên Kim gallery/video assets verified`);
+console.log("- exactly four Thiên Kim project videos are wired into the case study");
 console.log("- sitemap and llms.txt include every case-study route");
 console.log("- public agent metadata is aligned with current Visual / Digital positioning");
 console.log("- user-facing marketing positioning absent from src");

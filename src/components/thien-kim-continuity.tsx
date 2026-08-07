@@ -14,8 +14,8 @@ export function ThienKimContinuity() {
           </div>
           <p className="case-section-lede">
             The reference strategy separates identity from composition. Original
-            references remain authoritative, while Shot 1 becomes a temporary visual
-            anchor for the current pack instead of replacing the character source.
+            references remain authoritative, while the selected master look becomes a
+            temporary styling anchor for the current shot pack.
           </p>
         </div>
 
@@ -24,9 +24,7 @@ export function ThienKimContinuity() {
             <div className="case-flow-step" key={step.n}>
               <div className="case-flow-top">
                 <span className="mono">{step.n}</span>
-                {index < thienKimContinuitySteps.length - 1 ? (
-                  <i aria-hidden="true">→</i>
-                ) : null}
+                {index < thienKimContinuitySteps.length - 1 ? <i aria-hidden="true">→</i> : null}
               </div>
               <h3 className="dsp">{step.title}</h3>
               <p>{step.body}</p>
@@ -43,26 +41,26 @@ export function ThienKimContinuity() {
           <div className="case-lock-columns">
             <div>
               <span className="mono">LOCK</span>
-              <b>Identity &amp; pack look</b>
+              <b>Identity &amp; selected look</b>
               <p>
-                Face, body proportions, outfit, hair, accessories, lighting mood,
-                color mood and location atmosphere.
+                Face, body proportions and the chosen styling logic for the current
+                sequence: outfit, hair, accessories, lighting and environment cues.
               </p>
             </div>
             <div>
               <span className="mono">VARY</span>
               <b>Shot expression</b>
               <p>
-                Framing, pose, camera angle, shot purpose and motion — only when they
-                remain compatible with the lock.
+                Framing, pose, camera angle, shot purpose and motion when they remain
+                compatible with the identity and selected styling direction.
               </p>
             </div>
             <div>
               <span className="mono">REJECT</span>
               <b>Continuity breaks</b>
               <p>
-                Generic face drift, changed wardrobe, impossible anatomy, unstable
-                background or motion that destroys the selected master look.
+                Face drift, changed wardrobe, impossible anatomy, unstable background
+                logic or motion that breaks the selected character look.
               </p>
             </div>
           </div>
@@ -73,12 +71,12 @@ export function ThienKimContinuity() {
         <div className="case-section-split">
           <div className="case-detail-head">
             <div className="work-cat mono">Execution routing</div>
-            <h2 className="dsp">Not every trend should become four independent I2V shots.</h2>
+            <h2 className="dsp">Choose the production route before generating motion.</h2>
           </div>
           <p className="case-section-lede">
-            Version 8.3 chooses a production strategy first. This prevents the workflow
-            from forcing text prompts where a mimic tool has no prompt box, or forcing
-            motion onto imagery that is safer as a still sequence.
+            A source can call for direct image-to-video, reference-led mimic, segmented
+            handling or a controlled still sequence. Routing first avoids forcing the
+            same generation method onto every concept.
           </p>
         </div>
 
@@ -96,13 +94,13 @@ export function ThienKimContinuity() {
         </div>
 
         <div className="case-callout">
-          <span className="mono">RUNNINGHUB MIMIC CONSTRAINT</span>
+          <span className="mono">REFERENCE-LED MOTION</span>
           <div>
-            <strong className="dsp">One reference video + one Thiên Kim anchor image.</strong>
+            <strong className="dsp">Match the inputs to what the tool actually accepts.</strong>
             <p>
-              The preferred mimic route can have no prompt input box. The workflow
-              therefore generates an anchor-image plan and does not pretend a mandatory
-              text prompt exists where the tool cannot accept one.
+              Some mimic routes rely on a reference video and a character anchor image
+              instead of a long text prompt. The workflow records that input plan
+              explicitly rather than inventing controls that are not present.
             </p>
           </div>
         </div>

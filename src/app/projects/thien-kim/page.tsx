@@ -5,13 +5,91 @@ import { ThienKimProduction } from "@/components/thien-kim-production";
 import { ThienKimSystem } from "@/components/thien-kim-system";
 
 export const metadata: Metadata = {
-  title: "Thiên Kim — AI Visual & Video Case Study",
+  title: "Thiên Kim — AI Image & Video Workflow Case Study",
   description:
-    "Case study for Thiên Kim: virtual-character art direction, continuity rules, short-form shot planning, AI image/video routing, QC and an n8n + Google Sheets production system.",
+    "Independent case study for Thiên Kim: a virtual-character image and video workflow focused on identity continuity, outfit variation, shot planning, routing and quality control.",
   alternates: { canonical: "/projects/thien-kim" },
 };
 
 const TIKTOK = "https://www.tiktok.com/@tieu.thienkim";
+
+type Look = {
+  src: string;
+  alt: string;
+  label: string;
+  featured?: boolean;
+};
+
+const looks: readonly Look[] = [
+  {
+    src: "/projects/thien-kim/look-floral.webp",
+    alt: "Thiên Kim in a floral dress in a sunlit stone alley, framed as a close portrait",
+    label: "Floral / close portrait",
+    featured: true,
+  },
+  {
+    src: "/projects/thien-kim/look-white-denim.webp",
+    alt: "Thiên Kim in a white top with wide light-blue denim at a bright cafe exterior",
+    label: "White + wide denim",
+  },
+  {
+    src: "/projects/thien-kim/look-casual-street.webp",
+    alt: "Thiên Kim in a white graphic T-shirt and denim shorts on a quiet sunlit street",
+    label: "Casual streetwear",
+  },
+  {
+    src: "/projects/thien-kim/look-pink.webp",
+    alt: "Thiên Kim in a white dress with a cropped pink jacket and double ponytails",
+    label: "Feminine styling",
+  },
+  {
+    src: "/projects/thien-kim/look-strawberry.webp",
+    alt: "Thiên Kim in a strawberry graphic T-shirt with a red skirt and red sneakers",
+    label: "Graphic OOTD",
+  },
+  {
+    src: "/projects/thien-kim/look-devil.webp",
+    alt: "Thiên Kim in a black devil-inspired costume with small red horns",
+    label: "Costume variation",
+  },
+  {
+    src: "/projects/thien-kim/look-blue-street.webp",
+    alt: "Thiên Kim in a white top and pale blue shorts on a bright outdoor set",
+    label: "Clean daytime look",
+  },
+  {
+    src: "/projects/thien-kim/look-blue-home.webp",
+    alt: "Thiên Kim in a white top and pale blue shorts in a softly lit interior",
+    label: "Interior variation",
+  },
+];
+
+const videos = [
+  {
+    src: "/projects/thien-kim/video-green.mp4",
+    poster: "/projects/thien-kim/video-green-poster.webp",
+    title: "Green look",
+    note: "Short-form styling and motion output.",
+  },
+  {
+    src: "/projects/thien-kim/video-country.mp4",
+    poster: "/projects/thien-kim/video-country-poster.webp",
+    title: "Country AI",
+    note: "Location, styling and movement variation.",
+  },
+  {
+    src: "/projects/thien-kim/video-tuscany.mp4",
+    poster: "/projects/thien-kim/video-tuscany-poster.webp",
+    title: "Tuscany",
+    note: "A longer vertical motion sequence built around a consistent look.",
+  },
+  {
+    src: "/projects/thien-kim/video-white-lace.mp4",
+    poster: "/projects/thien-kim/video-white-lace-poster.webp",
+    title: "White lace",
+    note: "A styling-led image-to-video output.",
+  },
+] as const;
 
 export default function ThienKimCaseStudy() {
   return (
@@ -22,37 +100,36 @@ export default function ThienKimCaseStudy() {
 
       <header className="project-case-hero project-case-hero-media">
         <div className="case-hero-copy">
-          <div className="kicker">Independent Project · AI Image &amp; Video</div>
+          <div className="kicker">Independent project · AI image + video workflow</div>
           <h1 className="case-title dsp">Thiên Kim</h1>
           <p className="case-blurb">
-            A self-directed virtual-character system for repeatable image and short-form
-            video production. The core design problem is continuity: preserve a
-            recognizable person and visual language while still allowing outfits,
-            locations, camera angles and motion to change from shot to shot.
+            A virtual-character content system exploring repeatable AI image and
+            short-form video production through identity continuity, outfit variation,
+            shot planning and workflow design.
           </p>
 
           <div className="case-facts" aria-label="Project facts">
             <div className="case-fact">
+              <span className="mono">Project</span>
+              <b>Self-directed</b>
+            </div>
+            <div className="case-fact">
               <span className="mono">Focus</span>
-              <b>Character continuity</b>
+              <b>Identity continuity</b>
             </div>
             <div className="case-fact">
               <span className="mono">Format</span>
-              <b>Vertical short-form</b>
+              <b>Image + short-form video</b>
             </div>
             <div className="case-fact">
               <span className="mono">System</span>
-              <b>n8n + Sheets</b>
-            </div>
-            <div className="case-fact">
-              <span className="mono">Workflow</span>
-              <b>v8.3</b>
+              <b>Planning + routing + QC</b>
             </div>
           </div>
 
           <div className="project-case-actions">
             <a className="btn btn-accent" href={TIKTOK} target="_blank" rel="noopener noreferrer">
-              View published output ↗
+              View @tieu.thienkim ↗
             </a>
             <Link className="btn btn-ghost" href="/work">
               View full work
@@ -61,87 +138,154 @@ export default function ThienKimCaseStudy() {
         </div>
 
         <figure className="case-hero-media-block">
-          <div className="case-hero-frame">
+          <div className="case-hero-frame tk-hero-frame">
             <img
               src="/projects/thien-kim-collage.webp"
-              alt="Editorial collage showing Thiên Kim across multiple OOTD looks"
+              alt="Editorial collage of Thiên Kim across several outfits and image-generation looks"
+              fetchPriority="high"
             />
             <div className="case-media-hud mono" aria-hidden="true">
-              <span>VISUAL RANGE / OOTD</span>
-              <span>AI CHARACTER</span>
+              <span>SELECTED LOOKS</span>
+              <span>IMAGE + VIDEO SYSTEM</span>
             </div>
           </div>
           <figcaption>
-            A sharper project cover built from multiple Thiên Kim looks to show styling
-            range and character consistency at a glance.
+            Multiple styling directions are shown together so character range is visible
+            before the workflow details.
           </figcaption>
         </figure>
       </header>
 
       <nav className="case-jump" aria-label="Thiên Kim case study sections">
-        <a href="#brief">Brief</a>
+        <a href="#brief">Overview</a>
+        <a href="#visual-range">Visual range</a>
         <a href="#continuity">Continuity</a>
-        <a href="#production">Production</a>
+        <a href="#production">Workflow</a>
         <a href="#routing">Routing</a>
         <a href="#quality">QC</a>
-        <a href="#system">System</a>
-        <a href="#output">Output</a>
+        <a href="#video-outputs">Video</a>
+        <a href="#system">Tools</a>
       </nav>
 
       <section className="case-story-grid" id="brief">
         <div className="case-story-block">
           <div className="work-cat mono">Problem</div>
-          <h2 className="dsp">A good first frame is not enough.</h2>
+          <h2 className="dsp">A strong generated frame is not enough.</h2>
           <p>
-            Generative output can drift in face identity, body proportion, hair,
-            wardrobe, props, background and camera logic. Motion adds another failure
-            mode: a still image can look correct while the animated result breaks the
-            character a second later.
+            The project needs one recognizable character to survive changes in outfit,
+            hair, environment, framing and motion. The design problem is deciding what
+            should stay locked, what can vary and when an output should be rejected.
           </p>
         </div>
         <div className="case-story-block">
           <div className="work-cat mono">My role</div>
-          <h2 className="dsp">Art direction, shot logic, prompt systems and workflow design.</h2>
+          <h2 className="dsp">Art direction, shot planning and workflow design.</h2>
           <p>
-            I defined the continuity rules, planned shot packs, built reference and
-            prompt-routing logic, structured QC fields and iterated an n8n + Google
-            Sheets production workflow around the way the media is actually made.
+            I define the identity anchors, styling direction, shot logic, prompt and
+            reference strategy, production routing and review criteria, then use those
+            rules to build repeatable image and short-form video outputs.
           </p>
+        </div>
+      </section>
+
+      <section className="case-detail-section tk-visual-section" id="visual-range">
+        <div className="case-section-split">
+          <div className="case-detail-head">
+            <div className="work-cat mono">Visual range</div>
+            <h2 className="dsp">One identity, deliberately different looks.</h2>
+          </div>
+          <p className="case-section-lede">
+            Selected outputs span casual streetwear, feminine styling, costume,
+            interior and outdoor scenes while keeping the same character identity
+            readable across styling changes.
+          </p>
+        </div>
+
+        <div className="tk-look-grid">
+          {looks.map((look) => (
+            <figure className={`tk-look${look.featured ? " tk-look-featured" : ""}`} key={look.src}>
+              <img src={look.src} alt={look.alt} loading="lazy" decoding="async" />
+              <figcaption className="mono">{look.label}</figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 
       <ThienKimContinuity />
       <ThienKimProduction />
+
+      <section className="case-detail-section tk-video-section" id="video-outputs">
+        <div className="case-section-split">
+          <div className="case-detail-head">
+            <div className="work-cat mono">Selected video outputs</div>
+            <h2 className="dsp">The motion work is shown in the case study itself.</h2>
+          </div>
+          <p className="case-section-lede">
+            Four project videos are embedded directly here so the work can be reviewed
+            without depending on a social link. Video files use local portfolio assets;
+            TikTok remains available as additional public context.
+          </p>
+        </div>
+
+        <div className="tk-video-grid">
+          {videos.map((video) => (
+            <figure className="tk-video-card" key={video.src}>
+              <div className="tk-video-stage">
+                <video
+                  controls
+                  playsInline
+                  preload="metadata"
+                  poster={video.poster}
+                  aria-label={`Thiên Kim video output: ${video.title}`}
+                >
+                  <source src={video.src} type="video/mp4" />
+                  Your browser does not support the video element.
+                </video>
+              </div>
+              <figcaption>
+                <strong>{video.title}</strong>
+                <span>{video.note}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
       <ThienKimSystem />
 
       <section className="case-detail-section case-result-section">
         <div>
           <div className="work-cat mono">What this demonstrates</div>
-          <h2 className="dsp">AI video treated as a design system, not a one-click effect.</h2>
+          <h2 className="dsp">AI media treated as a designed production system.</h2>
         </div>
         <div className="case-proof-list">
-          <span>Virtual-character art direction</span>
-          <span>Reference continuity design</span>
+          <span>Virtual-character direction</span>
+          <span>Identity continuity rules</span>
+          <span>Outfit and scene variation</span>
           <span>Short-form shot planning</span>
-          <span>AI image &amp; I2V direction</span>
-          <span>Trend / mimic routing</span>
-          <span>n8n workflow design</span>
-          <span>Structured QC</span>
-          <span>Production tracking</span>
+          <span>Reference-led image generation</span>
+          <span>Image-to-video direction</span>
+          <span>Workflow routing</span>
+          <span>Structured quality control</span>
         </div>
       </section>
 
       <section className="case-output-feature" id="output">
-        <div className="case-output-image" aria-hidden="true">
-          <img src="/projects/thien-kim-collage.webp" alt="" />
+        <div className="case-output-image">
+          <img
+            src="/projects/thien-kim/look-floral.webp"
+            alt="Thiên Kim in a floral dress in a sunlit stone alley"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div className="case-output-copy">
-          <div className="work-cat mono">Published output</div>
-          <h2 className="dsp">The live channel is the proof layer for current image and video experiments.</h2>
+          <div className="work-cat mono">Public output</div>
+          <h2 className="dsp">See the project in its short-form context.</h2>
           <p>
-            The portfolio links to the actual TikTok account rather than fabricating
-            view counts or campaign outcomes. The system can evolve while the public
-            output remains directly inspectable.
+            The case study shows the system and selected media directly. The TikTok
+            account is linked as the public short-form channel for additional project
+            context and published outputs.
           </p>
           <a className="btn btn-accent" href={TIKTOK} target="_blank" rel="noopener noreferrer">
             Open @tieu.thienkim ↗
