@@ -62,6 +62,7 @@ const requiredCases = [
   "src/app/projects/thien-kim/page.tsx",
   "src/app/projects/co-giao-ai/page.tsx",
   "src/app/projects/claude-ui-lab/page.tsx",
+  "src/app/projects/wwm-homestead/page.tsx",
 ];
 for (const required of requiredCases) {
   if (!existsSync(join(root, required))) errors.push(`Required project case study missing: ${required}`);
@@ -81,6 +82,7 @@ for (const requiredCaseHref of [
   "/projects/thien-kim",
   "/projects/co-giao-ai",
   "/projects/claude-ui-lab",
+  "/projects/wwm-homestead",
 ]) {
   if (!projects.includes(requiredCaseHref)) errors.push(`Case-study link missing from project data: ${requiredCaseHref}`);
 }
@@ -98,6 +100,9 @@ if (!thienKimCase.includes("/projects/thien-kim-country.jpg") || !thienKimCase.i
 
 const wwmCase = read("src/app/projects/wwm-build-lab/page.tsx");
 if (!wwmCase.includes("/projects/wwm-build-lab.png")) errors.push("WWM Build Lab case study must show the live-product screenshot");
+
+const homesteadCase = read("src/app/projects/wwm-homestead/page.tsx");
+if (!homesteadCase.includes("/projects/wwm-homestead.png")) errors.push("WWM Homestead case study must show the live-product screenshot");
 
 const coGiaoCase = read("src/app/projects/co-giao-ai/page.tsx");
 if (!coGiaoCase.includes("/projects/co-giao-ai.svg")) errors.push("Cô Giáo AI case study must show its system map");
@@ -123,6 +128,8 @@ for (const visualAsset of [
   "/projects/nexus-react.png",
   "/projects/helix-kit.png",
   "/projects/co-giao-ai.svg",
+  "/projects/wwm-build-lab.png",
+  "/projects/wwm-homestead.png",
 ]) {
   const file = join(root, "public", visualAsset.slice(1));
   if (!existsSync(file)) errors.push(`Case-study visual asset missing: ${visualAsset}`);
@@ -140,6 +147,6 @@ console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
 console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
 console.log(`- ${requiredCases.length} detailed project case studies present`);
-console.log("- Thiên Kim / WWM / Cô Giáo AI / Claude UI Lab contain visual evidence");
+console.log("- all independent project case studies contain visual evidence");
 console.log("- user-facing marketing positioning absent from src");
 console.log("- stale UI8 / placeholder case-study tokens absent from src");
