@@ -1,0 +1,36 @@
+name: Cleanup stale positioning
+
+on:
+  push:
+    branches: [feature/ai-video-case-studies]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feature/ai-video-case-studies
+          fetch-depth: 0
+      - name: Remove obsolete capability export
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('src/data/portfolio-refresh.ts')
+          s = p.read_text()
+          marker = '\nexport const capabilityGroups = ['
+          if marker in s:
+              s = s.split(marker, 1)[0].rstrip() + '\n'
+              p.write_text(s)
+      - name: Commit cleanup
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/portfolio-refresh.ts
+          git commit -m "chore: remove obsolete marketing capability export"
+          git push origin HEAD:feature/ai-video-case-studies
