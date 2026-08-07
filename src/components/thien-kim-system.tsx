@@ -8,12 +8,13 @@ export function ThienKimSystem() {
     <section className="case-detail-section" id="system">
       <div className="case-section-split">
         <div className="case-detail-head">
-          <div className="work-cat mono">Production system</div>
-          <h2 className="dsp">The spreadsheet is a production model, not a prompt dump.</h2>
+          <div className="work-cat mono">Tools &amp; production system</div>
+          <h2 className="dsp">The workflow records decisions, not just prompts.</h2>
         </div>
         <p className="case-section-lede">
-          The lean v8.3 setup keeps the core production tabs visible and tracks the
-          decisions required to move from a concept to a reviewed, publishable asset.
+          n8n and Google Sheets keep planning, reference strategy, review state and
+          routing visible around the actual media tools. The system is there to support
+          repeatability, not replace visual judgment.
         </p>
       </div>
 
@@ -30,8 +31,8 @@ export function ThienKimSystem() {
             <span className="mono">SELECTED TRACKING FIELDS</span>
             <h3 className="dsp">Continuity, risk and routing stay visible.</h3>
             <p>
-              The workflow stores not just prompts and URLs, but also reference
-              strategy, QC signals, workflow selection and regeneration notes.
+              Alongside prompts and URLs, the production model keeps reference
+              strategy, continuity notes, review signals and the selected video route.
             </p>
           </div>
           <div className="case-schema-fields mono">
@@ -51,22 +52,22 @@ export function ThienKimSystem() {
         <div className="case-tool-card">
           <span className="mono">ORCHESTRATION</span>
           <b>n8n + Google Sheets</b>
-          <p>Pack/shot structure, analysis fields, review state and production tracking.</p>
+          <p>Shot structure, analysis fields, review state and production tracking.</p>
         </div>
         <div className="case-tool-card">
           <span className="mono">MOTION</span>
           <b>Kling / Dreamina</b>
-          <p>Image-to-video options when a shot is suitable for direct motion generation.</p>
+          <p>Image-to-video options for shots that are suitable for direct motion generation.</p>
         </div>
         <div className="case-tool-card">
-          <span className="mono">MIMIC ROUTING</span>
+          <span className="mono">REFERENCE ROUTING</span>
           <b>RunningHub</b>
-          <p>Reference-video-driven routes with an explicit anchor-image input plan.</p>
+          <p>Reference-video-driven motion routes using an explicit character anchor plan.</p>
         </div>
         <div className="case-tool-card">
           <span className="mono">EDIT</span>
           <b>CapCut</b>
-          <p>Short-form assembly, pacing, music/caption finishing and vertical export.</p>
+          <p>Short-form assembly, pacing, finishing and vertical export.</p>
         </div>
       </div>
     </section>

@@ -27,15 +27,15 @@ export const independentProjects: IndependentProject[] = [
   },
   {
     title: "Thiên Kim",
-    eyebrow: "Independent project · AI visual + video workflow",
+    eyebrow: "Independent project · AI image + video workflow",
     description:
-      "A virtual-character content system for short-form image and video production, with identity rules, shot planning, trend-mimic routing and repeatable AI-assisted workflows.",
-    tags: ["AI video", "Art direction", "n8n workflow"],
+      "A virtual-character content system exploring repeatable AI image and short-form video production through identity continuity, outfit variation, shot planning and workflow design.",
+    tags: ["AI image + video", "Art direction", "Workflow design"],
     liveHref: "https://www.tiktok.com/@tieu.thienkim",
     caseHref: "/projects/thien-kim",
     accent: "AI content system",
-    thumbnail: "/projects/thien-kim-cover.svg",
-    thumbnailAlt: "Frame from a Thiên Kim AI-generated short-form video",
+    thumbnail: "https://drive.usercontent.google.com/download?id=1QWeHKzxnxKljs8IOgLBXJBvuOctj8J66",
+    thumbnailAlt: "Editorial collage of Thiên Kim across multiple AI-generated styling looks",
   },
   {
     title: "WWM Homestead Planner",

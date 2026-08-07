@@ -59,17 +59,17 @@ if (existsSync(join(root, "src/app/work/[slug]/page.tsx"))) {
 
 const requiredCases = [
   ["src/app/projects/wwm-build-lab/page.tsx", "/projects/wwm-build-lab", "/projects/wwm-build-lab.png"],
-  ["src/app/projects/thien-kim/page.tsx", "/projects/thien-kim", "/projects/thien-kim-cover.svg"],
+  ["src/app/projects/thien-kim/page.tsx", "/projects/thien-kim", "https://drive.usercontent.google.com/download?id=1WfukRCEWLP9WIcfmv3L53zr70uii2Gs_"],
   ["src/app/projects/wwm-homestead/page.tsx", "/projects/wwm-homestead", "/projects/wwm-homestead.png"],
 ];
 
-for (const [path, , localMedia] of requiredCases) {
+for (const [path, , requiredMedia] of requiredCases) {
   if (!existsSync(join(root, path))) {
     errors.push(`Required project case study missing: ${path}`);
     continue;
   }
-  if (!read(path).includes(localMedia)) {
-    errors.push(`Case study does not use its local project media: ${path}`);
+  if (!read(path).includes(requiredMedia)) {
+    errors.push(`Case study does not use its required project media: ${path}`);
   }
 }
 
@@ -91,12 +91,14 @@ if (new Set(projectThumbs).size !== projectThumbs.length) {
   errors.push("Independent-project thumbnails must be unique");
 }
 for (const thumb of projectThumbs) {
-  if (!thumb.startsWith("/")) {
-    errors.push(`Independent-project thumbnail must be a local public asset: ${thumb}`);
+  if (thumb.startsWith("/")) {
+    const file = join(root, "public", thumb.slice(1));
+    if (!existsSync(file)) errors.push(`Independent-project thumbnail file missing: ${thumb}`);
     continue;
   }
-  const file = join(root, "public", thumb.slice(1));
-  if (!existsSync(file)) errors.push(`Independent-project thumbnail file missing: ${thumb}`);
+  if (!thumb.startsWith("https://drive.usercontent.google.com/download?id=")) {
+    errors.push(`Independent-project thumbnail uses an unsupported media host: ${thumb}`);
+  }
 }
 
 const sitemap = read("src/app/sitemap.ts");
@@ -131,7 +133,7 @@ console.log("Portfolio audit PASS");
 console.log(`- ${hrefs.length}/${expected} Dribbble shots mapped`);
 console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
-console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
+console.log(`- ${projectThumbs.length} independent projects have unique thumbnails`);
 console.log(`- ${requiredCases.length} full independent-project case-study routes present and media-backed`);
 console.log("- sitemap and llms.txt include every case-study route");
 console.log("- public agent metadata is aligned with current Visual / Digital positioning");
