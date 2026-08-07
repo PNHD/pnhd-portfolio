@@ -5,6 +5,14 @@ export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  const projectPaths = [
+    "wwm-build-lab",
+    "thien-kim",
+    "co-giao-ai",
+    "claude-ui-lab",
+    "wwm-homestead",
+  ];
+
   return [
     { url: siteConfig.url, lastModified: now, changeFrequency: "monthly", priority: 1 },
     {
@@ -13,17 +21,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
     },
-    {
-      url: `${siteConfig.url}/projects/wwm-build-lab`,
+    ...projectPaths.map((path) => ({
+      url: `${siteConfig.url}/projects/${path}`,
       lastModified: now,
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as const,
       priority: 0.85,
-    },
-    {
-      url: `${siteConfig.url}/projects/thien-kim`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
+    })),
   ];
 }
