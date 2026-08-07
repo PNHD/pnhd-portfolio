@@ -36,10 +36,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [entered, setEntered] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    setReady(true);
+    const mountFrame = requestAnimationFrame(() => {
+      setMounted(true);
+      setReady(true);
+    });
     const t = setTimeout(() => setEntered(true), 1500);
-    return () => clearTimeout(t);
+    return () => {
+      cancelAnimationFrame(mountFrame);
+      clearTimeout(t);
+    };
   }, []);
 
   useEffect(() => {
@@ -75,7 +80,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [menuOpen]);
 
   useEffect(() => {
-    setMenuOpen(false);
+    const closeFrame = requestAnimationFrame(() => setMenuOpen(false));
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
@@ -88,7 +93,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
     );
     document.querySelectorAll(".reveal:not(.in)").forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    return () => {
+      cancelAnimationFrame(closeFrame);
+      io.disconnect();
+    };
   }, [pathname]);
 
   const dark = mounted ? resolvedTheme === "dark" : true;
