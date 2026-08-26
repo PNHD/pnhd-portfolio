@@ -160,3 +160,59 @@ Never deploy `NEXT_PUBLIC_POSTHOG_TEST_MODE=true`. If Preview traffic should
 stay out of production analytics, omit the key/host there or set
 `NEXT_PUBLIC_POSTHOG_ENABLED=false`. A rebuild is required after changing
 `NEXT_PUBLIC_*` values because Next.js inlines them into the client bundle.
+
+## Reading CV campaign results
+
+### `CV → Portfolio Visits` insight
+
+Create this once in the PostHog project that receives production traffic.
+
+- Insight type: Trends.
+- Series: event `$pageview`, measured by **Total count**. Add a second series
+  on the same event measured by **Unique sessions** for a visit-shaped number.
+- Filters: `utm_source` equals `cv` **and** `utm_medium` equals `resume`.
+- Breakdown: event property `utm_campaign` (the company slug). Add
+  `utm_content` as a second breakdown, or switch to it, to split by role slug.
+- Date range: since the first CV send; set the chart to cumulative if you want
+  a running total rather than per-day bars.
+
+For first send/last send timestamps, open the breakdown value and read the
+underlying events, or build a table insight on `$pageview` filtered the same
+way and aggregated by `min(timestamp)` and `max(timestamp)` per
+`utm_campaign`.
+
+To answer "did company X's CV produce a visit?", read the row for that
+company's `utm_campaign` slug. An absent row means no tagged visit was
+recorded for that campaign.
+
+### Clicks and depth by company campaign
+
+Every custom event carries the same attribution properties, so any event can be
+filtered by `utm_campaign` the same way. Useful follow-ups:
+
+- `work_opened` broken down by `utm_campaign` — which campaigns led to a case
+  study being opened.
+- `external_work_clicked`, `dribbble_clicked`, `github_clicked` — outbound
+  interest per campaign.
+- `email_clicked` / `linkedin_clicked` — contact intent per campaign.
+- `scroll_depth` with `depth = 90` — campaigns that produced a full read.
+
+Use `first_utm_campaign` instead of `utm_campaign` when you want the campaign
+that originally introduced the browser, rather than the most recent tagged
+entry. Use `$session_entry_utm_campaign` for the campaign that started the
+current tab session.
+
+### What a campaign hit does and does not prove
+
+A hit means: a browser opened the portfolio through a URL tagged for that
+specific job application.
+
+It does not prove that the CV PDF itself was opened, that the visitor works at
+that company, that the visitor was a recruiter or hiring manager, or that one
+hit equals one person. CV files are forwarded, links are shared, previews and
+security scanners can fetch URLs, and one person may visit repeatedly from more
+than one browser or device.
+
+Treat campaign hits as a directional signal about which applications generated
+attention, not as proof of who looked. The implementation is deliberately
+anonymous and must not be extended with identification to close this gap.
