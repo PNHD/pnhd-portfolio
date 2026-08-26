@@ -19,9 +19,11 @@ other private token to a `NEXT_PUBLIC_*` variable.
 
 ## Pageviews and attribution
 
-PostHog owns the standard `$pageview` event. The SDK captures the initial load
-and App Router History API changes when the pathname or search string changes.
-Hash-only section navigation is intentionally not a pageview.
+PostHog's built-in pageview capture is disabled because its History API hooks
+also observe App Router hydration transitions. The portfolio runtime emits the
+standard `$pageview` event once after the initial route is hydrated and once
+after each pathname or search-string navigation. Hash-only section navigation
+is intentionally not a pageview.
 
 The supported campaign inputs are `utm_source`, `utm_medium`, `utm_campaign`,
 `utm_content`, and `utm_term`.
@@ -105,8 +107,7 @@ of the viewport reaches 50% and 90% of the document.
 The final `before_send` hook applies to standard PostHog events as well as
 custom events:
 
-- `$current_url` retains only the five supported UTM keys; all other query
-  parameters and fragments are removed.
+- `$current_url` retains no query parameters or fragment.
 - `$referrer` retains no query parameters or fragment.
 - Pathname properties have query/fragment suffixes removed.
 - Other URL-, href-, and filename-shaped properties have all query parameters
@@ -116,8 +117,8 @@ custom events:
   redacted.
 
 This policy applies to emitted `$pageview`, `$pageleave`, `$web_vitals`,
-and `$exception` payloads. Legitimate UTM attribution remains as explicit
-campaign properties and in the allowlisted `$current_url` query only.
+and `$exception` payloads. Legitimate UTM attribution remains available only
+as explicit campaign properties.
 Automatic campaign/referrer persistence is disabled so unsanitized
 `$initial_current_url` data cannot bypass the event hook via anonymous `$set`
 or feature-flag person context.

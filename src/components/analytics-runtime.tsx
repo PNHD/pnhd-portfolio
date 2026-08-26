@@ -62,6 +62,10 @@ export function AnalyticsRuntime() {
   const pageKey = `${pathname}?${searchParams.toString()}`;
 
   useEffect(() => {
+    analytics.pageViewed();
+  }, [pageKey]);
+
+  useEffect(() => {
     const seenSections = new Set<string>();
     const observer = new IntersectionObserver(
       (entries) => {

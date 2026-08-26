@@ -29,3 +29,5 @@ jobs:
         run: npm run lint
       - name: Build
         run: npm run build
+      - name: Analytics and privacy regression
+        run: npm run test:analytics

@@ -110,7 +110,7 @@ function sanitizePropertyValue(
 
   if (typeof value === "string") {
     if (propertyName === "$current_url" || propertyName === "current_url") {
-      return sanitizeUrl(value, true);
+      return sanitizeUrl(value, false);
     }
     if (propertyName === "$pathname" || propertyName === "pathname") {
       return sanitizePathname(value);
@@ -303,7 +303,7 @@ function refreshCampaignProperties() {
 
 function sanitizeReplayRequest<T extends { name?: string }>(request: T): T {
   if (!request.name) return request;
-  return { ...request, name: sanitizeUrl(request.name, true) };
+  return { ...request, name: sanitizeUrl(request.name, false) };
 }
 
 export function initializeAnalytics() {
@@ -316,7 +316,7 @@ export function initializeAnalytics() {
   posthog.init(key, {
     api_host: host,
     defaults: "2026-05-30",
-    capture_pageview: { path: true, search: true },
+    capture_pageview: false,
     capture_pageleave: true,
     capture_performance: {
       network_timing: false,
@@ -376,6 +376,10 @@ function capture(event: string, properties: Properties) {
 }
 
 export const analytics = {
+  pageViewed() {
+    capture("$pageview", {});
+  },
+
   sectionViewed(properties: { section: SectionName; placement: "homepage" }) {
     capture("section_viewed", properties);
   },
