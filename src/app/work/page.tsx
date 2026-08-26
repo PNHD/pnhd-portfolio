@@ -78,7 +78,18 @@ export default function Work() {
                 <h3 className="dsp">{project.title}</h3>
                 <p>{project.description}</p>
                 <div className="project-links">
-                  {project.caseHref ? <Link href={project.caseHref}>View case study →</Link> : null}
+                  {project.caseHref ? (
+                    <Link
+                      href={project.caseHref}
+                      data-analytics-event="work_opened"
+                      data-analytics-placement="work_archive_projects"
+                      data-analytics-section-context="work"
+                      data-project-slug={project.caseHref.replace("/projects/", "")}
+                      data-project-name={project.title}
+                    >
+                      View case study →
+                    </Link>
+                  ) : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
                       {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
@@ -115,6 +126,9 @@ export default function Work() {
             href={refreshedSiteConfig.links.dribbble}
             target="_blank"
             rel="noopener noreferrer"
+            data-analytics-placement="work_archive_source"
+            data-analytics-section-context="work"
+            data-analytics-label="Original Dribbble archive"
           >
             Original Dribbble archive ↗
           </a>

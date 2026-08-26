@@ -246,7 +246,15 @@ export default function WwmBuildLabCaseStudy() {
         <Link className="view-all" href="/work">
           ← Full work archive
         </Link>
-        <Link className="view-all" href="/projects/thien-kim">
+        <Link
+          className="view-all"
+          href="/projects/thien-kim"
+          data-analytics-event="work_opened"
+          data-analytics-placement="case_next"
+          data-analytics-section-context="projects"
+          data-project-slug="thien-kim"
+          data-project-name="Thiên Kim"
+        >
           Next: Thiên Kim — AI visual &amp; video workflow →
         </Link>
       </div>

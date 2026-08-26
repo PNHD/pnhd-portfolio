@@ -122,7 +122,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="section wrap" id="work">
+      <section className="section wrap" id="work" data-analytics-section="work">
         <div className="reveal work-head">
           <div>
             <div className="kicker">Selected Work</div>
@@ -143,6 +143,9 @@ export default function Home() {
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics-placement="home_featured"
+              data-analytics-section-context="work"
+              data-analytics-label={item.title}
             >
               <div className="wthumb work-real-thumb">
                 <img
@@ -180,7 +183,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section wrap" id="experience">
+      <section className="section wrap" id="experience" data-analytics-section="experience">
         <div className="reveal section-intro-row">
           <div>
             <div className="kicker">Experience</div>
@@ -257,7 +260,18 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="project-links">
-                  {project.caseHref ? <Link href={project.caseHref}>View case study →</Link> : null}
+                  {project.caseHref ? (
+                    <Link
+                      href={project.caseHref}
+                      data-analytics-event="work_opened"
+                      data-analytics-placement="home_projects"
+                      data-analytics-section-context="projects"
+                      data-project-slug={project.caseHref.replace("/projects/", "")}
+                      data-project-name={project.title}
+                    >
+                      View case study →
+                    </Link>
+                  ) : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
                       {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
@@ -275,7 +289,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section wrap" id="about">
+      <section className="section wrap" id="about" data-analytics-section="about">
         <div className="reveal">
           <div className="kicker">About</div>
           <h2 className="stitle dsp">A multidisciplinary designer with a product mindset.</h2>
@@ -347,7 +361,14 @@ export default function Home() {
               toolkit when the project needs them.
             </p>
             <div className="contact-actions">
-              <a className="btn btn-light" href={`mailto:${siteConfig.email}`}>
+              <a
+                className="btn btn-light"
+                href={`mailto:${siteConfig.email}`}
+                data-analytics-placement="contact_primary"
+                data-analytics-section-context="contact"
+                data-analytics-label="email"
+                data-ph-sensitive
+              >
                 {siteConfig.email} <span className="arr">↗</span>
               </a>
               <Link className="btn btn-line-d" href="/work">
@@ -360,6 +381,9 @@ export default function Home() {
                 href={siteConfig.links.dribbble}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-placement="contact_social"
+                data-analytics-section-context="contact"
+                data-analytics-label="Dribbble"
               >
                 Dribbble ↗
               </a>
@@ -368,6 +392,10 @@ export default function Home() {
                 href={siteConfig.links.behance}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-placement="contact_social"
+                data-analytics-section-context="contact"
+                data-analytics-label="Behance"
+                data-destination-type="behance"
               >
                 Behance ↗
               </a>
@@ -376,6 +404,9 @@ export default function Home() {
                 href={siteConfig.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-placement="contact_social"
+                data-analytics-section-context="contact"
+                data-analytics-label="GitHub"
               >
                 GitHub ↗
               </a>

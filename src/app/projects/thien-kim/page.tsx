@@ -294,10 +294,26 @@ export default function ThienKimCaseStudy() {
       </section>
 
       <div className="case-next case-next-split">
-        <Link className="view-all" href="/projects/wwm-build-lab">
+        <Link
+          className="view-all"
+          href="/projects/wwm-build-lab"
+          data-analytics-event="work_opened"
+          data-analytics-placement="case_previous"
+          data-analytics-section-context="projects"
+          data-project-slug="wwm-build-lab"
+          data-project-name="WWM Build Lab"
+        >
           ← Previous: WWM Build Lab
         </Link>
-        <Link className="view-all" href="/projects/wwm-homestead">
+        <Link
+          className="view-all"
+          href="/projects/wwm-homestead"
+          data-analytics-event="work_opened"
+          data-analytics-placement="case_next"
+          data-analytics-section-context="projects"
+          data-project-slug="wwm-homestead"
+          data-project-name="WWM Homestead Planner"
+        >
           Next: WWM Homestead Planner →
         </Link>
       </div>

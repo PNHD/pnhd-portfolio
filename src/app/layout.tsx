@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppShell } from "@/components/app-shell";
+import { AnalyticsRuntime } from "@/components/analytics-runtime";
 import { refreshedSiteConfig as siteConfig } from "@/data/portfolio-refresh";
 import "./globals.css";
 import "./portfolio-refresh.css";
@@ -89,6 +91,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <Suspense fallback={null}>
+          <AnalyticsRuntime />
+        </Suspense>
         <ThemeProvider>
           <AppShell>{children}</AppShell>
         </ThemeProvider>

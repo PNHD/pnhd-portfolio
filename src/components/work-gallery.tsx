@@ -53,6 +53,9 @@ export function WorkGallery() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${item.title} — open source work`}
+            data-analytics-placement="work_archive_visual"
+            data-analytics-section-context="work"
+            data-analytics-label={item.title}
           >
             <div className="wthumb work-real-thumb">
               {/* Responsive Dribbble CDN variants are supplied directly for static export. */}
