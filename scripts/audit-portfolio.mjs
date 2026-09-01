@@ -154,7 +154,7 @@ if (!existsSync(llmsPath)) {
   for (const stale of ["nova-ui-kit", "meditation-app", "analytics-dashboard", "3d-landing-page"]) {
     if (llmsLower.includes(stale)) errors.push(`Stale llms.txt token found: ${stale}`);
   }
-  if (!llms.includes("# Dang Pham — Visual / Digital Designer")) {
+  if (!llms.includes("# Dang Pham — Product & Visual Designer")) {
     errors.push("llms.txt positioning is not aligned with the current portfolio");
   }
   for (const [, caseHref] of requiredCases) {
@@ -177,7 +177,7 @@ console.log(`- ${requiredCases.length} sales-facing project case-study routes pr
 console.log(`- ${thienKimMedia.length} local Thiên Kim gallery/video assets verified`);
 console.log("- exactly four Thiên Kim project videos are wired into the case study");
 console.log("- sitemap and llms.txt include every sales-facing case-study route");
-console.log("- public agent metadata is aligned with current Visual / Digital positioning");
+console.log("- public agent metadata is aligned with current Product & Visual positioning");
 console.log("- user-facing marketing positioning absent from src");
 console.log("- Thiên Kim TikTok output link present");
 console.log("- stale placeholder case-study tokens absent from checked surfaces");
