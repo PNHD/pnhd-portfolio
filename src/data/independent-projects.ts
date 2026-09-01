@@ -19,6 +19,7 @@ export const independentProjects: IndependentProject[] = [
       "An interactive revenue-operations command center exploring dense pipeline data, forecast scenarios, risk signals, filtering and deal-level triage for a SaaS team.",
     tags: ["Product UI", "B2B SaaS", "Data workflows"],
     liveHref: "https://northstar-revops-1iggj3.v2.appdeploy.ai/",
+    caseHref: "/projects/northstar-revops",
     accent: "RevOps command center",
     thumbnail:
       "https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/northstar-revops-1iggj3/1788286942989/web.png",
@@ -31,6 +32,7 @@ export const independentProjects: IndependentProject[] = [
       "A returns and refund operations console built around SLA triage, refund exposure, fraud-risk context, carrier health and an approval workflow for high-volume commerce teams.",
     tags: ["E-commerce UX", "Operations", "Workflow design"],
     liveHref: "https://returnflow-ops-0v2co1.v2.appdeploy.ai/",
+    caseHref: "/projects/returnflow-ops",
     accent: "Returns control tower",
     thumbnail:
       "https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/returnflow-ops-0v2co1/1788287024292/web.png",
@@ -43,6 +45,7 @@ export const independentProjects: IndependentProject[] = [
       "A working AI-assisted creative-operations tool that turns a product brief into structured ad directions, then supports human review, selection and production handoff.",
     tags: ["AI workflow", "Creative strategy", "Product design"],
     liveHref: "https://adforge-creative-ops-aesma7.v2.appdeploy.ai/",
+    caseHref: "/projects/adforge-creative-ops",
     accent: "AI creative system",
     thumbnail:
       "https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/adforge-creative-ops-aesma7/1788287086972/web.png",
