@@ -21,8 +21,7 @@ export const independentProjects: IndependentProject[] = [
     liveHref: "https://northstar-revops-1iggj3.v2.appdeploy.ai/",
     caseHref: "/projects/northstar-revops",
     accent: "RevOps command center",
-    thumbnail:
-      "https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/northstar-revops-1iggj3/1788286942989/web.png",
+    thumbnail: "/projects/northstar-revops.svg",
     thumbnailAlt: "Northstar RevOps revenue operations command center concept",
   },
   {
@@ -34,8 +33,7 @@ export const independentProjects: IndependentProject[] = [
     liveHref: "https://returnflow-ops-0v2co1.v2.appdeploy.ai/",
     caseHref: "/projects/returnflow-ops",
     accent: "Returns control tower",
-    thumbnail:
-      "https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/returnflow-ops-0v2co1/1788287024292/web.png",
+    thumbnail: "/projects/returnflow-ops.svg",
     thumbnailAlt: "ReturnFlow Ops e-commerce returns operations console concept",
   },
   {
@@ -47,8 +45,7 @@ export const independentProjects: IndependentProject[] = [
     liveHref: "https://adforge-creative-ops-aesma7.v2.appdeploy.ai/",
     caseHref: "/projects/adforge-creative-ops",
     accent: "AI creative system",
-    thumbnail:
-      "https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/adforge-creative-ops-aesma7/1788287086972/web.png",
+    thumbnail: "/projects/adforge-creative-ops.svg",
     thumbnailAlt: "AdForge Creative Ops AI-assisted concept generation workflow",
   },
   {
