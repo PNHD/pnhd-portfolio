@@ -7,9 +7,10 @@
 - [Full work archive](/work)
 
 ## Independent Projects
-- [WWM Build Lab](/projects/wwm-build-lab) — gear and combat calculator with evidence-aware data states, reproducible calculation context and production verification.
+- [Northstar RevOps](/projects/northstar-revops) — self-directed B2B SaaS revenue-operations concept covering forecasting, risk triage, dense data and deal-level workflows.
+- [ReturnFlow Ops](/projects/returnflow-ops) — self-directed e-commerce operations concept covering return queues, refund exposure, SLA risk and approval decisions.
+- [AdForge Creative Ops](/projects/adforge-creative-ops) — self-directed AI creative-operations concept with structured generation, human review and production handoff.
 - [Thiên Kim](/projects/thien-kim) — virtual-character art direction and repeatable AI image/video workflow covering continuity, shot planning, execution routing and QC.
-- [WWM Homestead Planner](/projects/wwm-homestead) — production, profit, material-runway and retainer planning tool with dashboards and constraint-aware recommendations.
 
 ## Capabilities
 - Visual & Graphic: Adobe Photoshop, Adobe Illustrator, digital/web visual design, e-commerce and promotional assets, typography/layout.
@@ -18,7 +19,7 @@
 - AI Image & Video: character-consistency workflows, image-to-video direction, short-form shot planning, AI-assisted creative production.
 
 ## Source Policy
-Public visual work is linked to the original Dribbble source where available. Independent projects link to live products, repositories or published output. The portfolio avoids invented client names, campaign outcomes, KPIs and unverified performance claims.
+Public visual work is linked to the original Dribbble source where available. Self-directed concepts are labeled as concepts and link to live interactive prototypes. The portfolio avoids invented client names, campaign outcomes, KPIs and unverified performance claims.
 
 ## Contact
 - Email: phamnhathaidang@gmail.com

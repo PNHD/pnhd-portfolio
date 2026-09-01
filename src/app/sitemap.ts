@@ -14,19 +14,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${siteConfig.url}/projects/wwm-build-lab`,
+      url: `${siteConfig.url}/projects/northstar-revops`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${siteConfig.url}/projects/returnflow-ops`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${siteConfig.url}/projects/adforge-creative-ops`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.85,
     },
     {
       url: `${siteConfig.url}/projects/thien-kim`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
-    {
-      url: `${siteConfig.url}/projects/wwm-homestead`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.85,

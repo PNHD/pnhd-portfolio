@@ -13,17 +13,40 @@ export type IndependentProject = {
 
 export const independentProjects: IndependentProject[] = [
   {
-    title: "WWM Build Lab",
-    eyebrow: "Independent product · Product design + implementation",
+    title: "Northstar RevOps",
+    eyebrow: "Self-directed concept · B2B SaaS operations",
     description:
-      "A gear and combat calculator for Where Winds Meet Global, built around evidence-checked data, reproducible calculations and a production deployment workflow.",
-    tags: ["Product design", "TypeScript", "Data systems"],
-    repoHref: "https://github.com/PNHD/wwm-calc",
-    liveHref: "https://wonton-wwm.pages.dev",
-    caseHref: "/projects/wwm-build-lab",
-    accent: "Build calculator",
-    thumbnail: "/projects/wwm-build-lab.png",
-    thumbnailAlt: "WWM Build Lab calculator interface",
+      "An interactive revenue-operations command center exploring dense pipeline data, forecast scenarios, risk signals, filtering and deal-level triage for a SaaS team.",
+    tags: ["Product UI", "B2B SaaS", "Data workflows"],
+    liveHref: "https://northstar-revops-1iggj3.v2.appdeploy.ai/",
+    caseHref: "/projects/northstar-revops",
+    accent: "RevOps command center",
+    thumbnail: "/projects/northstar-revops.svg",
+    thumbnailAlt: "Northstar RevOps revenue operations command center concept",
+  },
+  {
+    title: "ReturnFlow Ops",
+    eyebrow: "Self-directed concept · E-commerce operations",
+    description:
+      "A returns and refund operations console built around SLA triage, refund exposure, fraud-risk context, carrier health and an approval workflow for high-volume commerce teams.",
+    tags: ["E-commerce UX", "Operations", "Workflow design"],
+    liveHref: "https://returnflow-ops-0v2co1.v2.appdeploy.ai/",
+    caseHref: "/projects/returnflow-ops",
+    accent: "Returns control tower",
+    thumbnail: "/projects/returnflow-ops.svg",
+    thumbnailAlt: "ReturnFlow Ops e-commerce returns operations console concept",
+  },
+  {
+    title: "AdForge Creative Ops",
+    eyebrow: "Self-directed concept · AI creative workflow",
+    description:
+      "A working AI-assisted creative-operations tool that turns a product brief into structured ad directions, then supports human review, selection and production handoff.",
+    tags: ["AI workflow", "Creative strategy", "Product design"],
+    liveHref: "https://adforge-creative-ops-aesma7.v2.appdeploy.ai/",
+    caseHref: "/projects/adforge-creative-ops",
+    accent: "AI creative system",
+    thumbnail: "/projects/adforge-creative-ops.svg",
+    thumbnailAlt: "AdForge Creative Ops AI-assisted concept generation workflow",
   },
   {
     title: "Thiên Kim",
@@ -36,18 +59,5 @@ export const independentProjects: IndependentProject[] = [
     accent: "AI content system",
     thumbnail: "/projects/thien-kim-collage.webp",
     thumbnailAlt: "Thiên Kim in a selected editorial look",
-  },
-  {
-    title: "WWM Homestead Planner",
-    eyebrow: "Independent product · Planning tool",
-    description:
-      "A web app for planning production, profit, material runway and retainer labor across a complex game economy, with dashboards, recommendations and optimization flows.",
-    tags: ["Product UI", "React", "Systems thinking"],
-    repoHref: "https://github.com/PNHD/homestead",
-    liveHref: "https://wwm-homestead.pages.dev",
-    caseHref: "/projects/wwm-homestead",
-    accent: "Planner + optimizer",
-    thumbnail: "/projects/wwm-homestead.png",
-    thumbnailAlt: "WWM Homestead Planner dashboard interface",
   },
 ];

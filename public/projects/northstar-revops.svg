@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Northstar RevOps interface preview</title>
+  <desc id="desc">Stylized revenue operations dashboard with navigation, metrics, forecast chart and deal table.</desc>
+  <rect width="1200" height="675" fill="#f3f4f1"/>
+  <rect width="230" height="675" fill="#17221f"/>
+  <rect x="28" y="26" width="32" height="32" rx="7" fill="#d5f26a"/>
+  <text x="44" y="49" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="18" fill="#17221f">N</text>
+  <text x="72" y="48" font-family="Arial,sans-serif" font-weight="700" font-size="18" fill="#f7faf8">Northstar</text>
+  <g font-family="Arial,sans-serif" font-size="13" fill="#93a39e">
+    <text x="34" y="112" fill="#f7faf8">COMMAND CENTER</text><text x="34" y="154">PIPELINE</text><text x="34" y="196">FORECAST</text><text x="34" y="238">ACCOUNTS</text><text x="34" y="280">SIGNALS</text>
+  </g>
+  <text x="270" y="52" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1.4" fill="#77807d">REVENUE OPERATIONS · Q3</text>
+  <text x="270" y="91" font-family="Arial,sans-serif" font-size="31" font-weight="700" fill="#18212f">Command center</text>
+  <g>
+    <rect x="270" y="124" width="210" height="105" rx="10" fill="#fff" stroke="#daddd6"/><rect x="492" y="124" width="210" height="105" rx="10" fill="#fff" stroke="#daddd6"/><rect x="714" y="124" width="210" height="105" rx="10" fill="#fff" stroke="#daddd6"/><rect x="936" y="124" width="210" height="105" rx="10" fill="#fff" stroke="#daddd6"/>
+    <g font-family="Arial,sans-serif"><text x="288" y="151" font-size="12" fill="#6e7774">OPEN PIPELINE</text><text x="288" y="194" font-size="28" font-weight="700" fill="#18212f">$620K</text><text x="510" y="151" font-size="12" fill="#6e7774">LIKELY FORECAST</text><text x="510" y="194" font-size="28" font-weight="700" fill="#18212f">$521K</text><text x="732" y="151" font-size="12" fill="#6e7774">COVERAGE</text><text x="732" y="194" font-size="28" font-weight="700" fill="#18212f">3.4×</text><text x="954" y="151" font-size="12" fill="#6e7774">DEALS AT RISK</text><text x="954" y="194" font-size="28" font-weight="700" fill="#18212f">2</text></g>
+  </g>
+  <rect x="270" y="243" width="558" height="220" rx="10" fill="#fff" stroke="#daddd6"/>
+  <text x="290" y="273" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#6f7975">FORECAST TRAJECTORY</text>
+  <text x="290" y="302" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#18212f">Q3 revenue projection</text>
+  <g fill="#6d8c80"><rect x="298" y="393" width="30" height="48" rx="3"/><rect x="338" y="381" width="30" height="60" rx="3"/><rect x="378" y="365" width="30" height="76" rx="3"/><rect x="418" y="349" width="30" height="92" rx="3"/><rect x="458" y="356" width="30" height="85" rx="3"/><rect x="498" y="329" width="30" height="112" rx="3"/><rect x="538" y="310" width="30" height="131" rx="3"/><rect x="578" y="302" width="30" height="139" rx="3"/></g>
+  <g fill="#b8ce66"><rect x="618" y="284" width="30" height="157" rx="3"/><rect x="658" y="268" width="30" height="173" rx="3"/><rect x="698" y="250" width="30" height="191" rx="3"/></g>
+  <rect x="842" y="243" width="304" height="220" rx="10" fill="#fff" stroke="#daddd6"/>
+  <text x="862" y="273" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#6f7975">SIGNALS</text>
+  <g font-family="Arial,sans-serif"><circle cx="869" cy="315" r="5" fill="#d65d4c"/><text x="884" y="319" font-size="13" font-weight="700" fill="#24302c">Kinetic slipped 8 days</text><circle cx="869" cy="365" r="5" fill="#4e9470"/><text x="884" y="369" font-size="13" font-weight="700" fill="#24302c">Foxglove added CFO</text><circle cx="869" cy="415" r="5" fill="#8f9a96"/><text x="884" y="419" font-size="13" font-weight="700" fill="#24302c">Sora engagement up</text></g>
+  <rect x="270" y="477" width="876" height="160" rx="10" fill="#fff" stroke="#daddd6"/>
+  <text x="290" y="508" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#6f7975">ACTIVE DEALS</text>
+  <g stroke="#eceee9"><line x1="290" y1="531" x2="1126" y2="531"/><line x1="290" y1="566" x2="1126" y2="566"/><line x1="290" y1="601" x2="1126" y2="601"/></g>
+  <g font-family="Arial,sans-serif" font-size="11" fill="#56605c"><text x="290" y="553">Atlas Labs</text><text x="500" y="553">Maya Chen</text><text x="710" y="553">Security review</text><text x="935" y="553">$118K</text><text x="290" y="588">Foxglove</text><text x="500" y="588">Jon Bell</text><text x="710" y="588">Commercial</text><text x="935" y="588">$92K</text></g>
+</svg>
