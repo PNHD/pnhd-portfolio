@@ -9,15 +9,32 @@ import {
 import { dribbbleImage } from "@/lib/dribbble-image";
 
 const MARQUEE = [
-  "Visual Design",
-  "Graphic Design",
-  "Digital Campaigns",
-  "E-commerce",
   "Product UI",
+  "Visual Design",
+  "E-commerce",
+  "AI Creative",
   "Motion",
-  "AI Video",
+  "Figma",
+  "Design Systems",
   "3D",
 ];
+
+const SERVICES = [
+  {
+    eyebrow: "Service 01 · SaaS / Product",
+    title: "Product UI Polish Sprint",
+    description:
+      "For working SaaS products that need a clearer, more consistent and production-ready interface without a full rebuild.",
+    tags: ["UI audit", "Key screens", "Responsive", "Components", "Developer handoff"],
+  },
+  {
+    eyebrow: "Service 02 · E-commerce / Creative",
+    title: "AI-Assisted Creative Sprint",
+    description:
+      "For digital brands that need more campaign and product-creative variations while keeping visual direction, product accuracy and quality control intact.",
+    tags: ["Static creative", "AI image", "Motion", "Video", "Source files"],
+  },
+] as const;
 
 const FEATURED_HREFS = [
   "https://dribbble.com/shots/12877734-Luxrious-Fashion-Web-Design",
@@ -53,33 +70,40 @@ export default function Home() {
       <section className="hero wrap">
         <div className="hero-text">
           <div className="hero-eyebrow mono rise r1">
-            Visual / Digital Designer · Ho Chi Minh City
+            Product &amp; Visual Designer · Ho Chi Minh City
           </div>
           <h1 className="h1 dsp rise r2">
-            Visual design across campaigns, web and{" "}
-            <span className="em">product experiences</span>.
+            I help digital products and brands become{" "}
+            <span className="em">clearer, sharper and ready to ship</span>.
           </h1>
           <p className="hero-sub rise r3">
-            I&apos;m Dang — a multidisciplinary designer with professional experience
-            across graphic design, e-commerce visuals, web and product UI, motion and
-            3D, plus independent work in AI-assisted image and video production.
+            Senior multidisciplinary designer working across SaaS and product UI,
+            e-commerce creative, motion and AI-assisted image/video production — with
+            implementation-aware workflows when a project needs more than static design.
           </p>
-          <div className="hero-role-line rise r3" aria-label="Role fit">
-            <span>Visual / Graphic</span>
-            <span>Digital / Campaign</span>
-            <span>Web / Product UI</span>
-            <span>Motion / AI Video</span>
+          <div className="hero-role-line rise r3" aria-label="Service focus">
+            <span>SaaS / Product UI</span>
+            <span>E-commerce Creative</span>
+            <span>Design Systems</span>
+            <span>AI Image / Video</span>
           </div>
           <div className="hero-cta rise r4">
-            <Link className="btn btn-accent" href="/#work">
-              View selected work <span className="arr">↗</span>
-            </Link>
-            <Link className="btn btn-ghost" href="/#experience">
-              Experience
+            <a
+              className="btn btn-accent"
+              href={`mailto:${siteConfig.email}?subject=Project%20inquiry`}
+              data-analytics-placement="hero_primary"
+              data-analytics-section-context="hero"
+              data-analytics-label="project inquiry"
+              data-ph-sensitive
+            >
+              Discuss a project <span className="arr">↗</span>
+            </a>
+            <Link className="btn btn-ghost" href="/#projects">
+              View product case studies
             </Link>
           </div>
           <div className="hero-foot rise r5">
-            <span>Open to Visual · Digital · Graphic · UI design roles</span>
+            <span>Available for selected freelance projects and design roles</span>
             <span className="ln" />
             <span>2026</span>
           </div>
@@ -122,105 +146,58 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="section wrap" id="work" data-analytics-section="work">
-        <div className="reveal work-head">
-          <div>
-            <div className="kicker">Selected Work</div>
-            <h2 className="stitle dsp">
-              A focused mix of web, interface, motion and visual systems.
-            </h2>
-          </div>
-          <Link className="view-all" href="/work">
-            View full work <span>→</span>
-          </Link>
-        </div>
-
-        <div className="work-grid selected-work-grid">
-          {featured.map((item) => (
-            <a
-              key={item.href}
-              className="wcard reveal work-real-card"
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-analytics-placement="home_featured"
-              data-analytics-section-context="work"
-              data-analytics-label={item.title}
-            >
-              <div className="wthumb work-real-thumb">
-                <img
-                  className="work-real-img"
-                  src={dribbbleImage(item.image, 1000)}
-                  srcSet={`${dribbbleImage(item.image, 640)} 640w, ${dribbbleImage(item.image, 1000)} 1000w, ${dribbbleImage(item.image, 1400)} 1400w`}
-                  sizes="(max-width: 680px) calc(100vw - 36px), (max-width: 1320px) 46vw, 590px"
-                  alt={item.title}
-                  loading="lazy"
-                />
-                <span className="warrow">↗</span>
-              </div>
-              <div className="wmeta">
-                <div>
-                  <div className="work-cat mono">{item.category}</div>
-                  <div className="wname dsp">{item.title}</div>
-                  {item.note ? <p className="wblurb">{item.note}</p> : null}
-                  <div className="wtags">
-                    {item.tags.map((tag) => (
-                      <span key={tag} className="wtag">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        <div className="work-more">
-          <Link className="view-all" href="/work">
-            View full work <span>→</span>
-          </Link>
-        </div>
-      </section>
-
-      <section className="section wrap" id="experience" data-analytics-section="experience">
+      <section className="section wrap" id="services" data-analytics-section="services">
         <div className="reveal section-intro-row">
           <div>
-            <div className="kicker">Experience</div>
-            <h2 className="stitle dsp">
-              Professional design work across product, visual and digital teams.
-            </h2>
+            <div className="kicker">Ways to work together</div>
+            <h2 className="stitle dsp">Two focused services built around work that needs to ship.</h2>
           </div>
           <p className="section-note">
-            The selected work above shows craft; the timeline below shows where that
-            craft has been applied professionally.
+            Start with a bounded sprint. If the collaboration works, the same system can
+            continue as ongoing product or creative support.
           </p>
         </div>
-        <div className="exp">
-          {experiences.map((x) => (
-            <div className="exp-row reveal" key={x.company + x.period}>
-              <div className="exp-date mono">{x.period}</div>
-              <div>
-                <div className="exp-role dsp">{x.role}</div>
-                <div className="exp-co mono">{x.company}</div>
-                <p className="exp-desc">{x.description}</p>
+
+        <div className="project-grid">
+          {SERVICES.map((service) => (
+            <article className="project-card reveal" key={service.title}>
+              <div className="project-body">
+                <div className="project-eyebrow mono">{service.eyebrow}</div>
+                <h3 className="dsp">{service.title}</h3>
+                <p>{service.description}</p>
+                <div className="wtags">
+                  {service.tags.map((tag) => (
+                    <span className="wtag" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="project-links">
+                  <a
+                    href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(service.title)}`}
+                    data-analytics-placement="home_services"
+                    data-analytics-section-context="services"
+                    data-analytics-label={service.title}
+                    data-ph-sensitive
+                  >
+                    Ask about this service →
+                  </a>
+                </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="section wrap" id="projects">
+      <section className="section wrap" id="projects" data-analytics-section="projects">
         <div className="reveal section-intro-row">
           <div>
-            <div className="kicker">Independent Projects</div>
-            <h2 className="stitle dsp">
-              Products and AI workflows built around real use cases.
-            </h2>
+            <div className="kicker">Product Case Studies</div>
+            <h2 className="stitle dsp">Proof through products, systems and repeatable workflows.</h2>
           </div>
           <p className="section-note">
-            Self-directed projects where I shaped the problem, interface, visual
-            direction and implementation or production workflow.
+            Self-directed projects showing problem framing, interface design, production
+            systems and implementation-aware decision making.
           </p>
         </div>
 
@@ -289,6 +266,90 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section wrap" id="work" data-analytics-section="work">
+        <div className="reveal work-head">
+          <div>
+            <div className="kicker">Selected Visual Work</div>
+            <h2 className="stitle dsp">Visual craft across web, interface, motion and systems.</h2>
+          </div>
+          <Link className="view-all" href="/work">
+            View full work <span>→</span>
+          </Link>
+        </div>
+
+        <div className="work-grid selected-work-grid">
+          {featured.map((item) => (
+            <a
+              key={item.href}
+              className="wcard reveal work-real-card"
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-analytics-placement="home_featured"
+              data-analytics-section-context="work"
+              data-analytics-label={item.title}
+            >
+              <div className="wthumb work-real-thumb">
+                <img
+                  className="work-real-img"
+                  src={dribbbleImage(item.image, 1000)}
+                  srcSet={`${dribbbleImage(item.image, 640)} 640w, ${dribbbleImage(item.image, 1000)} 1000w, ${dribbbleImage(item.image, 1400)} 1400w`}
+                  sizes="(max-width: 680px) calc(100vw - 36px), (max-width: 1320px) 46vw, 590px"
+                  alt={item.title}
+                  loading="lazy"
+                />
+                <span className="warrow">↗</span>
+              </div>
+              <div className="wmeta">
+                <div>
+                  <div className="work-cat mono">{item.category}</div>
+                  <div className="wname dsp">{item.title}</div>
+                  {item.note ? <p className="wblurb">{item.note}</p> : null}
+                  <div className="wtags">
+                    {item.tags.map((tag) => (
+                      <span key={tag} className="wtag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div className="work-more">
+          <Link className="view-all" href="/work">
+            View full work <span>→</span>
+          </Link>
+        </div>
+      </section>
+
+      <section className="section wrap" id="experience" data-analytics-section="experience">
+        <div className="reveal section-intro-row">
+          <div>
+            <div className="kicker">Experience</div>
+            <h2 className="stitle dsp">Professional design work across product, visual and digital teams.</h2>
+          </div>
+          <p className="section-note">
+            The case studies show how I work now; the timeline shows where that craft has
+            been applied professionally.
+          </p>
+        </div>
+        <div className="exp">
+          {experiences.map((x) => (
+            <div className="exp-row reveal" key={x.company + x.period}>
+              <div className="exp-date mono">{x.period}</div>
+              <div>
+                <div className="exp-role dsp">{x.role}</div>
+                <div className="exp-co mono">{x.company}</div>
+                <p className="exp-desc">{x.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="section wrap" id="about" data-analytics-section="about">
         <div className="reveal">
           <div className="kicker">About</div>
@@ -304,10 +365,10 @@ export default function Home() {
               systems.
             </p>
             <p>
-              I also build independent tools, prototypes and AI content workflows
-              when a problem benefits from something more functional than a static
-              design. The goal is the same: make complex information and production
-              systems <strong>clear, usable and visually coherent</strong>.
+              I also build independent tools, prototypes and AI content workflows when
+              a problem benefits from something more functional than a static design.
+              The goal is the same: make complex information and production systems{" "}
+              <strong>clear, usable and visually coherent</strong>.
             </p>
           </div>
           <div className="stats reveal">
@@ -353,23 +414,25 @@ export default function Home() {
             </span>
             <div className="contact-kick">Let&apos;s work together</div>
             <h2 className="dsp">
-              Need design that can move across <span className="em">formats</span>?
+              Have a product or creative system that needs to{" "}
+              <span className="em">feel ready to ship</span>?
             </h2>
             <p>
-              Open to Visual, Digital, Graphic and UI Designer roles, plus selected
-              freelance work. Motion, 3D and AI-assisted video are part of the
-              toolkit when the project needs them.
+              Available for selected freelance product and visual-design projects, plus
+              the right full-time design role. I can support UI, digital creative,
+              motion and AI-assisted production without inventing business outcomes the
+              work has not proved.
             </p>
             <div className="contact-actions">
               <a
                 className="btn btn-light"
-                href={`mailto:${siteConfig.email}`}
+                href={`mailto:${siteConfig.email}?subject=Project%20inquiry`}
                 data-analytics-placement="contact_primary"
                 data-analytics-section-context="contact"
-                data-analytics-label="email"
+                data-analytics-label="project inquiry"
                 data-ph-sensitive
               >
-                {siteConfig.email} <span className="arr">↗</span>
+                Discuss a project <span className="arr">↗</span>
               </a>
               <Link className="btn btn-line-d" href="/work">
                 View full work
