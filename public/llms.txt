@@ -1,6 +1,6 @@
-# Dang Pham — Visual / Digital Designer
+# Dang Pham — Product & Visual Designer
 
-> Visual and Digital Designer in Ho Chi Minh City working across graphic design, e-commerce and promotional visuals, web and product UI, motion, 3D, and independent AI image/video workflows.
+> Product and Visual Designer in Ho Chi Minh City working across B2B SaaS product UI, e-commerce operations and creative systems, visual design, motion, and AI-assisted image/video workflows.
 
 ## Portfolio
 - [Selected work and professional experience](/)
@@ -13,10 +13,10 @@
 - [Thiên Kim](/projects/thien-kim) — virtual-character art direction and repeatable AI image/video workflow covering continuity, shot planning, execution routing and QC.
 
 ## Capabilities
+- Product & Web: Figma, responsive UI, data-dense dashboards, operational workflows, design systems and developer handoff.
 - Visual & Graphic: Adobe Photoshop, Adobe Illustrator, digital/web visual design, e-commerce and promotional assets, typography/layout.
-- Product & Web: Figma, responsive UI, landing pages, design systems.
 - Motion & 3D: After Effects, Premiere Pro, Blender, UI motion and 3D animation.
-- AI Image & Video: character-consistency workflows, image-to-video direction, short-form shot planning, AI-assisted creative production.
+- AI Image & Video: character-consistency workflows, image-to-video direction, short-form shot planning and AI-assisted creative production.
 
 ## Source Policy
 Public visual work is linked to the original Dribbble source where available. Self-directed concepts are labeled as concepts and link to live interactive prototypes. The portfolio avoids invented client names, campaign outcomes, KPIs and unverified performance claims.
