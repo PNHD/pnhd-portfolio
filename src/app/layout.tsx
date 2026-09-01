@@ -11,27 +11,34 @@ import "./project-cases-expanded.css";
 import "./thien-kim-media.css";
 import "./accessibility.css";
 
+const publicPositioning = {
+  title: "Product & Visual Designer",
+  description:
+    "Product and visual designer in Ho Chi Minh City working across B2B SaaS product UI, e-commerce operations, visual systems and AI-assisted creative workflows.",
+} as const;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.title}`,
+    default: `${siteConfig.name} — ${publicPositioning.title}`,
     template: `%s — ${siteConfig.name}`,
   },
-  description: siteConfig.description,
+  description: publicPositioning.description,
   keywords: [
+    "Product Designer",
     "Visual Designer",
-    "Digital Designer",
-    "Graphic Designer",
+    "SaaS Product Designer",
     "UI Designer",
+    "Figma Designer",
+    "B2B SaaS Design",
+    "Dashboard Design",
+    "E-commerce UX",
+    "Design Systems",
+    "AI Product Design",
+    "AI Creative Workflow",
     "Motion Designer",
-    "E-commerce Design",
-    "Digital Campaign Design",
-    "AI Video",
-    "AI Image",
-    "Figma",
     "Adobe Photoshop",
     "Adobe Illustrator",
-    "Adobe Creative Cloud",
     "Blender",
     "Dang Pham",
     "Ho Chi Minh City",
@@ -43,14 +50,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    siteName: `${siteConfig.name} — ${siteConfig.title}`,
-    title: `${siteConfig.name} — ${siteConfig.title}`,
-    description: siteConfig.description,
+    siteName: `${siteConfig.name} — ${publicPositioning.title}`,
+    title: `${siteConfig.name} — ${publicPositioning.title}`,
+    description: publicPositioning.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — ${siteConfig.title}`,
-    description: siteConfig.description,
+    title: `${siteConfig.name} — ${publicPositioning.title}`,
+    description: publicPositioning.description,
   },
 };
 
@@ -63,8 +70,8 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.name,
-    jobTitle: siteConfig.title,
-    description: siteConfig.description,
+    jobTitle: publicPositioning.title,
+    description: publicPositioning.description,
     url: siteConfig.url,
     email: `mailto:${siteConfig.email}`,
     address: {
