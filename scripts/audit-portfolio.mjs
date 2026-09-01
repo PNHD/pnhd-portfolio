@@ -62,9 +62,10 @@ if (existsSync(join(root, "src/app/work/[slug]/page.tsx"))) {
 }
 
 const requiredCases = [
-  ["src/app/projects/wwm-build-lab/page.tsx", "/projects/wwm-build-lab", "/projects/wwm-build-lab.png"],
+  ["src/app/projects/northstar-revops/page.tsx", "/projects/northstar-revops", "/projects/northstar-revops.svg"],
+  ["src/app/projects/returnflow-ops/page.tsx", "/projects/returnflow-ops", "/projects/returnflow-ops.svg"],
+  ["src/app/projects/adforge-creative-ops/page.tsx", "/projects/adforge-creative-ops", "/projects/adforge-creative-ops.svg"],
   ["src/app/projects/thien-kim/page.tsx", "/projects/thien-kim", "/projects/thien-kim-collage.webp"],
-  ["src/app/projects/wwm-homestead/page.tsx", "/projects/wwm-homestead", "/projects/wwm-homestead.png"],
 ];
 
 for (const [path, , localMedia] of requiredCases) {
@@ -75,6 +76,8 @@ for (const [path, , localMedia] of requiredCases) {
   if (!read(path).includes(localMedia)) {
     errors.push(`Case study does not use its local project media: ${path}`);
   }
+  const mediaFile = join(root, "public", localMedia.slice(1));
+  if (!existsSync(mediaFile)) errors.push(`Required project media missing: ${localMedia}`);
 }
 
 const thienKimPage = read("src/app/projects/thien-kim/page.tsx");
@@ -122,8 +125,8 @@ for (const [, caseHref] of requiredCases) {
 }
 
 const projectThumbs = [...projects.matchAll(/thumbnail:\s*"([^"]+)"/g)].map((m) => m[1]);
-if (projectThumbs.length !== 3) {
-  errors.push(`Expected 3 independent-project thumbnails, found ${projectThumbs.length}`);
+if (projectThumbs.length !== requiredCases.length) {
+  errors.push(`Expected ${requiredCases.length} independent-project thumbnails, found ${projectThumbs.length}`);
 }
 if (new Set(projectThumbs).size !== projectThumbs.length) {
   errors.push("Independent-project thumbnails must be unique");
@@ -170,10 +173,10 @@ console.log(`- ${hrefs.length}/${expected} Dribbble shots mapped`);
 console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
 console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
-console.log(`- ${requiredCases.length} full independent-project case-study routes present and media-backed`);
+console.log(`- ${requiredCases.length} sales-facing project case-study routes present and media-backed`);
 console.log(`- ${thienKimMedia.length} local Thiên Kim gallery/video assets verified`);
 console.log("- exactly four Thiên Kim project videos are wired into the case study");
-console.log("- sitemap and llms.txt include every case-study route");
+console.log("- sitemap and llms.txt include every sales-facing case-study route");
 console.log("- public agent metadata is aligned with current Visual / Digital positioning");
 console.log("- user-facing marketing positioning absent from src");
 console.log("- Thiên Kim TikTok output link present");
