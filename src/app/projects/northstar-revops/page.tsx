@@ -14,7 +14,7 @@ export default function NorthstarRevOpsCaseStudy() {
       kicker="Self-directed concept · B2B SaaS operations"
       summary="A live revenue-operations command center exploring how a SaaS team can scan pipeline health, switch forecast scenarios, isolate regional risk and move from summary metrics into a deal-level decision."
       liveHref="https://northstar-revops-1iggj3.v2.appdeploy.ai/"
-      screenshot="https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/northstar-revops-1iggj3/1788286942989/web.png"
+      screenshot="/projects/northstar-revops.svg"
       screenshotAlt="Northstar RevOps revenue operations command center"
       problem="Revenue teams work with dense pipelines, changing confidence levels and mixed-risk opportunities. A useful command center has to keep summary metrics, signals, filtering and deal detail connected without turning the screen into a wall of equally weighted numbers."
       role="I framed the workflow, designed the hierarchy and interaction model, implemented the responsive prototype and added working scenario, search, region-filter and watchlist states."
