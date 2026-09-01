@@ -14,7 +14,7 @@ export default function ReturnFlowOpsCaseStudy() {
       kicker="Self-directed concept · E-commerce operations"
       summary="A live returns-and-refunds operations console designed around queue triage, refund exposure, SLA risk, carrier state and manual approval decisions for a high-volume commerce team."
       liveHref="https://returnflow-ops-0v2co1.v2.appdeploy.ai/"
-      screenshot="https://appdeployai-v2-qa-screenshots.s3.us-east-1.amazonaws.com/returnflow-ops-0v2co1/1788287024292/web.png"
+      screenshot="/projects/returnflow-ops.svg"
       screenshotAlt="ReturnFlow Ops e-commerce returns operations console"
       problem="Returns teams juggle customer reasons, order value, case age, carrier status and fraud risk at once. The main challenge is helping an operator decide what deserves attention first without hiding the context needed before money moves."
       role="I defined the triage model, designed the queue and case-detail experience, implemented working filters and sorting, and built a clear approval state so the prototype behaves like an operations tool rather than a static admin mockup."
