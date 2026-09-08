@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="illustration-title illustration-description">
+  <title id="illustration-title">No Search Results - SOFT SYSTEMS</title>
+  <desc id="illustration-description">A large magnifying glass inspects an empty search-results panel with a search field. Original editable vector illustration. No raster images or external dependencies.</desc>
+  <g id="composition" transform="translate(-100.634146 -183.658537) scale(1.804878)">
+    <ellipse cx="513" cy="818" rx="314" ry="23" fill="#DCE4EA" stroke="none" stroke-width="0" opacity="0.52"/>
+    <g id="search-results-1">
+      <rect x="184" y="264" width="515" height="438" rx="24" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="173" y="251" width="515" height="438" rx="24" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <line x1="173" y1="308" x2="688" y2="308" stroke="#1B2733" stroke-width="3"/>
+      <circle cx="199" cy="280" r="4.5" fill="#9EAFBE" stroke="none" stroke-width="4"/>
+      <circle cx="220" cy="280" r="4.5" fill="#9EAFBE" stroke="none" stroke-width="4"/>
+      <circle cx="241" cy="280" r="4.5" fill="#9EAFBE" stroke="none" stroke-width="4"/>
+      <rect x="593" y="273" width="64" height="13" rx="6" fill="#DCE4EA" stroke="none" stroke-width="0"/>
+      <rect x="205" y="341" width="451" height="60" rx="16" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="3"/>
+      <circle cx="235" cy="369" r="10" fill="none" stroke="#9EAFBE" stroke-width="3"/>
+      <line x1="243" y1="377" x2="252" y2="386" stroke="#9EAFBE" stroke-width="3"/>
+      <line x1="274" y1="371" x2="443" y2="371" stroke="#9EAFBE" stroke-width="6"/>
+      <line x1="621" y1="364" x2="635" y2="378" stroke="#9EAFBE" stroke-width="3"/>
+      <line x1="635" y1="364" x2="621" y2="378" stroke="#9EAFBE" stroke-width="3"/>
+      <rect x="210" y="441" width="61" height="61" rx="12" fill="none" stroke="#DCE4EA" stroke-width="3" stroke-dasharray="6 7"/>
+      <line x1="299" y1="460" x2="522" y2="460" stroke="#DCE4EA" stroke-width="7"/>
+      <line x1="299" y1="485" x2="447" y2="485" stroke="#DCE4EA" stroke-width="7"/>
+      <rect x="210" y="531" width="61" height="61" rx="12" fill="none" stroke="#DCE4EA" stroke-width="3" stroke-dasharray="6 7"/>
+      <line x1="299" y1="550" x2="522" y2="550" stroke="#DCE4EA" stroke-width="7"/>
+      <line x1="299" y1="575" x2="447" y2="575" stroke="#DCE4EA" stroke-width="7"/>
+    </g>
+    <g id="empty-search-lens-2" transform="rotate(-12 660 606)">
+      <line x1="694" y1="667" x2="766" y2="791" stroke="#1B2733" stroke-width="48"/>
+      <line x1="694" y1="667" x2="766" y2="791" stroke="#3976E8" stroke-width="39"/>
+      <circle cx="633" cy="545" r="154" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="633" cy="545" r="127" fill="#F7F8FA" stroke="#1B2733" stroke-width="3"/>
+      <circle cx="633" cy="545" r="111" fill="#EAF0FB" stroke="none" stroke-width="0"/>
+      <path d="M 554 516 A 89 89 0 0 1 626 459" fill="none" stroke="#F7F8FA" stroke-width="10"/>
+      <line x1="602" y1="545" x2="664" y2="545" stroke="#3976E8" stroke-width="9"/>
+    </g>
+    <path d="M 187 710 Q 150 755 213 790 H 349" fill="none" stroke="#9EAFBE" stroke-width="3" stroke-dasharray="8 12"/>
+    <path d="M 761 269 Q 781 269 781 249 Q 781 269 801 269 Q 781 269 781 289 Q 781 269 761 269" fill="#F4C66A" stroke="none" stroke-width="0"/>
+    <circle cx="772" cy="397" r="7" fill="#70C9D6" stroke="none" stroke-width="0"/>
+  </g>
+</svg>
