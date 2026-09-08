@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="illustration-title illustration-description">
+  <title id="illustration-title">Page Not Found - SOFT SYSTEMS</title>
+  <desc id="illustration-description">A missing application page, an interrupted route and geometric 404 numerals mark a page-not-found state. Original editable vector illustration. No raster images or external dependencies.</desc>
+  <g id="composition" transform="translate(-38.640000 -124.880000) scale(1.760000)">
+    <ellipse cx="500" cy="826" rx="325" ry="23" fill="#DCE4EA" stroke="none" stroke-width="0" opacity="0.52"/>
+    <g id="missing-page-window-1" transform="rotate(-4 490 427)">
+      <rect x="239" y="234" width="530" height="381" rx="24" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="228" y="221" width="530" height="381" rx="24" fill="#EAF0FB" stroke="#1B2733" stroke-width="4"/>
+      <line x1="228" y1="278" x2="758" y2="278" stroke="#1B2733" stroke-width="3"/>
+      <circle cx="254" cy="250" r="4.5" fill="#9EAFBE" stroke="none" stroke-width="4"/>
+      <circle cx="275" cy="250" r="4.5" fill="#9EAFBE" stroke="none" stroke-width="4"/>
+      <circle cx="296" cy="250" r="4.5" fill="#9EAFBE" stroke="none" stroke-width="4"/>
+      <rect x="663" y="243" width="64" height="13" rx="6" fill="#DCE4EA" stroke="none" stroke-width="0"/>
+      <rect x="257" y="306" width="472" height="238" rx="22" fill="#F7F8FA" stroke="#DCE4EA" stroke-width="3"/>
+      <g id="geometric-404-2">
+        <path d="M 349 345 L 299 426 H 377 M 355 344 V 474" fill="none" stroke="#3976E8" stroke-width="22"/>
+        <rect x="422" y="344" width="90" height="130" rx="40" fill="none" stroke="#3976E8" stroke-width="22"/>
+        <path d="M 592 345 L 542 426 H 620 M 598 344 V 474" fill="none" stroke="#3976E8" stroke-width="22"/>
+      </g>
+      <line x1="371" y1="568" x2="590" y2="568" stroke="#9EAFBE" stroke-width="6"/>
+    </g>
+    <g id="interrupted-page-route-3">
+      <path d="M 343 635 V 684 H 442 V 746 H 497" fill="none" stroke="#3976E8" stroke-width="15"/>
+      <path d="M 577 746 H 678 V 686 H 779" fill="none" stroke="#DCE4EA" stroke-width="15"/>
+      <path d="M 516 723 L 503 750 L 529 745 L 516 774" fill="none" stroke="#F28B73" stroke-width="5"/>
+      <circle cx="343" cy="634" r="12" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="779" cy="686" r="12" fill="#F7F8FA" stroke="#9EAFBE" stroke-width="3"/>
+    </g>
+    <g id="misplaced-page-4" transform="rotate(12 167 551)">
+      <path d="M 148 430 H 227 L 271 474 V 602 Q 271 618 255 618 H 148 Q 132 618 132 602 V 446 Q 132 430 148 430 Z" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 227 430 V 474 H 271" fill="#DCE4EA" stroke="#1B2733" stroke-width="3"/>
+      <line x1="160" y1="508" x2="224" y2="508" stroke="#DCE4EA" stroke-width="6"/>
+      <line x1="160" y1="535" x2="201" y2="535" stroke="#DCE4EA" stroke-width="6"/>
+    </g>
+    <path d="M 785 267 Q 803 267 803 249 Q 803 267 821 267 Q 803 267 803 285 Q 803 267 785 267" fill="#F28B73" stroke="none" stroke-width="0"/>
+    <path d="M 717 630 Q 821 570 834 455" fill="none" stroke="#9EAFBE" stroke-width="3" stroke-dasharray="8 12"/>
+  </g>
+</svg>
