@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="illustration-title illustration-description">
+  <title id="illustration-title">Account Created - SOFT SYSTEMS</title>
+  <desc id="illustration-description">A finished account identity card and a prominent verification seal celebrate successful registration. Original editable vector illustration. No raster images or external dependencies.</desc>
+  <g id="composition" transform="translate(-36.000000 -94.080000) scale(1.760000)">
+    <ellipse cx="501" cy="837" rx="311" ry="23" fill="#DCE4EA" stroke="none" stroke-width="0" opacity="0.52"/>
+    <g id="completed-account-1">
+      <rect x="266" y="228" width="408" height="548" rx="29" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="255" y="215" width="408" height="548" rx="29" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <rect x="280" y="242" width="358" height="43" rx="13" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="3"/>
+      <line x1="303" y1="263" x2="420" y2="263" stroke="#3976E8" stroke-width="6"/>
+      <circle cx="610" cy="263" r="6" fill="#70C9D6" stroke="none" stroke-width="0"/>
+      <circle cx="459" cy="403" r="88" fill="#3976E8" stroke="#1B2733" stroke-width="3"/>
+      <circle cx="459" cy="393" r="22" fill="#F7F8FA" stroke="none" stroke-width="0"/>
+      <path d="M 410.6 442.6 Q 416.76 406.52 459 406.52 Q 501.24 406.52 507.4 442.6 Z" fill="#F7F8FA" stroke="none" stroke-width="0"/>
+      <line x1="364" y1="539" x2="554" y2="539" stroke="#1B2733" stroke-width="9"/>
+      <line x1="397" y1="570" x2="521" y2="570" stroke="#9EAFBE" stroke-width="6"/>
+      <rect x="307" y="624" width="304" height="82" rx="17" fill="#E8F5F6" stroke="#DCE4EA" stroke-width="3"/>
+      <circle cx="343" cy="665" r="14" fill="#70C9D6" stroke="#1B2733" stroke-width="3"/>
+      <line x1="380" y1="653" x2="555" y2="653" stroke="#9EAFBE" stroke-width="6"/>
+      <line x1="380" y1="676" x2="500" y2="676" stroke="#9EAFBE" stroke-width="6"/>
+    </g>
+    <g id="registration-verification-seal-2">
+      <path d="M 660 680 L 636 814 L 690 789 L 725 830 L 750 684 Z" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="704" cy="653" r="93" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="704" cy="653" r="71" fill="#F7F8FA" stroke="#1B2733" stroke-width="3"/>
+      <path d="M 669.2 653 l 24.65 24.65 l 50.75 -55.1" fill="none" stroke="#3976E8" stroke-width="11"/>
+    </g>
+    <g id="account-details-tab-3" transform="rotate(-7 223 489)">
+      <rect x="154" y="457" width="152" height="94" rx="17" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="143" y="444" width="152" height="94" rx="17" fill="#EAF0FB" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="178" cy="481" r="11" fill="#70C9D6" stroke="#1B2733" stroke-width="3"/>
+      <line x1="204" y1="471" x2="265" y2="471" stroke="#9EAFBE" stroke-width="5"/>
+      <line x1="204" y1="492" x2="244" y2="492" stroke="#9EAFBE" stroke-width="5"/>
+    </g>
+    <path d="M 196 240 Q 208 240 208 228 Q 208 240 220 240 Q 208 240 208 252 Q 208 240 196 240" fill="#70C9D6" stroke="none" stroke-width="0"/>
+    <line x1="733" y1="262" x2="743" y2="278" stroke="#F4C66A" stroke-width="6"/>
+    <circle cx="771" cy="412" r="5" fill="#F28B73" stroke="none" stroke-width="0"/>
+    <path d="M 162 677 Q 174 677 174 665 Q 174 677 186 677 Q 174 677 174 689 Q 174 677 162 677" fill="#3976E8" stroke="none" stroke-width="0"/>
+    <line x1="565" y1="159" x2="575" y2="175" stroke="#70C9D6" stroke-width="6"/>
+    <circle cx="327" cy="822" r="5" fill="#F4C66A" stroke="none" stroke-width="0"/>
+  </g>
+</svg>
