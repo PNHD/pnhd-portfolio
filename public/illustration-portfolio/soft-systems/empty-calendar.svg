@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="illustration-title illustration-description">
+  <title id="illustration-title">Empty Calendar - SOFT SYSTEMS</title>
+  <desc id="illustration-description">A freestanding calendar with an unmarked date grid and empty schedule ribbon indicates no events. Original editable vector illustration. No raster images or external dependencies.</desc>
+  <g id="composition" transform="translate(-65.920000 -163.600000) scale(1.760000)">
+    <ellipse cx="493" cy="831" rx="329" ry="23" fill="#DCE4EA" stroke="none" stroke-width="0" opacity="0.52"/>
+    <g id="calendar-easel-1">
+      <path d="M 600 272 L 816 770 H 283 L 399 272 Z" fill="#EAF0FB" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 399 272 L 283 770 H 213 L 345 272 Z" fill="#DCE4EA" stroke="#1B2733" stroke-width="4"/>
+    </g>
+    <g id="empty-calendar-2">
+      <rect x="206" y="289" width="540" height="434" rx="28" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="195" y="276" width="540" height="434" rx="28" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <rect x="195" y="276" width="540" height="103" rx="28" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <rect x="195" y="333" width="540" height="47" rx="0" fill="#3976E8" stroke="none" stroke-width="0"/>
+      <line x1="197" y1="379" x2="733" y2="379" stroke="#1B2733" stroke-width="3"/>
+      <rect x="272" y="243" width="26" height="70" rx="13" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <rect x="450" y="243" width="26" height="70" rx="13" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <rect x="629" y="243" width="26" height="70" rx="13" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <line x1="384" y1="329" x2="543" y2="329" stroke="#F7F8FA" stroke-width="7"/>
+      <rect x="235" y="418" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="312" y="418" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="389" y="418" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="466" y="418" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="543" y="418" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="620" y="418" width="54" height="55" rx="10" fill="#E8F5F6" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="235" y="500" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="312" y="500" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="389" y="500" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="466" y="500" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="543" y="500" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="620" y="500" width="54" height="55" rx="10" fill="#E8F5F6" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="235" y="582" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="312" y="582" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="389" y="582" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="466" y="582" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="543" y="582" width="54" height="55" rx="10" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="2.5"/>
+      <rect x="620" y="582" width="54" height="55" rx="10" fill="#E8F5F6" stroke="#DCE4EA" stroke-width="2.5"/>
+      <line x1="235" y1="677" x2="397" y2="677" stroke="#DCE4EA" stroke-width="5"/>
+    </g>
+    <g id="unscheduled-time-ribbon-3">
+      <rect x="475" y="744" width="357" height="64" rx="18" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="464" y="731" width="357" height="64" rx="18" fill="#E8F5F6" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="501" cy="763" r="16" fill="#F7F8FA" stroke="#1B2733" stroke-width="3"/>
+      <line x1="501" y1="763" x2="501" y2="754" stroke="#1B2733" stroke-width="3"/>
+      <line x1="501" y1="763" x2="508" y2="767" stroke="#1B2733" stroke-width="3"/>
+      <line x1="540" y1="763" x2="784" y2="763" stroke="#9EAFBE" stroke-width="3" stroke-dasharray="7 11"/>
+    </g>
+    <path d="M 148 480 Q 166 480 166 462 Q 166 480 184 480 Q 166 480 166 498 Q 166 480 148 480" fill="#70C9D6" stroke="none" stroke-width="0"/>
+    <path d="M 766 349 Q 857 386 826 495" fill="none" stroke="#9EAFBE" stroke-width="3" stroke-dasharray="8 12"/>
+  </g>
+</svg>
