@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="illustration-title illustration-description">
+  <title id="illustration-title">Access Denied - SOFT SYSTEMS</title>
+  <desc id="illustration-description">A locked security shield stands in front of a blocked credential card and a restricted access barrier. Original editable vector illustration. No raster images or external dependencies.</desc>
+  <g id="composition" transform="translate(-65.040000 -131.040000) scale(1.760000)">
+    <ellipse cx="500" cy="830" rx="314" ry="23" fill="#DCE4EA" stroke="none" stroke-width="0" opacity="0.52"/>
+    <g id="blocked-credential-1" transform="rotate(7 690 433)">
+      <rect x="586" y="230" width="233" height="352" rx="23" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="575" y="217" width="233" height="352" rx="23" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <rect x="595" y="238" width="193" height="54" rx="13" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="3"/>
+      <circle cx="691" cy="365" r="44" fill="#70C9D6" stroke="#1B2733" stroke-width="3"/>
+      <circle cx="691" cy="355" r="11" fill="#F7F8FA" stroke="none" stroke-width="0"/>
+      <path d="M 666.8 384.8 Q 669.88 366.76 691 366.76 Q 712.12 366.76 715.2 384.8 Z" fill="#F7F8FA" stroke="none" stroke-width="0"/>
+      <line x1="625" y1="444" x2="756" y2="444" stroke="#9EAFBE" stroke-width="6"/>
+      <line x1="625" y1="472" x2="718" y2="472" stroke="#9EAFBE" stroke-width="6"/>
+      <rect x="624" y="516" width="137" height="20" rx="8" fill="#DCE4EA" stroke="none" stroke-width="0"/>
+    </g>
+    <g id="restricted-access-shield-2">
+      <path d="M 419.0 274 Q 506.36 313 601 320 V 491.61 Q 593.72 644.4000000000001 419.0 737 Q 244.28 644.4000000000001 237 491.61 V 320 Q 331.64 313 419.0 274 Z" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 270 335 Q 339 321 419 302" fill="none" stroke="#F7F8FA" stroke-width="3" opacity="0.5"/>
+      <path d="M 372.4 487.2 V 453.12 C 372.4 384.96 469.6 384.96 469.6 453.12 V 487.2" fill="none" stroke="#1B2733" stroke-width="10"/>
+      <rect x="331" y="476.55" width="180" height="138.45" rx="17" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="421" cy="536.19" r="9" fill="#1B2733" stroke="none" stroke-width="0"/>
+      <line x1="421" y1="540.45" x2="421" y2="572.4" stroke="#1B2733" stroke-width="7"/>
+    </g>
+    <g id="access-barrier-3">
+      <rect x="596" y="664" width="223" height="67" rx="21" fill="#F28B73" stroke="#1B2733" stroke-width="4"/>
+      <line x1="626" y1="697" x2="789" y2="697" stroke="#1B2733" stroke-width="10"/>
+      <line x1="619" y1="732" x2="619" y2="794" stroke="#1B2733" stroke-width="10"/>
+      <line x1="794" y1="732" x2="794" y2="794" stroke="#1B2733" stroke-width="10"/>
+    </g>
+    <path d="M 192 351 L 163 321 M 182 397 H 145" fill="none" stroke="#F28B73" stroke-width="5"/>
+    <path d="M 540 778 H 456 Q 421 778 421 755" fill="none" stroke="#9EAFBE" stroke-width="3" stroke-dasharray="8 12"/>
+    <path d="M 773 613 Q 789 613 789 597 Q 789 613 805 613 Q 789 613 789 629 Q 789 613 773 613" fill="#F4C66A" stroke="none" stroke-width="0"/>
+  </g>
+</svg>

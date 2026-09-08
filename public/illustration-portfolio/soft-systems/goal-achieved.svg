@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="illustration-title illustration-description">
+  <title id="illustration-title">Goal Achieved - SOFT SYSTEMS</title>
+  <desc id="illustration-description">A target with an accurately landed arrow rises above progress steps and a completed milestone flag. Original editable vector illustration. No raster images or external dependencies.</desc>
+  <g id="composition" transform="translate(-85.151599 -108.884562) scale(1.757997)">
+    <ellipse cx="508" cy="842" rx="328" ry="23" fill="#DCE4EA" stroke="none" stroke-width="0" opacity="0.52"/>
+    <g id="completed-progress-steps-1">
+      <path d="M 162 730 H 301 V 650 H 440 V 568 H 580 V 803 H 162 Z" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 162 730 L 202 704 H 339 V 626 H 479 V 544 H 620 L 580 568 H 440 V 650 H 301 V 730 Z" fill="#EAF0FB" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 580 568 L 620 544 V 778 L 580 803 Z" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 215.04 770 l 9.18 9.18 l 18.900000000000002 -20.520000000000003" fill="none" stroke="#F7F8FA" stroke-width="5"/>
+      <path d="M 356.04 691 l 9.18 9.18 l 18.900000000000002 -20.520000000000003" fill="none" stroke="#F7F8FA" stroke-width="5"/>
+      <path d="M 497.04 610 l 9.18 9.18 l 18.900000000000002 -20.520000000000003" fill="none" stroke="#F7F8FA" stroke-width="5"/>
+    </g>
+    <g id="achievement-target-2">
+      <circle cx="602" cy="422" r="190" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="602" cy="422" r="150" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="602" cy="422" r="111" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="602" cy="422" r="73" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="602" cy="422" r="31" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 739 557 L 781 769 M 500 581 L 473 782" fill="none" stroke="#1B2733" stroke-width="15"/>
+    </g>
+    <g id="landed-goal-arrow-3">
+      <line x1="602" y1="422" x2="827" y2="215" stroke="#1B2733" stroke-width="9"/>
+      <path d="M 750 287 L 751 226 L 810 171 L 811 233 L 861 236 L 803 288 Z" fill="#F4C66A" stroke="#1B2733" stroke-width="4"/>
+      <line x1="602" y1="422" x2="800" y2="240" stroke="#1B2733" stroke-width="8"/>
+      <path d="M 613 389 L 600 424 L 637 414" fill="none" stroke="#1B2733" stroke-width="8"/>
+    </g>
+    <g id="milestone-flag-4">
+      <line x1="234" y1="530" x2="234" y2="303" stroke="#1B2733" stroke-width="7"/>
+      <path d="M 235 304 H 372 L 341 354 L 372 404 H 235 Z" fill="#F28B73" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 275.4 354 l 11.05 11.05 l 22.75 -24.7" fill="none" stroke="#1B2733" stroke-width="5"/>
+      <line x1="205" y1="532" x2="261" y2="532" stroke="#1B2733" stroke-width="7"/>
+    </g>
+    <path d="M 360 217 Q 372 217 372 205 Q 372 217 384 217 Q 372 217 372 229 Q 372 217 360 217" fill="#70C9D6" stroke="none" stroke-width="0"/>
+    <line x1="147" y1="415" x2="157" y2="431" stroke="#F4C66A" stroke-width="6"/>
+    <circle cx="849" cy="548" r="5" fill="#F28B73" stroke="none" stroke-width="0"/>
+    <path d="M 656 818 Q 668 818 668 806 Q 668 818 680 818 Q 668 818 668 830 Q 668 818 656 818" fill="#3976E8" stroke="none" stroke-width="0"/>
+  </g>
+</svg>

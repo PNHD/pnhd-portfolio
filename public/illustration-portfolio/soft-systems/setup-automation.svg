@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="illustration-title illustration-description">
+  <title id="illustration-title">Setup Automation - SOFT SYSTEMS</title>
+  <desc id="illustration-description">A branching workflow connects trigger, condition and action nodes beside a timing control. Original editable vector illustration. No raster images or external dependencies.</desc>
+  <g id="composition" transform="translate(-80.880000 -132.800000) scale(1.760000)">
+    <ellipse cx="498" cy="830" rx="337" ry="23" fill="#DCE4EA" stroke="none" stroke-width="0" opacity="0.52"/>
+    <g id="workflow-routing-1">
+      <path d="M 250 353 H 467 Q 500 353 500 389 V 453 M 500 574 V 684 H 682 M 550 515 H 740 V 353" fill="none" stroke="#DCE4EA" stroke-width="20"/>
+      <path d="M 250 353 H 467 Q 500 353 500 389 V 453 M 500 574 V 684 H 682 M 550 515 H 740 V 353" fill="none" stroke="#1B2733" stroke-width="3"/>
+      <circle cx="379" cy="353" r="10" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="607" cy="684" r="10" fill="#F4C66A" stroke="#1B2733" stroke-width="4"/>
+    </g>
+    <g id="trigger-node-2">
+      <rect x="168" y="260" width="194" height="200" rx="24" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="157" y="247" width="194" height="200" rx="24" fill="#3976E8" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 268 285 L 220 355 H 251 L 239 408 L 292 334 H 260 Z" fill="#F7F8FA" stroke="#1B2733" stroke-width="3"/>
+    </g>
+    <g id="condition-node-3">
+      <polygon points="500,425 590,515 500,605 410,515" fill="#F4C66A" stroke="#1B2733" stroke-width="4"/>
+      <path d="M 482 492 Q 482 470 506 476 Q 532 486 508 505 L 500 516" fill="none" stroke="#1B2733" stroke-width="7"/>
+      <circle cx="500" cy="543" r="4" fill="#1B2733" stroke="none" stroke-width="0"/>
+    </g>
+    <g id="action-node-4">
+      <rect x="656" y="246" width="190" height="187" rx="23" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="645" y="233" width="190" height="187" rx="23" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <polygon points="786.74,326 796.512,333.44 795.058,340.753 792.661,347.813 789.363,354.5 777.081,354.454 773.05,359.05 774.699,371.221 768.5,375.363 761.813,378.661 754.753,381.058 746.101,372.34 740,372.74 732.56,382.512 725.247,381.058 718.187,378.661 711.5,375.363 711.546,363.081 706.95,359.05 694.779,360.699 690.637,354.5 687.339,347.813 684.942,340.753 693.66,332.101 693.26,326 683.488,318.56 684.942,311.247 687.339,304.187 690.637,297.5 702.919,297.546 706.95,292.95 705.301,280.779 711.5,276.637 718.187,273.339 725.247,270.942 733.899,279.66 740,279.26 747.44,269.488 754.753,270.942 761.813,273.339 768.5,276.637 768.454,288.919 773.05,292.95 785.221,291.301 789.363,297.5 792.661,304.187 795.058,311.247 786.34,319.899" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="740" cy="326" r="22.8" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+    </g>
+    <g id="automation-delay-5">
+      <circle cx="721" cy="695" r="91" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <circle cx="721" cy="695" r="66" fill="#EAF0FB" stroke="#DCE4EA" stroke-width="3"/>
+      <line x1="721" y1="695" x2="721" y2="655" stroke="#1B2733" stroke-width="7"/>
+      <line x1="721" y1="695" x2="754" y2="714" stroke="#1B2733" stroke-width="7"/>
+      <circle cx="721" cy="695" r="7" fill="#3976E8" stroke="none" stroke-width="0"/>
+      <rect x="703" y="578" width="36" height="26" rx="7" fill="#70C9D6" stroke="#1B2733" stroke-width="4"/>
+    </g>
+    <g id="workflow-configuration-6">
+      <rect x="182" y="639" width="198" height="129" rx="18" fill="#C7D4E0" stroke="none" stroke-width="0"/>
+      <rect x="171" y="626" width="198" height="129" rx="18" fill="#F7F8FA" stroke="#1B2733" stroke-width="4"/>
+      <line x1="200" y1="667" x2="337" y2="667" stroke="#DCE4EA" stroke-width="7"/>
+      <circle cx="238" cy="667" r="11" fill="#3976E8" stroke="#1B2733" stroke-width="3"/>
+      <line x1="200" y1="709" x2="337" y2="709" stroke="#DCE4EA" stroke-width="7"/>
+      <circle cx="300" cy="709" r="11" fill="#3976E8" stroke="#1B2733" stroke-width="3"/>
+    </g>
+    <path d="M 392 261 C 463 193 573 194 614 248" fill="none" stroke="#3976E8" stroke-width="3" stroke-dasharray="8 12"/>
+    <path d="M 421 724 Q 438 724 438 707 Q 438 724 455 724 Q 438 724 438 741 Q 438 724 421 724" fill="#70C9D6" stroke="none" stroke-width="0"/>
+  </g>
+</svg>
