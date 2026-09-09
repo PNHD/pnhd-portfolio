@@ -18,6 +18,13 @@ export default function ReturnFlowOpsCaseStudy() {
       screenshotAlt="ReturnFlow Ops e-commerce returns operations console"
       problem="Returns teams juggle customer reasons, order value, case age, carrier status and fraud risk at once. The main challenge is helping an operator decide what deserves attention first without hiding the context needed before money moves."
       role="I defined the triage model, designed the queue and case-detail experience, implemented working filters and sorting, and built a clear approval state so the prototype behaves like an operations tool rather than a static admin mockup."
+      facts={[
+        { label: "Context", value: "E-commerce operations" },
+        { label: "Role", value: "Workflow + interface design" },
+        { label: "Scope", value: "Triage and approvals" },
+        { label: "Status", value: "Self-directed" },
+        { label: "Evidence", value: "Live prototype" },
+      ]}
       workflow={[
         { label: "SCAN", title: "See exposure before opening cases", body: "Open-case count, refund value, SLA risk and high-risk case count summarize the current filtered queue." },
         { label: "PRIORITIZE", title: "Filter and reorder work", body: "Status, risk, search and value/age sorting let operators move between policy, urgency and financial exposure." },

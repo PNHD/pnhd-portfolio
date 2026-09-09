@@ -18,6 +18,9 @@ const uniqueHrefs = new Set(hrefs);
 const uniqueImages = new Set(images);
 
 const config = read("src/data/portfolio-refresh.ts");
+const layout = read("src/app/layout.tsx");
+const home = read("src/app/page.tsx");
+const appShell = read("src/components/app-shell.tsx");
 const expectedMatch = config.match(/dribbbleShotCount:\s*(\d+)/);
 const expected = expectedMatch ? Number(expectedMatch[1]) : NaN;
 
@@ -27,6 +30,16 @@ if (hrefs.length !== expected) errors.push(`Expected ${expected} Dribbble shot l
 if (uniqueHrefs.size !== hrefs.length) errors.push(`Duplicate Dribbble shot links found: ${hrefs.length - uniqueHrefs.size}`);
 if (images.length !== expected) errors.push(`Expected ${expected} Dribbble thumbnails, found ${images.length}`);
 if (uniqueImages.size !== images.length) errors.push(`Duplicate Dribbble thumbnails found: ${images.length - uniqueImages.size}`);
+
+if (!config.includes('title: "Product & Visual Designer"')) {
+  errors.push("Canonical Product & Visual Designer title is missing from site config");
+}
+if (!config.includes("linkedin: \"https://linkedin.com/in/pnhd\"")) {
+  errors.push("Verified LinkedIn link is missing from site config");
+}
+if (!layout.includes("siteConfig.links.linkedin")) errors.push("LinkedIn is missing from Person JSON-LD");
+if (!home.includes("siteConfig.links.linkedin")) errors.push("LinkedIn is missing from contact discovery");
+if (appShell.includes("Visual / Digital Designer")) errors.push("Stale generic footer identity remains");
 
 function walk(dir) {
   return readdirSync(dir).flatMap((name) => {
@@ -66,7 +79,9 @@ const requiredCases = [
   ["src/app/projects/returnflow-ops/page.tsx", "/projects/returnflow-ops", "/projects/returnflow-ops.svg"],
   ["src/app/projects/adforge-creative-ops/page.tsx", "/projects/adforge-creative-ops", "/projects/adforge-creative-ops.svg"],
   ["src/app/projects/thien-kim/page.tsx", "/projects/thien-kim", "/projects/thien-kim-collage.webp"],
+  ["src/app/projects/nexus-ui-kit/page.tsx", "/projects/nexus-ui-kit", "/projects/nexus-ui-kit.svg"],
 ];
+const illustrationRoute = "/illustration-portfolio";
 
 for (const [path, , localMedia] of requiredCases) {
   if (!existsSync(join(root, path))) {
@@ -118,6 +133,14 @@ const projects = read("src/data/independent-projects.ts");
 if (!projects.includes("https://www.tiktok.com/@tieu.thienkim")) {
   errors.push("Thiên Kim TikTok output link missing");
 }
+for (const token of [
+  "title: \"Nexus UI Kit\"",
+  "Self-directed project · UI system / design system",
+  "https://github.com/PNHD/nexus-ui-kit",
+  "caseHref: \"/projects/nexus-ui-kit\"",
+]) {
+  if (!projects.includes(token)) errors.push(`Nexus independent-project reference missing: ${token}`);
+}
 for (const [, caseHref] of requiredCases) {
   if (!projects.includes(`caseHref: "${caseHref}"`)) {
     errors.push(`Independent project case-study link missing: ${caseHref}`);
@@ -144,6 +167,36 @@ const sitemap = read("src/app/sitemap.ts");
 for (const [, caseHref] of requiredCases) {
   if (!sitemap.includes(caseHref)) errors.push(`Sitemap missing case-study route: ${caseHref}`);
 }
+if (!sitemap.includes(illustrationRoute)) {
+  errors.push(`Sitemap missing illustration route: ${illustrationRoute}`);
+}
+
+if (!existsSync(join(root, "src/app/illustration-portfolio/page.tsx"))) {
+  errors.push("Illustration portfolio route is missing");
+}
+if (!home.includes(illustrationRoute)) {
+  errors.push("Homepage Soft Systems link is missing");
+}
+if (!read("src/app/work/page.tsx").includes(illustrationRoute)) {
+  errors.push("Work archive Soft Systems link is missing");
+}
+if (srcText.includes("3 independent case studies")) {
+  errors.push("Stale hard-coded independent-project count remains");
+}
+if (!read("src/app/work/page.tsx").includes("{independentProjects.length} independent case studies")) {
+  errors.push("Work archive independent-project count is not derived from data");
+}
+for (const token of ["What are you hiring for?", "Nexus UI Kit", "Northstar RevOps", "Thiên Kim"]) {
+  if (!home.includes(token)) errors.push(`Homepage recruiter focus missing: ${token}`);
+}
+for (const path of [
+  "src/app/projects/northstar-revops/page.tsx",
+  "src/app/projects/returnflow-ops/page.tsx",
+  "src/app/projects/adforge-creative-ops/page.tsx",
+  "src/app/projects/nexus-ui-kit/page.tsx",
+]) {
+  if (!read(path).includes("facts={[")) errors.push(`Case-scan facts missing: ${path}`);
+}
 
 const llmsPath = join(root, "public/llms.txt");
 if (!existsSync(llmsPath)) {
@@ -160,6 +213,8 @@ if (!existsSync(llmsPath)) {
   for (const [, caseHref] of requiredCases) {
     if (!llms.includes(caseHref)) errors.push(`llms.txt missing case-study route: ${caseHref}`);
   }
+  if (!llms.includes("https://linkedin.com/in/pnhd")) errors.push("llms.txt LinkedIn link missing");
+  if (!llms.includes(illustrationRoute)) errors.push(`llms.txt missing illustration route: ${illustrationRoute}`);
 }
 
 if (errors.length) {
@@ -174,10 +229,14 @@ console.log(`- ${uniqueHrefs.size} unique shot URLs`);
 console.log(`- ${uniqueImages.size} unique Dribbble thumbnails`);
 console.log(`- ${projectThumbs.length} independent projects have unique local thumbnails`);
 console.log(`- ${requiredCases.length} sales-facing project case-study routes present and media-backed`);
+console.log("- Nexus project references, local media, sitemap and llms.txt are present");
+console.log("- Soft Systems homepage/work links and sitemap/llms.txt entries are present");
 console.log(`- ${thienKimMedia.length} local Thiên Kim gallery/video assets verified`);
 console.log("- exactly four Thiên Kim project videos are wired into the case study");
 console.log("- sitemap and llms.txt include every sales-facing case-study route");
 console.log("- public agent metadata is aligned with current Product & Visual positioning");
+console.log("- recruiter positioning, LinkedIn discovery and case-scan facts are present");
 console.log("- user-facing marketing positioning absent from src");
 console.log("- Thiên Kim TikTok output link present");
 console.log("- stale placeholder case-study tokens absent from checked surfaces");
+console.log("- independent-project count is data-derived with no stale hard-coded count");

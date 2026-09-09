@@ -14,6 +14,13 @@ export const experiences: Experience[] = [
       "Designed app interfaces, illustrations and motion for client products, collaborating on polished digital experiences.",
   },
   {
+    company: "Lazada",
+    role: "Freelance Banner Designer",
+    period: "Nov 2024 — Feb 2025",
+    description:
+      "Created banner and campaign visuals on a freelance basis for Lazada.",
+  },
+  {
     company: "Shopline Vietnam",
     role: "Senior Graphic Designer",
     period: "Mar 2021 — Mar 2022",

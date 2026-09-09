@@ -50,7 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       setMounted(true);
       setReady(true);
     });
-    const t = setTimeout(() => setEntered(true), 1500);
+    const t = setTimeout(() => setEntered(true), 250);
     return () => {
       cancelAnimationFrame(mountFrame);
       clearTimeout(t);
@@ -262,7 +262,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <footer className="foot">
         <div className="foot-l">
-          <b>Dang Pham</b> — Visual / Digital Designer
+          <b>Dang Pham</b> — Product &amp; Visual Designer
         </div>
         <div className="foot-l">© {new Date().getFullYear()} · Ho Chi Minh City, Vietnam</div>
         <button

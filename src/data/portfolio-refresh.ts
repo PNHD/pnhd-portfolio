@@ -1,12 +1,13 @@
 export const refreshedSiteConfig = {
   name: "Dang Pham",
-  title: "Visual / Digital Designer",
-  tagline: "Visual design across campaigns, web, product UI, motion and 3D.",
+  title: "Product & Visual Designer",
+  tagline: "Digital products, visual systems and creative work ready to ship.",
   description:
-    "Visual and Digital Designer in Ho Chi Minh City working across graphic and digital design, e-commerce and promotional visuals, web and product UI, motion, icon systems and 3D illustration.",
+    "Product & Visual Designer in Ho Chi Minh City working across mobile and web UI, visual and digital design, e-commerce creative, illustration, motion and AI-assisted creative workflows.",
   url: "https://dangpham.pages.dev",
   email: "phamnhathaidang@gmail.com",
   links: {
+    linkedin: "https://linkedin.com/in/pnhd",
     dribbble: "https://dribbble.com/pnhd",
     behance: "https://www.behance.net/five3105",
     github: "https://github.com/PNHD",

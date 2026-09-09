@@ -9,6 +9,7 @@ export type ConceptCaseStudyProps = {
   screenshotAlt: string;
   problem: string;
   role: string;
+  facts: { label: string; value: string }[];
   workflow: { label: string; title: string; body: string }[];
   decisions: { title: string; body: string }[];
   demonstrates: string[];
@@ -23,6 +24,7 @@ export function ConceptCaseStudy({
   screenshotAlt,
   problem,
   role,
+  facts,
   workflow,
   decisions,
   demonstrates,
@@ -56,6 +58,15 @@ export function ConceptCaseStudy({
           <figcaption>Live interactive concept built as portfolio evidence, not client work.</figcaption>
         </figure>
       </header>
+
+      <dl className="facts" aria-label={`${title} case-study facts`}>
+        {facts.map((fact) => (
+          <div className="fact" key={fact.label}>
+            <dt className="k">{fact.label}</dt>
+            <dd className="v">{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
 
       <section className="case-story-grid" id="brief">
         <div className="case-story-block">

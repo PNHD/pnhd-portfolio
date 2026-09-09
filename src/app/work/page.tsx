@@ -31,7 +31,7 @@ export default function Work() {
         </p>
         <div className="hero-role-line archive-proof-line" aria-label="Archive coverage">
           <span>{portfolioEvidence.dribbbleShotCount} source-linked works</span>
-          <span>3 independent case studies</span>
+          <span>{independentProjects.length} independent case studies</span>
           <span>No invented client outcomes</span>
         </div>
       </div>
@@ -92,7 +92,11 @@ export default function Work() {
                   ) : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
-                      {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
+                      {project.title === "Thiên Kim"
+                        ? "View TikTok ↗"
+                        : project.title === "Nexus UI Kit"
+                          ? "Open live project ↗"
+                          : "Open live product ↗"}
                     </a>
                   ) : null}
                   {project.repoHref ? (
@@ -105,6 +109,33 @@ export default function Work() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="archive-projects" aria-labelledby="soft-systems-title">
+        <div className="archive-section-head reveal">
+          <div>
+            <div className="work-cat mono">Illustration System</div>
+            <h2 id="soft-systems-title" className="dsp">Soft Systems — Product Illustration System</h2>
+          </div>
+          <p>
+            A dedicated 40-scene SaaS illustration family for onboarding, empty states,
+            system feedback and success moments.
+          </p>
+        </div>
+        <Link className="project-card" href="/illustration-portfolio">
+          <div className="project-visual project-visual-thumb">
+            <img
+              className="project-thumb-img"
+              src="/illustration-portfolio/soft-systems/welcome.svg"
+              alt="Soft Systems welcome illustration"
+              loading="lazy"
+            />
+          </div>
+          <div className="project-body">
+            <div className="project-eyebrow mono">Illustration / System</div>
+            <h3 className="dsp">Explore the dedicated illustration portfolio →</h3>
+          </div>
+        </Link>
       </section>
 
       <section className="archive-visual" aria-labelledby="visual-archive-title">

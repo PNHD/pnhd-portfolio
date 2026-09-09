@@ -18,6 +18,13 @@ export default function AdForgeCreativeOpsCaseStudy() {
       screenshotAlt="AdForge Creative Ops AI-assisted concept generation workflow"
       problem="Teams can generate a large volume of AI copy or imagery quickly, but volume alone does not create a useful creative system. The product problem is to structure generation around a real brief, make outputs comparable, preserve human judgment and avoid turning AI suggestions into unsupported performance claims."
       role="I designed the brief-to-review workflow, implemented the product interface and wired a real backend AI generation route with structured output, validation and a visible failure state."
+      facts={[
+        { label: "Context", value: "AI-assisted creative workflow" },
+        { label: "Role", value: "Workflow + interface design" },
+        { label: "Scope", value: "Brief-to-review flow" },
+        { label: "Status", value: "Self-directed" },
+        { label: "Evidence", value: "Interactive concept" },
+      ]}
       workflow={[
         { label: "BRIEF", title: "Define product, audience and goal", body: "The generator starts from three business inputs instead of an open-ended prompt box." },
         { label: "GENERATE", title: "Create distinct structured directions", body: "The backend returns exactly three concepts with hook, promise, visual system and CTA fields so outputs can be reviewed consistently." },
