@@ -78,7 +78,7 @@ export default function Home() {
           </div>
           <h1 className="h1 dsp rise r2">
             Digital products, visual systems and creative work built to be{" "}
-            <span className="em">clear, coherent and ready to ship</span>.
+            <span className="em hero-em">clear, coherent and ready to ship</span>.
           </h1>
           <p className="hero-sub rise r3">
             I work across mobile and web UI, e-commerce creative, illustration, motion and

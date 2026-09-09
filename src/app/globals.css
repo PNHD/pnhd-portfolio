@@ -105,6 +105,7 @@ html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 .h1{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(2.5rem,5.2vw,5.4rem);line-height:1;letter-spacing:-.034em;max-width:15ch}
 .em{font-family:'Instrument Serif';font-style:italic;font-weight:400;letter-spacing:0;position:relative;white-space:nowrap}
 .em::after{content:'';position:absolute;left:-1%;right:-1%;bottom:.07em;height:.12em;background:var(--grad);border-radius:4px;z-index:-1}
+.hero-em{white-space:normal}
 .hero-sub{margin-top:30px;font-size:clamp(1.08rem,1.6vw,1.34rem);line-height:1.5;color:var(--ink-2);max-width:48ch}
 .hero-cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:36px}
 .btn{display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono';font-weight:700;font-size:.85rem;padding:15px 25px;border-radius:13px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .22s,border-color .22s,background .22s}
@@ -115,6 +116,7 @@ html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 .btn .arr{transition:transform .25s}
 .btn:hover .arr{transform:translate(3px,-3px)}
 .hero-foot{display:flex;align-items:center;gap:14px;margin-top:32px;font-family:'Space Mono';font-size:.76rem;color:var(--ink-2)}
+.hero-foot>span:first-child{min-width:0}
 .hero-foot .ln{height:1px;flex:1;background:var(--line)}
 
 /* marquee */
