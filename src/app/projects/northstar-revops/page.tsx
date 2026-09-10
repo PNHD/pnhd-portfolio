@@ -18,6 +18,13 @@ export default function NorthstarRevOpsCaseStudy() {
       screenshotAlt="Northstar RevOps revenue operations command center"
       problem="Revenue teams work with dense pipelines, changing confidence levels and mixed-risk opportunities. A useful command center has to keep summary metrics, signals, filtering and deal detail connected without turning the screen into a wall of equally weighted numbers."
       role="I framed the workflow, designed the hierarchy and interaction model, implemented the responsive prototype and added working scenario, search, region-filter and watchlist states."
+      facts={[
+        { label: "Context", value: "B2B SaaS operations" },
+        { label: "Role", value: "Product framing + UI" },
+        { label: "Scope", value: "Responsive prototype" },
+        { label: "Status", value: "Self-directed" },
+        { label: "Evidence", value: "Live prototype" },
+      ]}
       workflow={[
         { label: "SCAN", title: "Read the quarter at a glance", body: "Open pipeline, forecast, coverage and risk are grouped as decision signals rather than decorative KPI cards." },
         { label: "MODEL", title: "Switch forecast confidence", body: "Commit, Likely and Upside states recalculate the projection so scenario planning is visible in the interface." },

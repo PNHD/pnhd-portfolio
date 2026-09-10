@@ -59,6 +59,10 @@ const featured = FEATURED_HREFS.flatMap((href) => {
   return item ? [item] : [];
 });
 
+const featuredProjects = ["Nexus UI Kit", "Northstar RevOps", "Thiên Kim"].flatMap((title) =>
+  independentProjects.filter((project) => project.title === title)
+);
+
 const showcase = SHOWCASE_HREFS.flatMap((href) => {
   const item = workItems.find((work) => work.href === href);
   return item ? [item] : [];
@@ -73,37 +77,29 @@ export default function Home() {
             Product &amp; Visual Designer · Ho Chi Minh City
           </div>
           <h1 className="h1 dsp rise r2">
-            I help digital products and brands become{" "}
-            <span className="em">clearer, sharper and ready to ship</span>.
+            Digital products, visual systems and creative work built to be{" "}
+            <span className="em hero-em">clear, coherent and ready to ship</span>.
           </h1>
           <p className="hero-sub rise r3">
-            Senior multidisciplinary designer working across SaaS and product UI,
-            e-commerce creative, motion and AI-assisted image/video production — with
-            implementation-aware workflows when a project needs more than static design.
+            I work across mobile and web UI, e-commerce creative, illustration, motion and
+            AI-assisted production — combining visual craft with product thinking and
+            implementation-aware workflows.
           </p>
-          <div className="hero-role-line rise r3" aria-label="Service focus">
-            <span>SaaS / Product UI</span>
-            <span>E-commerce Creative</span>
-            <span>Design Systems</span>
-            <span>AI Image / Video</span>
+          <div className="hero-role-line rise r3" aria-label="Recruiter proof">
+            <span>Professional design experience since 2016</span>
+            <span>Open to remote / relocation</span>
+          </div>
+          <div className="hero-role-line rise r3" aria-label="Professional experience">
+            <span>Experience includes S3Corp · Lazada · Shopline · Select Technology</span>
           </div>
           <div className="hero-cta rise r4">
-            <a
-              className="btn btn-accent"
-              href={`mailto:${siteConfig.email}?subject=Project%20inquiry`}
-              data-analytics-placement="hero_primary"
-              data-analytics-section-context="hero"
-              data-analytics-label="project inquiry"
-              data-ph-sensitive
-            >
-              Discuss a project <span className="arr">↗</span>
-            </a>
-            <Link className="btn btn-ghost" href="/#projects">
-              View product case studies
+            <Link className="btn btn-accent" href="/#projects">
+              View selected work <span className="arr">→</span>
             </Link>
+            <Link className="btn btn-ghost" href="/#contact">Contact / Let&apos;s talk</Link>
           </div>
           <div className="hero-foot rise r5">
-            <span>Available for selected freelance projects and design roles</span>
+            <span>Open to product, visual and digital design opportunities</span>
             <span className="ln" />
             <span>2026</span>
           </div>
@@ -146,63 +142,62 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="section wrap" id="services" data-analytics-section="services">
+      <section className="section wrap" id="hiring-focus" data-analytics-section="hiring_focus">
         <div className="reveal section-intro-row">
           <div>
-            <div className="kicker">Ways to work together</div>
-            <h2 className="stitle dsp">Two focused services built around work that needs to ship.</h2>
+            <div className="kicker">Hiring Focus</div>
+            <h2 className="stitle dsp">What are you hiring for?</h2>
           </div>
           <p className="section-note">
-            Start with a bounded sprint. If the collaboration works, the same system can
-            continue as ongoing product or creative support.
+            Three clear lenses for recruiter and client discovery, each linked to portfolio evidence.
           </p>
         </div>
 
         <div className="project-grid">
-          {SERVICES.map((service) => (
-            <article className="project-card reveal" key={service.title}>
-              <div className="project-body">
-                <div className="project-eyebrow mono">{service.eyebrow}</div>
-                <h3 className="dsp">{service.title}</h3>
-                <p>{service.description}</p>
-                <div className="wtags">
-                  {service.tags.map((tag) => (
-                    <span className="wtag" key={tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="project-links">
-                  <a
-                    href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(service.title)}`}
-                    data-analytics-placement="home_services"
-                    data-analytics-section-context="services"
-                    data-analytics-label={service.title}
-                    data-ph-sensitive
-                  >
-                    Ask about this service →
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
+          <article className="project-card reveal">
+            <div className="project-body">
+              <div className="project-eyebrow mono">Product / UI / UX</div>
+              <h3 className="dsp">Interfaces and connected workflows.</h3>
+              <p>Mobile and web interfaces, user flows, dashboards, responsive systems and interactive prototypes.</p>
+              <div className="wtags"><span className="wtag">Figma</span><span className="wtag">Responsive UI</span><span className="wtag">Information architecture</span></div>
+              <div className="project-links"><Link href="/projects/nexus-ui-kit">Nexus UI Kit →</Link><Link href="/projects/northstar-revops">Northstar RevOps →</Link></div>
+            </div>
+          </article>
+          <article className="project-card reveal">
+            <div className="project-body">
+              <div className="project-eyebrow mono">Visual / Graphic / Digital</div>
+              <h3 className="dsp">Creative systems for digital surfaces.</h3>
+              <p>E-commerce and promotional creative, web visuals, illustration systems, iconography and motion.</p>
+              <div className="wtags"><span className="wtag">E-commerce creative</span><span className="wtag">Illustration</span><span className="wtag">Motion</span></div>
+              <div className="project-links"><Link href="/illustration-portfolio">Soft Systems →</Link><Link href="/work">Selected visual archive →</Link></div>
+            </div>
+          </article>
+          <article className="project-card reveal">
+            <div className="project-body">
+              <div className="project-eyebrow mono">AI-assisted Creative</div>
+              <h3 className="dsp">Directed production with review built in.</h3>
+              <p>Art direction, visual quality review, identity consistency, image/video workflow and AI-assisted production.</p>
+              <div className="wtags"><span className="wtag">Art direction</span><span className="wtag">Visual QA</span><span className="wtag">Production workflow</span></div>
+              <div className="project-links"><Link href="/projects/thien-kim">Thiên Kim →</Link><Link href="/projects/adforge-creative-ops">AdForge Creative Ops →</Link></div>
+            </div>
+          </article>
         </div>
       </section>
 
       <section className="section wrap" id="projects" data-analytics-section="projects">
         <div className="reveal section-intro-row">
           <div>
-            <div className="kicker">Product Case Studies</div>
-            <h2 className="stitle dsp">Proof through products, systems and repeatable workflows.</h2>
+            <div className="kicker">Featured Case Studies</div>
+            <h2 className="stitle dsp">Deep product and creative proof for recruiter review.</h2>
           </div>
           <p className="section-note">
-            Self-directed projects showing problem framing, interface design, production
-            systems and implementation-aware decision making.
+            Three self-directed cases selected for UI systems, complex product workflows and
+            AI-assisted creative production. The full breadth remains in the work archive.
           </p>
         </div>
 
         <div className="project-grid">
-          {independentProjects.map((project, index) => (
+          {featuredProjects.map((project, index) => (
             <article className="project-card reveal" key={project.title}>
               <div className={`project-visual project-visual-${index + 1} project-visual-thumb`}>
                 <img
@@ -251,7 +246,11 @@ export default function Home() {
                   ) : null}
                   {project.liveHref ? (
                     <a href={project.liveHref} target="_blank" rel="noopener noreferrer">
-                      {project.title === "Thiên Kim" ? "View TikTok ↗" : "Open live product ↗"}
+                      {project.title === "Thiên Kim"
+                        ? "View TikTok ↗"
+                        : project.title === "Nexus UI Kit"
+                          ? "Open live project ↗"
+                          : "Open live product ↗"}
                     </a>
                   ) : null}
                   {project.repoHref ? (
@@ -262,6 +261,30 @@ export default function Home() {
                 </div>
               </div>
             </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section wrap" id="experience" data-analytics-section="experience">
+        <div className="reveal section-intro-row">
+          <div>
+            <div className="kicker">Professional Experience</div>
+            <h2 className="stitle dsp">Professional design work across product, visual and digital teams.</h2>
+          </div>
+          <p className="section-note">
+            Professional history is distinct from the self-directed cases above.
+          </p>
+        </div>
+        <div className="exp">
+          {experiences.map((x) => (
+            <div className="exp-row reveal" key={x.company + x.period}>
+              <div className="exp-date mono">{x.period}</div>
+              <div>
+                <div className="exp-role dsp">{x.role}</div>
+                <div className="exp-co mono">{x.company}</div>
+                <p className="exp-desc">{x.description}</p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
@@ -278,6 +301,38 @@ export default function Home() {
         </div>
 
         <div className="work-grid selected-work-grid">
+          <Link
+            className="wcard reveal work-real-card"
+            href="/illustration-portfolio"
+            data-analytics-event="work_opened"
+            data-analytics-placement="home_featured"
+            data-analytics-section-context="work"
+            data-analytics-label="Soft Systems — Product Illustration System"
+          >
+            <div className="wthumb work-real-thumb">
+              <img
+                className="work-real-img"
+                src="/illustration-portfolio/soft-systems/welcome.svg"
+                alt="Soft Systems welcome illustration"
+                loading="lazy"
+              />
+              <span className="warrow">→</span>
+            </div>
+            <div className="wmeta">
+              <div>
+                <div className="work-cat mono">Illustration / System</div>
+                <div className="wname dsp">Soft Systems — Product Illustration System</div>
+                <p className="wblurb">
+                  40-scene SaaS onboarding, empty-state, system-feedback and success illustration family.
+                </p>
+                <div className="wtags">
+                  {['Illustration', 'Visual System', 'SVG'].map((tag) => (
+                    <span key={tag} className="wtag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Link>
           {featured.map((item) => (
             <a
               key={item.href}
@@ -325,27 +380,58 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section wrap" id="experience" data-analytics-section="experience">
+      <section className="section wrap" id="skills">
+        <div className="reveal">
+          <div className="kicker">Capabilities &amp; Tools</div>
+          <h2 className="stitle dsp">Product, visual, motion and AI-assisted production capability.</h2>
+        </div>
+        <div className="skills-grid">
+          {verifiedCapabilityGroups.map((group) => (
+            <div className="skill-col reveal" key={group.h}>
+              <h4>{group.h}</h4>
+              <ul>
+                {group.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section wrap" id="services" data-analytics-section="services">
         <div className="reveal section-intro-row">
           <div>
-            <div className="kicker">Experience</div>
-            <h2 className="stitle dsp">Professional design work across product, visual and digital teams.</h2>
+            <div className="kicker">Freelance Services</div>
+            <h2 className="stitle dsp">Two focused ways to work together.</h2>
           </div>
           <p className="section-note">
-            The case studies show how I work now; the timeline shows where that craft has
-            been applied professionally.
+            A bounded sprint can grow into ongoing product or creative support when it is the right fit.
           </p>
         </div>
-        <div className="exp">
-          {experiences.map((x) => (
-            <div className="exp-row reveal" key={x.company + x.period}>
-              <div className="exp-date mono">{x.period}</div>
-              <div>
-                <div className="exp-role dsp">{x.role}</div>
-                <div className="exp-co mono">{x.company}</div>
-                <p className="exp-desc">{x.description}</p>
+        <div className="project-grid">
+          {SERVICES.map((service) => (
+            <article className="project-card reveal" key={service.title}>
+              <div className="project-body">
+                <div className="project-eyebrow mono">{service.eyebrow}</div>
+                <h3 className="dsp">{service.title}</h3>
+                <p>{service.description}</p>
+                <div className="wtags">
+                  {service.tags.map((tag) => <span className="wtag" key={tag}>{tag}</span>)}
+                </div>
+                <div className="project-links">
+                  <a
+                    href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(service.title)}`}
+                    data-analytics-placement="home_services"
+                    data-analytics-section-context="services"
+                    data-analytics-label={service.title}
+                    data-ph-sensitive
+                  >
+                    Ask about this service →
+                  </a>
+                </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>
@@ -373,7 +459,7 @@ export default function Home() {
           </div>
           <div className="stats reveal">
             {[
-              { num: "2016–25", lab: "Professional design experience" },
+              { num: "Since 2016", lab: "Professional design experience" },
               { num: "Product", lab: "+ visual communication" },
               { num: "Figma", lab: "+ Adobe workflow" },
               { num: "AI Video", lab: "+ motion & 3D" },
@@ -387,41 +473,20 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section wrap" id="skills">
-        <div className="reveal">
-          <div className="kicker">Capabilities &amp; Tools</div>
-          <h2 className="stitle dsp">Visual craft across interfaces, motion and AI workflows.</h2>
-        </div>
-        <div className="skills-grid">
-          {verifiedCapabilityGroups.map((group) => (
-            <div className="skill-col reveal" key={group.h}>
-              <h4>{group.h}</h4>
-              <ul>
-                {group.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section className="section wrap" id="contact">
         <div className="contact reveal">
           <div className="contact-card">
             <span className="ast ast-bg" aria-hidden="true">
               <i />
             </span>
-            <div className="contact-kick">Let&apos;s work together</div>
+            <div className="contact-kick">Contact</div>
             <h2 className="dsp">
               Have a product or creative system that needs to{" "}
               <span className="em">feel ready to ship</span>?
             </h2>
             <p>
-              Available for selected freelance product and visual-design projects, plus
-              the right full-time design role. I can support UI, digital creative,
-              motion and AI-assisted production without inventing business outcomes the
-              work has not proved.
+              Open to product, visual and digital design opportunities. Based in Ho Chi Minh City;
+              open to remote / relocation, contract and selected freelance work.
             </p>
             <div className="contact-actions">
               <a
@@ -439,6 +504,17 @@ export default function Home() {
               </Link>
             </div>
             <div className="socials">
+              <a
+                className="social"
+                href={siteConfig.links.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-analytics-placement="contact_social"
+                data-analytics-section-context="contact"
+                data-analytics-label="LinkedIn"
+              >
+                LinkedIn ↗
+              </a>
               <a
                 className="social"
                 href={siteConfig.links.dribbble}

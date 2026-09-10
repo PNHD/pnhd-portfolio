@@ -1,6 +1,6 @@
 # Dang Pham — Product & Visual Designer
 
-> Product and Visual Designer in Ho Chi Minh City working across B2B SaaS product UI, e-commerce operations and creative systems, visual design, motion, and AI-assisted image/video workflows.
+> Product & Visual Designer in Ho Chi Minh City. Work spans mobile and web UI, visual and digital design, e-commerce creative, illustration, motion and AI-assisted creative production. Open to product, visual and digital design opportunities, including remote, relocation, contract and selected freelance work.
 
 ## Portfolio
 - [Selected work and professional experience](/)
@@ -10,19 +10,22 @@
 - [Northstar RevOps](/projects/northstar-revops) — self-directed B2B SaaS revenue-operations concept covering forecasting, risk triage, dense data and deal-level workflows.
 - [ReturnFlow Ops](/projects/returnflow-ops) — self-directed e-commerce operations concept covering return queues, refund exposure, SLA risk and approval decisions.
 - [AdForge Creative Ops](/projects/adforge-creative-ops) — self-directed AI creative-operations concept with structured generation, human review and production handoff.
-- [Thiên Kim](/projects/thien-kim) — virtual-character art direction and repeatable AI image/video workflow covering continuity, shot planning, execution routing and QC.
+- [Thiên Kim](/projects/thien-kim) — independent AI visual-production system covering character art direction, identity continuity, shot planning, quality review and the idea-to-storyboard-to-production-prompt-to-saved-pack workflow.
+- [Nexus UI Kit](/projects/nexus-ui-kit) — self-directed UI/design-system portfolio project covering reusable SaaS layouts, dashboards, components, responsive views and theme variants; not client work.
+- [Soft Systems illustration portfolio](/illustration-portfolio) — self-directed 40-scene SaaS onboarding, empty-state, system-feedback and success illustration system with editable SVG and transparent PNG outputs.
 
 ## Capabilities
-- Product & Web: Figma, responsive UI, data-dense dashboards, operational workflows, design systems and developer handoff.
-- Visual & Graphic: Adobe Photoshop, Adobe Illustrator, digital/web visual design, e-commerce and promotional assets, typography/layout.
-- Motion & 3D: After Effects, Premiere Pro, Blender, UI motion and 3D animation.
-- AI Image & Video: character-consistency workflows, image-to-video direction, short-form shot planning and AI-assisted creative production.
+- Product & UX: Figma, responsive UI, user flows, wireframing/prototyping, information architecture and design-system work.
+- Visual & Graphic: Adobe Photoshop, Adobe Illustrator, e-commerce/promotional design, digital/web visual design, typography/layout and illustration/icon systems.
+- Motion & 3D: After Effects, Premiere Pro, Blender, UI motion and 3D illustration/animation.
+- AI-assisted Workflow: art direction/visual QA, character consistency, image-to-video direction, shot planning and AI-assisted creative production.
 
 ## Source Policy
-Public visual work is linked to the original Dribbble source where available. Self-directed concepts are labeled as concepts and link to live interactive prototypes. The portfolio avoids invented client names, campaign outcomes, KPIs and unverified performance claims.
+Public visual work is linked to the original Dribbble source where available. Self-directed concepts and portfolio artifacts are labeled as such; they are distinct from professional work and do not imply client outcomes. The portfolio avoids invented client names, campaign outcomes, KPIs and unverified performance claims.
 
 ## Contact
 - Email: phamnhathaidang@gmail.com
+- LinkedIn: https://linkedin.com/in/pnhd
 - Dribbble: https://dribbble.com/pnhd
 - Behance: https://www.behance.net/five3105
 - GitHub: https://github.com/PNHD

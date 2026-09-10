@@ -163,6 +163,7 @@ export default function ThienKimCaseStudy() {
         <a href="#production">Workflow</a>
         <a href="#routing">Routing</a>
         <a href="#quality">QC</a>
+        <a href="#production-pack">Production pack</a>
         <a href="#video-outputs">Video</a>
         <a href="#system">Tools</a>
       </nav>
@@ -213,6 +214,25 @@ export default function ThienKimCaseStudy() {
 
       <ThienKimContinuity />
       <ThienKimProduction />
+
+      <section className="case-detail-section" id="production-pack">
+        <div className="case-section-split">
+          <div className="case-detail-head">
+            <div className="work-cat mono">Structured production pack</div>
+            <h2 className="dsp">Idea → storyboard → production prompts → saved pack.</h2>
+          </div>
+          <p className="case-section-lede">
+            This independent workflow keeps planning and production artifacts connected,
+            so a selected direction can be reviewed and saved as a usable production pack.
+          </p>
+        </div>
+        <div className="case-proof-list">
+          <span>Cloudflare Workers</span>
+          <span>Hono</span>
+          <span>D1</span>
+          <span>TypeScript</span>
+        </div>
+      </section>
 
       <section className="case-detail-section tk-video-section" id="video-outputs">
         <div className="case-section-split">

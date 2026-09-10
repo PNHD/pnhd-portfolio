@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrative Nexus UI Kit system composition</title>
+  <desc id="desc">An original dashboard, sidebar, chart and component-theme illustration for the Nexus UI Kit portfolio case study.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#121126"/><stop offset="1" stop-color="#252047"/></linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a78bfa"/><stop offset="1" stop-color="#5b35d5"/></linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <circle cx="1380" cy="130" r="340" fill="#7c3aed" opacity=".16"/><circle cx="105" cy="920" r="300" fill="#22d3ee" opacity=".12"/>
+  <rect x="115" y="100" width="1370" height="800" rx="28" fill="#17162d" stroke="#4c4778" stroke-width="3"/>
+  <rect x="115" y="100" width="280" height="800" rx="28" fill="#1e1b3b"/><rect x="392" y="100" width="3" height="800" fill="#4c4778"/>
+  <g fill="#c4b5fd"><rect x="162" y="164" width="118" height="28" rx="14"/><circle cx="182" cy="178" r="25" fill="url(#violet)"/></g>
+  <g fill="#8177a8"><rect x="164" y="274" width="168" height="18" rx="9"/><rect x="164" y="334" width="130" height="18" rx="9"/><rect x="164" y="394" width="152" height="18" rx="9"/><rect x="164" y="454" width="108" height="18" rx="9"/></g>
+  <rect x="155" y="550" width="200" height="176" rx="18" fill="#29234d"/><text x="182" y="600" fill="#ddd6fe" font-family="Arial, sans-serif" font-size="24">Theme</text><circle cx="191" cy="652" r="19" fill="#a78bfa"/><circle cx="246" cy="652" r="19" fill="#34d399"/><circle cx="301" cy="652" r="19" fill="#fb923c"/>
+  <text x="465" y="183" fill="#f5f3ff" font-family="Arial, sans-serif" font-size="42" font-weight="700">Overview</text><text x="466" y="224" fill="#a19abf" font-family="Arial, sans-serif" font-size="20">A reusable UI system in context</text>
+  <g><rect x="466" y="275" width="270" height="150" rx="20" fill="#252142"/><rect x="766" y="275" width="270" height="150" rx="20" fill="#252142"/><rect x="1066" y="275" width="330" height="150" rx="20" fill="#252142"/>
+  <text x="495" y="322" fill="#a19abf" font-family="Arial, sans-serif" font-size="18">ACTIVE USERS</text><text x="495" y="382" fill="#f5f3ff" font-family="Arial, sans-serif" font-size="48" font-weight="700">12.8K</text><text x="795" y="322" fill="#a19abf" font-family="Arial, sans-serif" font-size="18">CONVERSION</text><text x="795" y="382" fill="#f5f3ff" font-family="Arial, sans-serif" font-size="48" font-weight="700">24.6%</text><text x="1095" y="322" fill="#a19abf" font-family="Arial, sans-serif" font-size="18">SYSTEM STATUS</text><rect x="1095" y="355" width="170" height="28" rx="14" fill="#165e4c"/><text x="1120" y="376" fill="#a7f3d0" font-family="Arial, sans-serif" font-size="17">All systems live</text></g>
+  <rect x="466" y="460" width="620" height="355" rx="20" fill="#252142"/><text x="500" y="510" fill="#f5f3ff" font-family="Arial, sans-serif" font-size="24" font-weight="700">Activity</text><g fill="none" stroke="url(#violet)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><path d="M510 738 L590 665 L670 700 L760 585 L840 628 L930 540 L1042 590"/></g><g fill="#c4b5fd"><circle cx="590" cy="665" r="10"/><circle cx="760" cy="585" r="10"/><circle cx="930" cy="540" r="10"/></g>
+  <rect x="1115" y="460" width="281" height="355" rx="20" fill="#252142"/><text x="1145" y="510" fill="#f5f3ff" font-family="Arial, sans-serif" font-size="24" font-weight="700">Components</text><rect x="1145" y="550" width="214" height="42" rx="12" fill="url(#violet)"/><rect x="1145" y="620" width="125" height="38" rx="10" fill="#37305d"/><rect x="1283" y="620" width="76" height="38" rx="10" fill="#37305d"/><rect x="1145" y="691" width="214" height="18" rx="9" fill="#8177a8"/><rect x="1145" y="729" width="160" height="18" rx="9" fill="#8177a8"/>
+</svg>

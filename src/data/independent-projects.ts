@@ -52,12 +52,25 @@ export const independentProjects: IndependentProject[] = [
     title: "Thiên Kim",
     eyebrow: "Independent project · AI image + video workflow",
     description:
-      "A virtual-character content system exploring repeatable AI image and short-form video production through identity continuity, outfit variation, shot planning and workflow design.",
-    tags: ["AI image + video", "Art direction", "Workflow design"],
+      "An independent AI visual-production system combining character art direction, identity continuity, shot planning, quality review and a structured idea-to-storyboard-to-production-prompt workflow.",
+    tags: ["AI image + video", "Art direction", "Production workflow"],
     liveHref: "https://www.tiktok.com/@tieu.thienkim",
     caseHref: "/projects/thien-kim",
     accent: "AI content system",
     thumbnail: "/projects/thien-kim-collage.webp",
     thumbnailAlt: "Thiên Kim in a selected editorial look",
+  },
+  {
+    title: "Nexus UI Kit",
+    eyebrow: "Self-directed project · UI system / design system",
+    description:
+      "A UI/design-system showcase exploring reusable layouts, components, dashboards, SaaS surfaces, mobile views and theme variants within one coherent visual language.",
+    tags: ["Design Systems", "Product UI", "Responsive UI"],
+    liveHref: "https://nexus-react.pages.dev/",
+    repoHref: "https://github.com/PNHD/nexus-ui-kit",
+    caseHref: "/projects/nexus-ui-kit",
+    accent: "Reusable UI system",
+    thumbnail: "/projects/nexus-ui-kit.svg",
+    thumbnailAlt: "Illustrative Nexus UI Kit dashboard and component system composition",
   },
 ];
