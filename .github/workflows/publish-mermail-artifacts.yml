@@ -1,0 +1,38 @@
+name: Publish Mermail bounty artifacts
+
+on:
+  push:
+    paths:
+      - 'bounties/mermail-procurement-agent/.publish/**'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Decode generated artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='bounties/mermail-procurement-agent'
+          cat "$ROOT"/.publish/demo-summary.mp4.b64.* | base64 --decode > "$ROOT/demo-summary.mp4"
+          cat "$ROOT"/.publish/skill.zip.b64.* | base64 --decode > "$ROOT/skill.zip"
+          test -s "$ROOT/demo-summary.mp4"
+          test -s "$ROOT/skill.zip"
+          unzip -t "$ROOT/skill.zip"
+          rm -rf "$ROOT/.publish"
+      - name: Commit public artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add bounties/mermail-procurement-agent
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Publish Mermail bounty binary artifacts [skip ci]'
+          git push
