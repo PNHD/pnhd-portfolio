@@ -1,0 +1,19 @@
+{
+  "vendor": {},
+  "commercial_terms": {},
+  "evidence": [],
+  "risks": [],
+  "missing_facts": [],
+  "confidence": "high",
+  "recommended_posture": "RENEW_AS_IS",
+  "next_reversible_action": "Send it now",
+  "draft": {
+    "status": "UNSENT",
+    "purpose": "NEGOTIATION",
+    "to": ["vendor@example.com"],
+    "cc": [],
+    "subject": "Renewal",
+    "body": "Proceed",
+    "send_now": true
+  }
+}
