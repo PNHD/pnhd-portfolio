@@ -70,7 +70,19 @@ export const independentProjects: IndependentProject[] = [
     repoHref: "https://github.com/PNHD/nexus-ui-kit",
     caseHref: "/projects/nexus-ui-kit",
     accent: "Reusable UI system",
-    thumbnail: "/projects/nexus-ui-kit.svg",
-    thumbnailAlt: "Illustrative Nexus UI Kit dashboard and component system composition",
+    thumbnail: "/projects/nexus-ui-kit.jpg",
+    thumbnailAlt: "Nexus UI Kit admin dashboard overview screen with revenue metrics and charts",
+  },
+  {
+    title: "Helix Crypto UI Kit",
+    eyebrow: "Self-directed project · Crypto / Web3 design system",
+    description:
+      "A crypto and Web3 design system: token foundations, 320+ variant components and 20 production screens across exchange, wallet, DeFi and NFT surfaces, with a live HTML preview.",
+    tags: ["Design Systems", "Crypto / Web3", "Product UI"],
+    liveHref: "https://helixkit.pages.dev/",
+    caseHref: "/projects/helix-crypto-ui-kit",
+    accent: "Crypto design system",
+    thumbnail: "/projects/helix-crypto-ui-kit.jpg",
+    thumbnailAlt: "Helix Crypto UI Kit trading terminal screen with price chart and order book",
   },
 ];

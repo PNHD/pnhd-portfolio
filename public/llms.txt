@@ -12,6 +12,7 @@
 - [AdForge Creative Ops](/projects/adforge-creative-ops) — self-directed AI creative-operations concept with structured generation, human review and production handoff.
 - [Thiên Kim](/projects/thien-kim) — independent AI visual-production system covering character art direction, identity continuity, shot planning, quality review and the idea-to-storyboard-to-production-prompt-to-saved-pack workflow.
 - [Nexus UI Kit](/projects/nexus-ui-kit) — self-directed UI/design-system portfolio project covering reusable SaaS layouts, dashboards, components, responsive views and theme variants; not client work.
+- [Helix Crypto UI Kit](/projects/helix-crypto-ui-kit) — self-directed crypto/Web3 design system covering token foundations, a 320+ component library and 20 production screens for exchange, wallet, DeFi and NFT products, with a live HTML preview; not client work.
 - [Soft Systems illustration portfolio](/illustration-portfolio) — self-directed 40-scene SaaS onboarding, empty-state, system-feedback and success illustration system with editable SVG and transparent PNG outputs.
 
 ## Capabilities

@@ -1,5 +1,12 @@
 import Link from "next/link";
 
+export type CaseScreen = {
+  src: string;
+  alt: string;
+  label: string;
+  span?: "full" | "mobile";
+};
+
 export type ConceptCaseStudyProps = {
   title: string;
   kicker: string;
@@ -13,6 +20,9 @@ export type ConceptCaseStudyProps = {
   workflow: { label: string; title: string; body: string }[];
   decisions: { title: string; body: string }[];
   demonstrates: string[];
+  screens?: CaseScreen[];
+  /** Native aspect ratio of the hero screenshot (width / height). Keeps the shot uncropped. */
+  screenshotRatio?: number;
 };
 
 export function ConceptCaseStudy({
@@ -28,6 +38,8 @@ export function ConceptCaseStudy({
   workflow,
   decisions,
   demonstrates,
+  screens,
+  screenshotRatio,
 }: ConceptCaseStudyProps) {
   return (
     <article className="project-case wrap case">
@@ -48,8 +60,19 @@ export function ConceptCaseStudy({
         </div>
 
         <figure className="case-hero-media-block">
-          <div className="case-product-shot">
-            <img src={screenshot} alt={screenshotAlt} />
+          <div
+            className="case-product-shot"
+            style={
+              screenshotRatio
+                ? { aspectRatio: String(screenshotRatio), minHeight: 0 }
+                : undefined
+            }
+          >
+            <img
+              src={screenshot}
+              alt={screenshotAlt}
+              style={screenshotRatio ? { minHeight: 0 } : undefined}
+            />
             <div className="case-media-hud mono" aria-hidden="true">
               <span>SELF-DIRECTED CONCEPT</span>
               <span>2026</span>
@@ -67,6 +90,32 @@ export function ConceptCaseStudy({
           </div>
         ))}
       </dl>
+
+      {screens && screens.length > 0 ? (
+        <section className="case-detail-section" id="screens">
+          <div className="case-section-split">
+            <div className="case-detail-head">
+              <div className="work-cat mono">Interface evidence</div>
+              <h2 className="dsp">Screens captured from the live build.</h2>
+            </div>
+            <p className="case-section-lede">
+              Direct screenshots of the deployed product — no reconstructed mockups — so density,
+              states and theme variants can be judged exactly as they ship.
+            </p>
+          </div>
+          <div className="case-screens">
+            {screens.map((screen) => (
+              <figure
+                className={`case-screen${screen.span ? ` case-screen-${screen.span}` : ""}`}
+                key={screen.src}
+              >
+                <img src={screen.src} alt={screen.alt} loading="lazy" />
+                <figcaption className="mono">{screen.label}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="case-story-grid" id="brief">
         <div className="case-story-block">

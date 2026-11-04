@@ -15,8 +15,8 @@ export default function NexusUiKitCaseStudy() {
       kicker="Self-directed project · UI system / design system"
       summary="A portfolio/design-system artifact that explores how reusable layout and component patterns can stay coherent across SaaS landing pages, dashboards, documentation and mobile views. It is not client work."
       liveHref="https://nexus-react.pages.dev/"
-      screenshot="/projects/nexus-ui-kit.svg"
-      screenshotAlt="Illustrative Nexus UI Kit dashboard and component system composition"
+      screenshot="/projects/nexus-ui-kit/overview-dark.jpg"
+      screenshotAlt="Nexus UI Kit admin suite overview dashboard with revenue metrics, charts and navigation"
       problem="A visual system has to stay recognizable when navigation, data density, documentation, introductory surfaces and responsive layouts all ask for different patterns."
       role="I designed the interface system, reusable patterns, responsive treatment and theme variants, then implemented the portfolio artifact as a working UI showcase."
       facts={[
@@ -38,6 +38,41 @@ export default function NexusUiKitCaseStudy() {
         { title: "Implementation-aware by design", body: "The artifact is built as a working interface showcase so responsive states and component consistency can be reviewed directly." },
       ]}
       demonstrates={["Design systems", "SaaS UI", "Admin dashboards", "Component patterns", "Responsive UI", "Light and dark themes", "Implementation-aware design"]}
+      screenshotRatio={1.6}
+      screens={[
+        {
+          src: "/projects/nexus-ui-kit/analytics.jpg",
+          alt: "Nexus UI Kit analytics dashboard with sessions, users and bounce-rate metrics",
+          label: "ANALYTICS · DARK",
+          span: "full",
+        },
+        {
+          src: "/projects/nexus-ui-kit/ecommerce.jpg",
+          alt: "Nexus UI Kit e-commerce overview with sales, orders and category breakdown",
+          label: "ECOMMERCE OVERVIEW",
+        },
+        {
+          src: "/projects/nexus-ui-kit/components.jpg",
+          alt: "Nexus UI Kit component library screen showing buttons, badges, alerts and accordions",
+          label: "COMPONENT LIBRARY",
+        },
+        {
+          src: "/projects/nexus-ui-kit/overview-light.jpg",
+          alt: "Nexus UI Kit overview dashboard rendered in the light theme with an emerald accent",
+          label: "OVERVIEW · LIGHT THEME",
+        },
+        {
+          src: "/projects/nexus-ui-kit/landing.jpg",
+          alt: "Nexus UI Kit landing page surface with hero and pricing sections",
+          label: "LANDING SURFACE",
+        },
+        {
+          src: "/projects/nexus-ui-kit/mobile-app.jpg",
+          alt: "Nexus UI Kit dashboard rendered in a 390px mobile viewport",
+          label: "MOBILE · 390 PX",
+          span: "mobile",
+        },
+      ]}
     />
   );
 }

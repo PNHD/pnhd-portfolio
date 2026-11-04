@@ -160,7 +160,7 @@ export default function Home() {
               <h3 className="dsp">Interfaces and connected workflows.</h3>
               <p>Mobile and web interfaces, user flows, dashboards, responsive systems and interactive prototypes.</p>
               <div className="wtags"><span className="wtag">Figma</span><span className="wtag">Responsive UI</span><span className="wtag">Information architecture</span></div>
-              <div className="project-links"><Link href="/projects/nexus-ui-kit">Nexus UI Kit →</Link><Link href="/projects/northstar-revops">Northstar RevOps →</Link></div>
+              <div className="project-links"><Link href="/projects/nexus-ui-kit">Nexus UI Kit →</Link><Link href="/projects/helix-crypto-ui-kit">Helix Crypto UI Kit →</Link><Link href="/projects/northstar-revops">Northstar RevOps →</Link></div>
             </div>
           </article>
           <article className="project-card reveal">

@@ -79,7 +79,8 @@ const requiredCases = [
   ["src/app/projects/returnflow-ops/page.tsx", "/projects/returnflow-ops", "/projects/returnflow-ops.svg"],
   ["src/app/projects/adforge-creative-ops/page.tsx", "/projects/adforge-creative-ops", "/projects/adforge-creative-ops.svg"],
   ["src/app/projects/thien-kim/page.tsx", "/projects/thien-kim", "/projects/thien-kim-collage.webp"],
-  ["src/app/projects/nexus-ui-kit/page.tsx", "/projects/nexus-ui-kit", "/projects/nexus-ui-kit.svg"],
+  ["src/app/projects/nexus-ui-kit/page.tsx", "/projects/nexus-ui-kit", "/projects/nexus-ui-kit/overview-dark.jpg"],
+  ["src/app/projects/helix-crypto-ui-kit/page.tsx", "/projects/helix-crypto-ui-kit", "/projects/helix-crypto-ui-kit/trading-terminal.jpg"],
 ];
 const illustrationRoute = "/illustration-portfolio";
 
