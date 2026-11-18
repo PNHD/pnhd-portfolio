@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { WorkGallery } from "@/components/work-gallery";
 import { independentProjects } from "@/data/independent-projects";
+import { photographyPreviewEnabled, photographyProject } from "@/data/photography-preview";
 import { portfolioEvidence, refreshedSiteConfig } from "@/data/portfolio-refresh";
 
 export const metadata: Metadata = {
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default function Work() {
+  const projects = photographyPreviewEnabled ? [...independentProjects, photographyProject] : independentProjects;
+
   return (
     <div className="archive wrap case">
       <Link className="case-back" href="/#work">
@@ -31,7 +34,7 @@ export default function Work() {
         </p>
         <div className="hero-role-line archive-proof-line" aria-label="Archive coverage">
           <span>{portfolioEvidence.dribbbleShotCount} source-linked works</span>
-          <span>{independentProjects.length} independent case studies</span>
+          <span>{projects.length} independent case studies</span>
           <span>No invented client outcomes</span>
         </div>
       </div>
@@ -50,7 +53,7 @@ export default function Work() {
           </p>
         </div>
         <div className="project-grid compact-project-grid">
-          {independentProjects.map((project, index) => (
+          {projects.map((project, index) => (
             <article className="project-card" key={project.title}>
               <div className={`project-visual project-visual-${index + 1} project-visual-thumb`}>
                 <img
