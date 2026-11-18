@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import {
   photographyMedia,
   photographyPath,
+  photographyPortfolioReview,
   photographyPreviewEnabled,
   photographyProject,
 } from "@/data/photography-preview";
@@ -80,8 +81,16 @@ export default function PhotographyCaseStudy() {
 
       <header className={styles.hero}>
         <div>
-          <p className={styles.eyebrow}>Independent work · Private review</p>
-          <h1 className={`dsp ${styles.title}`}>AI Product Lifestyle <em>Photography</em></h1>
+          <p className={styles.eyebrow}>
+            {photographyPortfolioReview ? photographyProject.eyebrow : "Independent work · Private review"}
+          </p>
+          {photographyPortfolioReview ? (
+            <h1 className={`dsp ${styles.title} ${styles.reviewTitle}`}>
+              AI Lifestyle Photography <em>&amp; Personalized POD Mockups</em>
+            </h1>
+          ) : (
+            <h1 className={`dsp ${styles.title}`}>AI Product Lifestyle <em>Photography</em></h1>
+          )}
           <p className={styles.lede}>
             A seasonal e-commerce image set for a personalized pet sweatshirt, built with
             reference-led AI generation and finished in Photoshop.
@@ -104,9 +113,9 @@ export default function PhotographyCaseStudy() {
             <h2 className="dsp" id="overview-title">A holiday image set for personalized apparel</h2>
           </div>
           <p>
-            I created this independently as a hiring exercise using the supplied garment and artwork
-            references. The set pairs a personalization hero and a product detail with four holiday
-            lifestyle scenes and three crops for product-page sections.
+            {photographyPortfolioReview
+              ? "This personal project explores how to make a custom pet portrait feel at home on a sweatshirt while keeping the print readable at storefront size. The set pairs a personalization hero and a product detail with four holiday lifestyle scenes and three wider crops."
+              : "I created this independently as a hiring exercise using the supplied garment and artwork references. The set pairs a personalization hero and a product detail with four holiday lifestyle scenes and three crops for product-page sections."}
           </p>
         </div>
         <dl className={styles.facts}>
@@ -159,20 +168,37 @@ export default function PhotographyCaseStudy() {
         </div>
       </section>
 
-      <section className={styles.section} aria-labelledby="comparison-title">
-        <p className={styles.eyebrow}>Before and after</p>
-        <h2 className="dsp" id="comparison-title">From garment reference to finished product detail</h2>
-        <div className={styles.pair}>
-          <figure>
-            <StudyImage id="navy-reference" alt="Supplied studio reference of a blank navy crewneck sweatshirt" sizes="(max-width: 680px) 90vw, 48vw" />
-            <figcaption><strong>Before · Supplied reference</strong><span>Original navy garment reference from the hiring brief.</span></figcaption>
-          </figure>
-          <figure>
-            <StudyImage {...productImages[1]} sizes="(max-width: 680px) 90vw, 48vw" />
-            <figcaption><strong>After · Final Photoshop export</strong><span>US_2nd.png with the approved print, matched backdrop and typeset product details.</span></figcaption>
-          </figure>
-        </div>
-      </section>
+      {photographyPortfolioReview ? (
+        <section className={styles.section} aria-labelledby="comparison-title">
+          <p className={styles.eyebrow}>Framing and crops</p>
+          <h2 className="dsp" id="comparison-title">One product detail, two storefront formats</h2>
+          <div className={styles.pair}>
+            <figure>
+              <StudyImage {...productImages[1]} sizes="(max-width: 680px) 90vw, 48vw" />
+              <figcaption><strong>Square product image</strong><span>Room around the garment lets the print and detail copy sit together.</span></figcaption>
+            </figure>
+            <figure>
+              <StudyImage {...sectionImages[0]} wide sizes="(max-width: 680px) 90vw, 48vw" />
+              <figcaption><strong>Wide section crop</strong><span>A tighter crop keeps the print and copy visible in a horizontal layout.</span></figcaption>
+            </figure>
+          </div>
+        </section>
+      ) : (
+        <section className={styles.section} aria-labelledby="comparison-title">
+          <p className={styles.eyebrow}>Before and after</p>
+          <h2 className="dsp" id="comparison-title">From garment reference to finished product detail</h2>
+          <div className={styles.pair}>
+            <figure>
+              <StudyImage id="navy-reference" alt="Supplied studio reference of a blank navy crewneck sweatshirt" sizes="(max-width: 680px) 90vw, 48vw" />
+              <figcaption><strong>Before · Supplied reference</strong><span>Original navy garment reference from the hiring brief.</span></figcaption>
+            </figure>
+            <figure>
+              <StudyImage {...productImages[1]} sizes="(max-width: 680px) 90vw, 48vw" />
+              <figcaption><strong>After · Final Photoshop export</strong><span>US_2nd.png with the approved print, matched backdrop and typeset product details.</span></figcaption>
+            </figure>
+          </div>
+        </section>
+      )}
 
       <section className={styles.section} id="gallery" aria-labelledby="gallery-title">
         <p className={styles.eyebrow}>Final gallery</p>
@@ -181,13 +207,13 @@ export default function PhotographyCaseStudy() {
           {productImages.map((image) => (
             <figure key={image.id}>
               <StudyImage {...image} />
-              <figcaption><strong>{image.title}</strong><span>{image.id}</span></figcaption>
+              <figcaption><strong>{image.title}</strong><span>{photographyPortfolioReview ? "Product image" : image.id}</span></figcaption>
             </figure>
           ))}
           {sectionImages.map((image) => (
             <figure key={image.id}>
               <StudyImage {...image} wide />
-              <figcaption><strong>{image.title}</strong><span>From {image.source}</span></figcaption>
+              <figcaption><strong>{image.title}</strong><span>{photographyPortfolioReview ? "Section crop" : `From ${image.source}`}</span></figcaption>
             </figure>
           ))}
         </div>

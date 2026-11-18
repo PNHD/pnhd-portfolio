@@ -1,12 +1,18 @@
 import type { IndependentProject } from "@/data/independent-projects";
 
-export const photographyPreviewEnabled = process.env.PHOTOGRAPHY_LOCAL_PREVIEW === "1";
+export const photographyPortfolioReview = process.env.PHOTOGRAPHY_PORTFOLIO_REVIEW === "1";
+export const photographyPreviewEnabled =
+  photographyPortfolioReview || process.env.PHOTOGRAPHY_LOCAL_PREVIEW === "1";
 export const photographyPath = "/projects/ai-product-lifestyle-photography";
-export const photographyMedia = "/__photo-preview-media";
+export const photographyMedia = photographyPortfolioReview
+  ? "/__photo-review-media"
+  : "/__photo-preview-media";
 
 export const photographyProject: IndependentProject = {
-  title: "AI Product Lifestyle Photography",
-  eyebrow: "Independent case study · Private preview",
+  title: photographyPortfolioReview
+    ? "AI Lifestyle Photography & Personalized POD Mockups"
+    : "AI Product Lifestyle Photography",
+  eyebrow: photographyPortfolioReview ? "Personal Project" : "Independent case study · Private preview",
   description:
     "Reference-led AI scenes and Photoshop finishing for a nine-image seasonal e-commerce set.",
   tags: ["AI art direction", "Adobe Photoshop", "E-commerce imagery"],

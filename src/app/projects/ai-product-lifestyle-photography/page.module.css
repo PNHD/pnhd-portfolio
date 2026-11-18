@@ -29,6 +29,12 @@
   letter-spacing: -.064em;
 }
 
+.reviewTitle {
+  max-width: 16ch;
+  font-size: clamp(2.9rem, 5.2vw, 5.5rem);
+  letter-spacing: -.045em;
+}
+
 .title em {
   display: block;
   font: italic 400 1.11em/.94 var(--font-serif);
@@ -194,6 +200,9 @@
   .title {
     font-size: clamp(2.8rem, 10vw, 5.5rem);
   }
+  .reviewTitle {
+    font-size: clamp(2.45rem, 9vw, 4.8rem);
+  }
 }
 
 @media (max-width: 680px) {
@@ -215,6 +224,9 @@
 @media (max-width: 365px) {
   .title {
     font-size: 2.65rem;
+  }
+  .reviewTitle {
+    font-size: 2.4rem;
   }
   .gallery {
     grid-template-columns: minmax(0, 1fr);
