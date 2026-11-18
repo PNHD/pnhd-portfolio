@@ -1,8 +1,7 @@
 import type { IndependentProject } from "@/data/independent-projects";
 
-export const photographyPortfolioReview = process.env.PHOTOGRAPHY_PORTFOLIO_REVIEW === "1";
-export const photographyPreviewEnabled =
-  photographyPortfolioReview || process.env.PHOTOGRAPHY_LOCAL_PREVIEW === "1";
+export const photographyPortfolioReview = true;
+export const photographyPreviewEnabled = true;
 export const photographyPath = "/projects/ai-product-lifestyle-photography";
 export const photographyMedia = photographyPortfolioReview
   ? "/__photo-review-media"
