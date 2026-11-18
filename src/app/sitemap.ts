@@ -50,6 +50,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${siteConfig.url}/projects/ai-product-lifestyle-photography`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
       url: `${siteConfig.url}/illustration-portfolio`,
       lastModified: now,
       changeFrequency: "monthly",
