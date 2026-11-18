@@ -184,7 +184,7 @@ if (!read("src/app/work/page.tsx").includes(illustrationRoute)) {
 if (srcText.includes("3 independent case studies")) {
   errors.push("Stale hard-coded independent-project count remains");
 }
-if (!read("src/app/work/page.tsx").includes("{independentProjects.length} independent case studies")) {
+if (!read("src/app/work/page.tsx").includes("{projects.length} independent case studies")) {
   errors.push("Work archive independent-project count is not derived from data");
 }
 for (const token of ["What are you hiring for?", "Nexus UI Kit", "Northstar RevOps", "Thiên Kim"]) {
