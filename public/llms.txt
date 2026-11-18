@@ -13,6 +13,7 @@
 - [Thiên Kim](/projects/thien-kim) — independent AI visual-production system covering character art direction, identity continuity, shot planning, quality review and the idea-to-storyboard-to-production-prompt-to-saved-pack workflow.
 - [Nexus UI Kit](/projects/nexus-ui-kit) — self-directed UI/design-system portfolio project covering reusable SaaS layouts, dashboards, components, responsive views and theme variants; not client work.
 - [Helix Crypto UI Kit](/projects/helix-crypto-ui-kit) — self-directed crypto/Web3 design system covering token foundations, a 320+ component library and 20 production screens for exchange, wallet, DeFi and NFT products, with a live HTML preview; not client work.
+- [AI Lifestyle Photography & Personalized POD Mockups](/projects/ai-product-lifestyle-photography) — personal project: nine e-commerce images combining reference-led AI art direction, personalized apparel photography and Photoshop compositing.
 - [Soft Systems illustration portfolio](/illustration-portfolio) — self-directed 40-scene SaaS onboarding, empty-state, system-feedback and success illustration system with editable SVG and transparent PNG outputs.
 
 ## Capabilities
