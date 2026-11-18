@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: photographyProject.title,
   description,
   alternates: { canonical: photographyPath },
-  robots: { index: false, follow: false },
+  robots: { index: true, follow: true },
   openGraph: { title: photographyProject.title, description, url: photographyPath, type: "article" },
 };
 
